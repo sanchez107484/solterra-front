@@ -48,32 +48,42 @@ export function Sidebar({ t }: { t: Translations }) {
               <Button
                 variant="ghost"
                 className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
+                onClick={() => setIsOpen(false)}
               >
                 <Home className="h-5 w-5" />
                 {t.nav.home}
               </Button>
             </Link>
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
-            >
-              <Info className="h-5 w-5" />
-              {t.nav.howItWorks}
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
-            >
-              <Info className="h-5 w-5" />
-              {t.nav.about}
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
-            >
-              <Mail className="h-5 w-5" />
-              {t.nav.contact}
-            </Button>
+            <Link href="/como-funciona">
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
+                onClick={() => setIsOpen(false)}
+              >
+                <Info className="h-5 w-5" />
+                {t.nav.howItWorks}
+              </Button>
+            </Link>
+            <Link href="/nosotros">
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
+                onClick={() => setIsOpen(false)}
+              >
+                <Info className="h-5 w-5" />
+                {t.nav.about}
+              </Button>
+            </Link>
+            <Link href="/contacto">
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
+                onClick={() => setIsOpen(false)}
+              >
+                <Mail className="h-5 w-5" />
+                {t.nav.contact}
+              </Button>
+            </Link>
           </nav>
 
           {/* Bottom actions */}
