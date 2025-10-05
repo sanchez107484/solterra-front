@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -7,10 +9,18 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Zap, Mail, Lock, ArrowLeft, Eye, EyeOff, Building2 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function LoginPromotor() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLogin, setIsLogin] = useState(true)
+  const router = useRouter()
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // TODO: Implementar lógica de autenticación real
+    router.push("/dashboard/promotor")
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -82,7 +92,7 @@ export default function LoginPromotor() {
               </p>
             </div>
 
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               {!isLogin && (
                 <>
                   <div className="space-y-2">
@@ -139,7 +149,7 @@ export default function LoginPromotor() {
                 </div>
               )}
 
-              <Button className="w-full h-12 bg-secondary hover:bg-secondary/90 text-lg">
+              <Button type="submit" className="w-full h-12 bg-secondary hover:bg-secondary/90 text-lg">
                 {isLogin ? "Iniciar sesión" : "Crear cuenta"}
               </Button>
             </form>
