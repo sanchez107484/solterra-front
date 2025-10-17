@@ -14,7 +14,13 @@ export function Sidebar() {
     return (
         <>
             {/* Mobile menu button */}
-            <Button variant="ghost" size="icon" className="fixed top-4 left-4 z-50 lg:hidden" onClick={() => setIsOpen(!isOpen)}>
+            <Button
+                variant="ghost"
+                size="icon"
+                aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+                className="fixed top-4 left-4 z-50 lg:hidden"
+                onClick={() => setIsOpen(!isOpen)}
+            >
                 {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
 

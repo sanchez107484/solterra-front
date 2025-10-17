@@ -12,9 +12,9 @@
     --primary: oklch(0.6 0.15 135); /* #59A52C */
     --primary-foreground: oklch(1 0 0); /* Blanco */
 
-    /* Secondary: Amarillo crema */
-    --secondary: oklch(0.96 0.03 95); /* #f8f3d4 */
-    --secondary-foreground: oklch(0.12 0.005 240); /* #111111 */
+    /* Secondary: Amarillo profesional (opción A) */
+    --secondary: #d19a12; /* amarillo ámbar profesional */
+    --secondary-foreground: #0b1b2b; /* texto oscuro sobre amarillo */
 
     /* Accent: Verde brillante */
     --accent: oklch(0.73 0.18 135); /* #6fca3a */
@@ -24,7 +24,8 @@
     --card-foreground: oklch(0.12 0.005 240);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.12 0.005 240);
-    --muted: oklch(0.96 0.01 95); /* Muy claro */
+    /* Muted: superficie neutra ligera */
+    --muted: #fff7e6; /* off-white cálido para soportar amarillo */
     --muted-foreground: oklch(0.45 0.02 240);
     --destructive: oklch(0.577 0.245 27.325);
     --destructive-foreground: oklch(0.99 0.005 27.325);
@@ -38,8 +39,14 @@
     --sidebar-foreground: oklch(0.12 0.005 240);
     --sidebar-primary: oklch(0.6 0.15 135);
     --sidebar-primary-foreground: oklch(1 0 0);
-    --sidebar-accent: oklch(0.96 0.03 95);
-    --sidebar-accent-foreground: oklch(0.12 0.005 240);
+    --sidebar-accent: #d19a12;
+    --sidebar-accent-foreground: #ffffff;
+    /* Accent (verde brillante para estados): */
+    --accent: #6fd24a;
+    --accent-foreground: #0b1b2b;
+    /* Foreground and border adjustments for better contrast */
+    --foreground: #0b1b2b;
+    --border: #e6eef6;
     --sidebar-border: oklch(0.92 0.02 95);
     --sidebar-ring: oklch(0.6 0.15 135);
 }
@@ -49,8 +56,9 @@
     --foreground: oklch(0.96 0.03 95); /* #f8f3d4 - Crema */
     --primary: oklch(0.6 0.15 135); /* #59A52C - Verde principal */
     --primary-foreground: oklch(1 0 0); /* Blanco */
-    --secondary: oklch(0.96 0.03 95); /* #f8f3d4 - Amarillo crema */
-    --secondary-foreground: oklch(0.12 0.005 240); /* #111111 */
+    /* Secondary in dark: use a darker amber for contrast */
+    --secondary: #9a6400; /* darker amber for dark mode */
+    --secondary-foreground: #ffffff; /* white text on dark amber */
     --accent: oklch(0.73 0.18 135); /* #6fca3a - Verde brillante */
     --accent-foreground: oklch(0.12 0.005 240); /* #111111 */
     --card: oklch(0.17 0.005 240); /* #2a2a2a - Gris oscuro */
@@ -68,8 +76,8 @@
     --sidebar-foreground: oklch(0.96 0.03 95);
     --sidebar-primary: oklch(0.6 0.15 135);
     --sidebar-primary-foreground: oklch(1 0 0);
-    --sidebar-accent: oklch(0.2 0.005 240);
-    --sidebar-accent-foreground: oklch(0.96 0.03 95);
+    --sidebar-accent: #9a6400;
+    --sidebar-accent-foreground: #ffffff;
     --sidebar-border: oklch(0.22 0.005 240);
     --sidebar-ring: oklch(0.6 0.15 135);
 }

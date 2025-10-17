@@ -81,7 +81,7 @@ export function SeccionBeneficios() {
 
                 {/* Beneficios Promotores */}
                 <div>
-                    <h3 className="text-secondary mb-8 text-center text-3xl font-bold">{t.benefits?.developers.title}</h3>
+                    <h3 className="text-secondary-foreground mb-8 text-center text-3xl font-bold">{t.benefits?.developers.title}</h3>
                     <div className="grid gap-6 md:grid-cols-3">
                         {beneficiosPromotores.map((beneficio, index) => {
                             const Icon = beneficio.icon
@@ -91,7 +91,7 @@ export function SeccionBeneficios() {
                                     className="group border-secondary/20 from-secondary/5 hover:border-secondary relative overflow-hidden bg-gradient-to-br to-transparent p-8 transition-all hover:scale-105 hover:shadow-xl"
                                 >
                                     <div className="bg-secondary/20 mb-6 inline-flex rounded-2xl p-4">
-                                        <Icon className="text-secondary h-8 w-8 transition-transform group-hover:scale-110" />
+                                        <Icon className="text-secondary-foreground h-8 w-8 transition-transform group-hover:scale-110" />
                                     </div>
                                     <h4 className="text-foreground mb-3 text-xl font-bold">{beneficio.title}</h4>
                                     <p className="text-muted-foreground">{beneficio.description}</p>

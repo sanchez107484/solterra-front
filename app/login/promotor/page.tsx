@@ -78,7 +78,7 @@ export default function LoginPromotor() {
                     <Card className="border-2 p-8 shadow-xl">
                         <div className="mb-8 text-center">
                             <div className="bg-secondary/10 mb-4 inline-flex rounded-2xl p-4">
-                                <Zap className="text-secondary h-10 w-10" />
+                                <Zap className="text-secondary-foreground h-10 w-10" />
                             </div>
                             <h2 className="text-foreground mb-2 text-3xl font-bold">{isLogin ? "Bienvenido de nuevo" : "Crear cuenta"}</h2>
                             <p className="text-muted-foreground">
@@ -124,6 +124,8 @@ export default function LoginPromotor() {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                        title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                                         className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
                                     >
                                         {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}

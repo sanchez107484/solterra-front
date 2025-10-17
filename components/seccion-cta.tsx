@@ -12,7 +12,7 @@ export function SeccionCTA() {
                 <Card className="border-primary/20 from-primary/10 via-secondary/5 to-accent/10 relative overflow-hidden border-2 bg-gradient-to-br p-12 shadow-2xl md:p-16">
                     {/* Decorative elements */}
                     <div className="bg-primary/20 absolute -top-20 -right-20 h-64 w-64 rounded-full blur-3xl" />
-                    <div className="bg-secondary/20 absolute -bottom-20 -left-20 h-64 w-64 rounded-full blur-3xl" />
+                    <div className="bg-secondary/30 absolute -bottom-20 -left-20 h-64 w-64 rounded-full shadow-2xl blur-3xl" />
 
                     <div className="relative mx-auto max-w-3xl text-center">
                         <div className="bg-accent/30 mb-6 inline-flex rounded-full px-6 py-2">

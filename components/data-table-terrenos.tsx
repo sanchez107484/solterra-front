@@ -84,7 +84,7 @@ export const columns: ColumnDef<Terreno>[] = [
             return (
                 <span
                     className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        tipo === "Solar" ? "bg-primary/10 text-primary" : "bg-secondary/10 text-secondary"
+                        tipo === "Solar" ? "bg-primary/10 text-primary" : "bg-secondary/10 text-secondary-foreground"
                     }`}
                 >
                     {tipo}
@@ -193,6 +193,7 @@ export function DataTableTerrenos({ data }: DataTableTerrenosProps) {
                 <div className="relative max-w-sm flex-1">
                     <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                     <Input
+                        aria-label="Buscar terrenos por ubicación"
                         placeholder="Buscar por ubicación..."
                         value={(table.getColumn("ubicacion")?.getFilterValue() as string) ?? ""}
                         onChange={(event) => table.getColumn("ubicacion")?.setFilterValue(event.target.value)}

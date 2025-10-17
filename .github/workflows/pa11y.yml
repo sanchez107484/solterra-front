@@ -1,0 +1,55 @@
+name: pa11y accessibility checks
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+    pa11y:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build
+              run: npm run build
+
+            - name: Start server
+              run: |
+                  npm run start &
+                  SERVER_PID=$!
+                  echo "Server PID: $SERVER_PID"
+                  # Wait for server to be ready
+                  npx wait-on http://localhost:3000/
+              env:
+                  CI: true
+
+            - name: Run pa11y checks
+              run: |
+                  mkdir -p pa11y-reports
+                  routes=("/" "/login/promotor" "/como-funciona" "/nosotros" "/dashboard/promotor")
+                  for r in "${routes[@]}"; do
+                    safe=$(echo "$r" | sed 's@/@-@g' | sed 's@^-@@')
+                    url="http://localhost:3000${r}"
+                    echo "Checking $url"
+                    npx pa11y "$url" --standard WCAG2AA --reporter json > "pa11y-reports/pa11y-${safe}.json" || true
+                  done
+
+            - name: Upload pa11y reports
+              uses: actions/upload-artifact@v4
+              with:
+                  name: pa11y-reports
+                  path: pa11y-reports
+
+            - name: Stop server
+              if: always()
+              run: |
+                  pkill -f "node" || true

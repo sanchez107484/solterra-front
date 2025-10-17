@@ -28,6 +28,7 @@ export function FooterSectionPro() {
                                 href="https://linkedin.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label="Abrir LinkedIn (se abre en nueva pestaña)"
                                 className="bg-primary/10 hover:bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110"
                             >
                                 <Linkedin className="h-5 w-5" />
@@ -36,6 +37,7 @@ export function FooterSectionPro() {
                                 href="https://twitter.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label="Abrir Twitter (se abre en nueva pestaña)"
                                 className="bg-primary/10 hover:bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110"
                             >
                                 <Twitter className="h-5 w-5" />
@@ -44,6 +46,7 @@ export function FooterSectionPro() {
                                 href="https://facebook.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label="Abrir Facebook (se abre en nueva pestaña)"
                                 className="bg-primary/10 hover:bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110"
                             >
                                 <Facebook className="h-5 w-5" />

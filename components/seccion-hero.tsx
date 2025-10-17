@@ -17,14 +17,14 @@ export function SeccionHero() {
                         <div className="group bg-primary/20 hover:bg-primary/30 rounded-2xl p-4 shadow-lg backdrop-blur-sm transition-all hover:scale-110">
                             <Leaf className="text-primary h-10 w-10 transition-transform group-hover:rotate-12" />
                         </div>
-                        <div className="group bg-secondary/20 hover:bg-secondary/30 rounded-2xl p-4 shadow-lg backdrop-blur-sm transition-all hover:scale-110">
-                            <Sun className="text-secondary h-10 w-10 transition-transform group-hover:rotate-12" />
+                        <div className="group bg-secondary/30 hover:bg-secondary/40 rounded-2xl p-4 shadow-xl backdrop-blur-sm transition-all hover:scale-110">
+                            <Sun className="text-secondary-foreground h-10 w-10 transition-transform group-hover:rotate-12" />
                         </div>
 
                         <div className="group bg-primary/20 hover:bg-primary/30 rounded-2xl p-4 shadow-lg backdrop-blur-sm transition-all hover:scale-110">
-                            <Wind className="text-secondary h-10 w-10 transition-transform group-hover:rotate-12" />
+                            <Wind className="text-primary h-10 w-10 transition-transform group-hover:rotate-12" />
                         </div>
-                        <div className="group bg-secondary/20 hover:bg-secondary/30 rounded-2xl p-4 shadow-lg backdrop-blur-sm transition-all hover:scale-110">
+                        <div className="group bg-secondary/30 hover:bg-secondary/40 rounded-2xl p-4 shadow-xl backdrop-blur-sm transition-all hover:scale-110">
                             <Zap className="text-primary h-10 w-10 transition-transform group-hover:rotate-12" />
                         </div>
                     </div>
@@ -57,7 +57,7 @@ export function SeccionHero() {
                             <Link href="/login/promotor">
                                 <div className="group border-secondary/20 from-secondary/10 to-secondary/5 hover:border-secondary relative overflow-hidden rounded-2xl border-2 bg-gradient-to-br p-8 shadow-xl transition-all hover:scale-105 hover:shadow-2xl">
                                     <div className="bg-secondary/20 absolute top-4 right-4 rounded-full p-3">
-                                        <Zap className="text-secondary h-6 w-6" />
+                                        <Zap className="text-secondary-foreground h-6 w-6" />
                                     </div>
                                     <h3 className="text-foreground mb-3 text-2xl font-bold">{t.hero?.ctaDeveloper}</h3>
                                     <p className="text-muted-foreground mb-6">Encuentra terrenos ideales para tus proyectos renovables</p>
@@ -74,7 +74,7 @@ export function SeccionHero() {
 
             {/* Decorative elements */}
             <div className="bg-primary/20 pointer-events-none absolute top-20 -left-32 h-96 w-96 rounded-full blur-3xl" />
-            <div className="bg-secondary/20 pointer-events-none absolute -right-32 bottom-20 h-96 w-96 rounded-full blur-3xl" />
+            <div className="bg-secondary/30 pointer-events-none absolute -right-32 bottom-20 h-96 w-96 rounded-full shadow-2xl blur-3xl" />
         </section>
     )
 }

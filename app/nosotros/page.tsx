@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { getTranslations, type Locale } from "@/lib/i18n"
 import { Award, Globe, Leaf, Target, TrendingUp, Users } from "lucide-react"
+import Head from "next/head"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -29,7 +30,10 @@ export default function Nosotros() {
 
     return (
         <div className="flex min-h-screen">
-            <Sidebar t={t} />
+            <Head>
+                <title>Sobre Solterra Advisory</title>
+            </Head>
+            <Sidebar />
             <main className="flex-1 lg:ml-64">
                 {/* Hero Section */}
                 <section className="from-primary/10 via-background to-secondary/10 relative bg-gradient-to-br px-6 py-24">
@@ -75,7 +79,7 @@ export default function Nosotros() {
                                     </div>
                                     <div className="flex items-start gap-4">
                                         <div className="bg-secondary/10 shrink-0 rounded-xl p-3">
-                                            <Leaf className="text-secondary h-8 w-8" />
+                                            <Leaf className="text-secondary-foreground h-8 w-8" />
                                         </div>
                                         <div>
                                             <h3 className="mb-2 text-xl font-bold">Compromiso sostenible</h3>
@@ -124,7 +128,7 @@ export default function Nosotros() {
 
                             <Card className="border-2 p-8 text-center transition-shadow hover:shadow-xl">
                                 <div className="bg-secondary/10 mx-auto mb-6 w-fit rounded-full p-4">
-                                    <TrendingUp className="text-secondary h-10 w-10" />
+                                    <TrendingUp className="text-secondary-foreground h-10 w-10" />
                                 </div>
                                 <h3 className="mb-4 text-2xl font-bold">Eficiencia</h3>
                                 <p className="text-muted-foreground">
@@ -161,7 +165,7 @@ export default function Nosotros() {
                                 <div className="text-muted-foreground">Terrenos listados</div>
                             </Card>
                             <Card className="border-2 p-8 text-center">
-                                <div className="text-secondary mb-2 text-5xl font-bold">300+</div>
+                                <div className="text-secondary-foreground mb-2 text-5xl font-bold">300+</div>
                                 <div className="text-muted-foreground">Promotores activos</div>
                             </Card>
                             <Card className="border-2 p-8 text-center">
@@ -205,7 +209,7 @@ export default function Nosotros() {
                     </div>
                 </section>
 
-                <Footer t={t} />
+                <Footer />
             </main>
         </div>
     )

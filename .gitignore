@@ -70,3 +70,8 @@ Thumbs.db
 # pnpm-lock.yaml
 # yarn.lock
 # package-lock.json
+
+# pa11y / accessibility reports (generados, no versionar)
+/pa11y-*.json
+/pa11y-*.html
+/pa11y-reports/

@@ -127,7 +127,7 @@ export function TestimonialsSectionPro() {
                         </div>
                         <div className="bg-border h-8 w-px" />
                         <div className="text-center">
-                            <div className="text-secondary text-2xl font-bold">98%</div>
+                            <div className="text-secondary-foreground text-2xl font-bold">98%</div>
                             <div className="text-xs">Satisfacción</div>
                         </div>
                         <div className="bg-border h-8 w-px" />

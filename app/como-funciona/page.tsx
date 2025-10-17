@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { getTranslations, type Locale } from "@/lib/i18n"
 import { CheckCircle, FileText, Handshake, Search, TrendingUp, UserPlus } from "lucide-react"
+import Head from "next/head"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -29,7 +30,10 @@ export default function ComoFunciona() {
 
     return (
         <div className="flex min-h-screen">
-            <Sidebar t={t} />
+            <Head>
+                <title>Cómo funciona - Solterra Advisory</title>
+            </Head>
+            <Sidebar />
             <main className="flex-1 lg:ml-64">
                 {/* Hero Section */}
                 <section className="from-primary/10 via-background to-secondary/10 relative bg-gradient-to-br px-6 py-24">
@@ -132,7 +136,7 @@ export default function ComoFunciona() {
                 <section className="from-secondary/5 to-background bg-gradient-to-br px-6 py-20">
                     <div className="container mx-auto max-w-6xl">
                         <div className="mb-16 text-center">
-                            <div className="bg-secondary/10 text-secondary mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold">
+                            <div className="bg-secondary/10 text-secondary-foreground mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold">
                                 Para Promotores
                             </div>
                             <h2 className="mb-4 text-4xl font-bold">Encuentra terrenos ideales en 4 pasos</h2>
@@ -145,10 +149,10 @@ export default function ComoFunciona() {
                             <Card className="border-2 p-8 transition-shadow hover:shadow-xl">
                                 <div className="flex items-start gap-4">
                                     <div className="bg-secondary/10 shrink-0 rounded-xl p-3">
-                                        <UserPlus className="text-secondary h-8 w-8" />
+                                        <UserPlus className="text-secondary-foreground h-8 w-8" />
                                     </div>
                                     <div>
-                                        <div className="text-secondary mb-2 text-sm font-semibold">PASO 1</div>
+                                        <div className="text-secondary-foreground mb-2 text-sm font-semibold">PASO 1</div>
                                         <h3 className="mb-3 text-2xl font-bold">Regístrate como promotor</h3>
                                         <p className="text-muted-foreground">
                                             Crea tu perfil empresarial y accede a nuestra base de datos de terrenos disponibles.
@@ -160,10 +164,10 @@ export default function ComoFunciona() {
                             <Card className="border-2 p-8 transition-shadow hover:shadow-xl">
                                 <div className="flex items-start gap-4">
                                     <div className="bg-secondary/10 shrink-0 rounded-xl p-3">
-                                        <FileText className="text-secondary h-8 w-8" />
+                                        <FileText className="text-secondary-foreground h-8 w-8" />
                                     </div>
                                     <div>
-                                        <div className="text-secondary mb-2 text-sm font-semibold">PASO 2</div>
+                                        <div className="text-secondary-foreground mb-2 text-sm font-semibold">PASO 2</div>
                                         <h3 className="mb-3 text-2xl font-bold">Define tu proyecto</h3>
                                         <p className="text-muted-foreground">
                                             Especifica tipo de energía, capacidad, ubicación preferida y requisitos técnicos.
@@ -175,10 +179,10 @@ export default function ComoFunciona() {
                             <Card className="border-2 p-8 transition-shadow hover:shadow-xl">
                                 <div className="flex items-start gap-4">
                                     <div className="bg-secondary/10 shrink-0 rounded-xl p-3">
-                                        <TrendingUp className="text-secondary h-8 w-8" />
+                                        <TrendingUp className="text-secondary-foreground h-8 w-8" />
                                     </div>
                                     <div>
-                                        <div className="text-secondary mb-2 text-sm font-semibold">PASO 3</div>
+                                        <div className="text-secondary-foreground mb-2 text-sm font-semibold">PASO 3</div>
                                         <h3 className="mb-3 text-2xl font-bold">Recibe matches</h3>
                                         <p className="text-muted-foreground">
                                             Nuestro algoritmo te mostrará terrenos compatibles con tu proyecto. Analiza y compara opciones.
@@ -190,10 +194,10 @@ export default function ComoFunciona() {
                             <Card className="border-2 p-8 transition-shadow hover:shadow-xl">
                                 <div className="flex items-start gap-4">
                                     <div className="bg-secondary/10 shrink-0 rounded-xl p-3">
-                                        <Handshake className="text-secondary h-8 w-8" />
+                                        <Handshake className="text-secondary-foreground h-8 w-8" />
                                     </div>
                                     <div>
-                                        <div className="text-secondary mb-2 text-sm font-semibold">PASO 4</div>
+                                        <div className="text-secondary-foreground mb-2 text-sm font-semibold">PASO 4</div>
                                         <h3 className="mb-3 text-2xl font-bold">Contacta y negocia</h3>
                                         <p className="text-muted-foreground">
                                             Comunícate directamente con propietarios y cierra acuerdos de forma ágil y transparente.
@@ -251,7 +255,7 @@ export default function ComoFunciona() {
                     </div>
                 </section>
 
-                <Footer t={t} />
+                <Footer />
             </main>
         </div>
     )

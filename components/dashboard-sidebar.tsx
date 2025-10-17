@@ -19,7 +19,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
     const isPropietario = userType === "propietario"
     const Icon = isPropietario ? Leaf : Zap
     const bgColor = isPropietario ? "bg-primary" : "bg-secondary"
-    const textColor = isPropietario ? "text-primary" : "text-secondary"
+    const textColor = isPropietario ? "text-primary" : "text-secondary-foreground"
 
     const navItems = isPropietario
         ? [

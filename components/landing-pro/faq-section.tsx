@@ -69,8 +69,8 @@ export function FAQSectionPro() {
             <div className="container mx-auto px-4">
                 <div className="mb-16 text-center">
                     <div className="bg-secondary/10 border-secondary/20 mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-2">
-                        <HelpCircle className="text-secondary h-4 w-4" />
-                        <span className="text-secondary text-sm font-semibold">Preguntas Frecuentes</span>
+                        <HelpCircle className="text-secondary-foreground h-4 w-4" />
+                        <span className="text-secondary-foreground text-sm font-semibold">Preguntas Frecuentes</span>
                     </div>
                     <h2 className="mb-4 text-4xl font-bold md:text-5xl">
                         ¿Tienes <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">dudas?</span>
@@ -120,7 +120,7 @@ export function FAQSectionPro() {
                                                 className={`rounded-full px-2 py-1 text-xs font-semibold ${
                                                     faq.category === "propietario"
                                                         ? "bg-primary/10 text-primary"
-                                                        : "bg-secondary/10 text-secondary"
+                                                        : "bg-secondary/10 text-secondary-foreground"
                                                 }`}
                                             >
                                                 {faq.category === "propietario" ? "Propietario" : "Promotor"}

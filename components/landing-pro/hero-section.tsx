@@ -116,7 +116,7 @@ export function HeroSectionPro() {
                             <Link href="/login/promotor" className="group">
                                 <div className="border-secondary/20 from-secondary/10 to-secondary/5 hover:border-secondary relative h-full overflow-hidden rounded-2xl border-2 bg-gradient-to-br p-8 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl">
                                     <div className="bg-secondary/20 absolute top-4 right-4 rounded-full p-3 transition-transform duration-300 group-hover:scale-110">
-                                        <Zap className="text-secondary h-6 w-6" />
+                                        <Zap className="text-secondary-foreground h-6 w-6" />
                                     </div>
                                     <div className="from-secondary/0 to-secondary/10 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                                     <h3 className="text-foreground relative z-10 mb-3 text-2xl font-bold">Soy promotor</h3>

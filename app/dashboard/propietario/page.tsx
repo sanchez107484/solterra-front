@@ -126,7 +126,7 @@ export default function DashboardPropietario() {
                                             <p className="text-muted-foreground mt-1 text-xs">+3 esta semana</p>
                                         </div>
                                         <div className="bg-secondary/10 rounded-full p-3">
-                                            <TrendingUp className="text-secondary h-5 w-5" />
+                                            <TrendingUp className="text-secondary-foreground h-5 w-5" />
                                         </div>
                                     </div>
                                 </Card>

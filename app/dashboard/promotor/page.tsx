@@ -77,15 +77,15 @@ export default function DashboardPromotor() {
                                     </Link>
                                     <div className="mt-8 grid grid-cols-3 gap-6 border-t pt-6">
                                         <div className="text-center">
-                                            <div className="text-secondary text-2xl font-bold">500+</div>
+                                            <div className="text-secondary-foreground text-2xl font-bold">500+</div>
                                             <div className="text-muted-foreground text-xs">Terrenos disponibles</div>
                                         </div>
                                         <div className="text-center">
-                                            <div className="text-secondary text-2xl font-bold">150MW</div>
+                                            <div className="text-secondary-foreground text-2xl font-bold">150MW</div>
                                             <div className="text-muted-foreground text-xs">Capacidad total</div>
                                         </div>
                                         <div className="text-center">
-                                            <div className="text-secondary text-2xl font-bold">95%</div>
+                                            <div className="text-secondary-foreground text-2xl font-bold">95%</div>
                                             <div className="text-muted-foreground text-xs">Match exitoso</div>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@ export default function DashboardPromotor() {
                                             <p className="text-muted-foreground mt-1 text-xs">En desarrollo</p>
                                         </div>
                                         <div className="bg-secondary/10 rounded-full p-3">
-                                            <Briefcase className="text-secondary h-5 w-5" />
+                                            <Briefcase className="text-secondary-foreground h-5 w-5" />
                                         </div>
                                     </div>
                                 </Card>
@@ -143,7 +143,7 @@ export default function DashboardPromotor() {
                                             <p className="text-muted-foreground mt-1 text-xs">Total proyectos</p>
                                         </div>
                                         <div className="bg-secondary/10 rounded-full p-3">
-                                            <Calendar className="text-secondary h-5 w-5" />
+                                            <Calendar className="text-secondary-foreground h-5 w-5" />
                                         </div>
                                     </div>
                                 </Card>
