@@ -1,7 +1,11 @@
+"use client"
+
+import { useTranslations } from "@/i18n/i18nContext"
 import { Facebook, Leaf, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react"
 import Link from "next/link"
 
 export function FooterSection() {
+    const { t } = useTranslations()
     const currentYear = new Date().getFullYear()
 
     return (
@@ -19,16 +23,13 @@ export function FooterSection() {
                                 <p className="text-muted-foreground text-xs">Advisory</p>
                             </div>
                         </div>
-                        <p className="text-muted-foreground mb-6 max-w-sm">
-                            Conectando terrenos con el futuro de la energía renovable. Marketplace seguro y transparente para propietarios y
-                            promotores.
-                        </p>
+                        <p className="text-muted-foreground mb-6 max-w-sm">{t.footer?.description}</p>
                         <div className="flex gap-4">
                             <a
                                 href="https://linkedin.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label="Abrir LinkedIn (se abre en nueva pestaña)"
+                                aria-label="Abrir LinkedIn"
                                 className="bg-primary/10 hover:bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110"
                             >
                                 <Linkedin className="h-5 w-5" />
@@ -37,7 +38,7 @@ export function FooterSection() {
                                 href="https://twitter.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label="Abrir Twitter (se abre en nueva pestaña)"
+                                aria-label="Abrir Twitter"
                                 className="bg-primary/10 hover:bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110"
                             >
                                 <Twitter className="h-5 w-5" />
@@ -46,7 +47,7 @@ export function FooterSection() {
                                 href="https://facebook.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label="Abrir Facebook (se abre en nueva pestaña)"
+                                aria-label="Abrir Facebook"
                                 className="bg-primary/10 hover:bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110"
                             >
                                 <Facebook className="h-5 w-5" />
@@ -153,9 +154,9 @@ export function FooterSection() {
                             <Mail className="text-primary h-5 w-5" />
                         </div>
                         <div>
-                            <div className="text-foreground mb-1 font-semibold">Email</div>
-                            <a href="mailto:info@solterra.com" className="text-muted-foreground hover:text-primary transition-colors">
-                                info@solterra.com
+                            <div className="text-foreground mb-1 font-semibold">{t.footer?.contact}</div>
+                            <a href={`mailto:${t.faq?.email}`} className="text-muted-foreground hover:text-primary transition-colors">
+                                {t.faq?.email}
                             </a>
                         </div>
                     </div>
@@ -184,16 +185,18 @@ export function FooterSection() {
                 {/* Bottom Bar */}
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                     <div className="text-muted-foreground text-center text-sm md:text-left">
-                        <p>© {currentYear} Solterra Advisory. Todos los derechos reservados.</p>
+                        <p>
+                            © {currentYear} Solterra Advisory. {t.footer?.rights}.
+                        </p>
                     </div>
 
                     <div className="text-muted-foreground flex flex-wrap items-center justify-center gap-6 text-sm">
                         <Link href="#" className="hover:text-primary transition-colors">
-                            Términos y condiciones
+                            {t.footer?.terms}
                         </Link>
                         <span className="text-border">•</span>
                         <Link href="#" className="hover:text-primary transition-colors">
-                            Política de privacidad
+                            {t.footer?.privacy}
                         </Link>
                         <span className="text-border">•</span>
                         <Link href="#" className="hover:text-primary transition-colors">
@@ -201,7 +204,7 @@ export function FooterSection() {
                         </Link>
                         <span className="text-border">•</span>
                         <Link href="#" className="hover:text-primary transition-colors">
-                            Legal
+                            {t.footer?.legal}
                         </Link>
                     </div>
                 </div>

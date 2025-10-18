@@ -1,11 +1,12 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
+import { useTranslations } from "@/i18n/i18nContext"
 import { Calendar, Euro, MapPin, TrendingUp } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 interface Stat {
-    icon: typeof TrendingUp
+    icon: any
     value: number
     suffix: string
     prefix?: string
@@ -14,43 +15,7 @@ interface Stat {
     description: string
 }
 
-const stats: Stat[] = [
-    {
-        icon: TrendingUp,
-        value: 81,
-        suffix: "%",
-        label: "Energía Renovable 2030",
-        color: "primary",
-        description: "Objetivo del PNIEC para generación eléctrica",
-    },
-    {
-        icon: MapPin,
-        value: 500,
-        suffix: "+",
-        label: "Terrenos Disponibles",
-        color: "secondary",
-        description: "Hectáreas verificadas en toda España",
-    },
-    {
-        icon: Euro,
-        value: 2500,
-        suffix: "",
-        prefix: "€",
-        label: "Ingreso por hectárea/año",
-        color: "accent",
-        description: "Renta media en proyectos solares",
-    },
-    {
-        icon: Calendar,
-        value: 25,
-        suffix: " años",
-        label: "Duración de contratos",
-        color: "primary",
-        description: "Periodo típico de arrendamiento",
-    },
-]
-
-function AnimatedNumber({
+export function AnimatedNumber({
     value,
     duration = 2000,
     prefix = "",
@@ -75,10 +40,7 @@ function AnimatedNumber({
             { threshold: 0.1 }
         )
 
-        if (ref.current) {
-            observer.observe(ref.current)
-        }
-
+        if (ref.current) observer.observe(ref.current)
         return () => observer.disconnect()
     }, [])
 
@@ -116,22 +78,60 @@ function AnimatedNumber({
 }
 
 export function StatsSection() {
+    const { t } = useTranslations()
+
+    const stats: Stat[] = [
+        {
+            icon: TrendingUp,
+            value: 81,
+            suffix: "%",
+            label: "Energía Renovable 2030",
+            color: "primary",
+            description: "Objetivo del PNIEC para generación eléctrica",
+        },
+        {
+            icon: MapPin,
+            value: 500,
+            suffix: "+",
+            label: "Terrenos Disponibles",
+            color: "secondary",
+            description: "Hectáreas verificadas en toda España",
+        },
+        {
+            icon: Euro,
+            value: 2500,
+            suffix: "",
+            prefix: "€",
+            label: "Ingreso por hectárea/año",
+            color: "accent",
+            description: "Renta media en proyectos solares",
+        },
+        {
+            icon: Calendar,
+            value: 25,
+            suffix: " años",
+            label: "Duración de contratos",
+            color: "primary",
+            description: "Periodo típico de arrendamiento",
+        },
+    ]
+
     return (
         <section className="from-background to-muted/30 bg-gradient-to-b py-20 md:py-32">
             <div className="container mx-auto px-4">
                 <div className="mb-16 text-center">
                     <div className="bg-primary/10 border-primary/20 mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-2">
                         <TrendingUp className="text-primary h-4 w-4" />
-                        <span className="text-primary text-sm font-semibold">Impacto Real</span>
+                        <span className="text-primary text-sm font-semibold">{t.stats?.impactLabel}</span>
                     </div>
+
                     <h2 className="mb-4 text-4xl font-bold md:text-5xl">
                         Los números que{" "}
                         <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">respaldan</span> nuestra
                         misión
                     </h2>
-                    <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
-                        Comprometidos con la transición energética y el desarrollo sostenible del medio rural
-                    </p>
+
+                    <p className="text-muted-foreground mx-auto max-w-2xl text-xl">{t.stats?.sourceNote}</p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -176,12 +176,7 @@ export function StatsSection() {
 
                 {/* Additional info */}
                 <div className="mt-16 text-center">
-                    <p className="text-muted-foreground mx-auto max-w-3xl">
-                        Datos basados en el{" "}
-                        <span className="text-foreground font-semibold">Plan Nacional Integrado de Energía y Clima (PNIEC 2023-2030)</span>{" "}
-                        y la experiencia de más de <span className="text-foreground font-semibold">200 proyectos completados</span> en toda
-                        España.
-                    </p>
+                    <p className="text-muted-foreground mx-auto max-w-3xl">{t.stats?.sourceNote}</p>
                 </div>
             </div>
         </section>

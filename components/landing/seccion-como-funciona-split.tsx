@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FileText, Handshake, Search, UserPlus } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "../../i18n/i18nContext"
 
 interface SplitProps {
     showCTA?: boolean
@@ -14,6 +15,7 @@ export function SeccionComoFuncionaSplit({ showCTA = true, compactMode = false }
     const sectionPadding = compactMode ? "py-8" : "py-16"
     const titleSize = compactMode ? "text-2xl" : "text-3xl"
     const subtitleSize = compactMode ? "text-base" : "text-lg"
+    const { t } = useTranslations()
 
     const propietarios = [
         {
@@ -73,10 +75,8 @@ export function SeccionComoFuncionaSplit({ showCTA = true, compactMode = false }
         <section className={`bg-background px-4 ${sectionPadding}`}>
             <div className="container mx-auto max-w-6xl">
                 <div className="mb-12 text-center">
-                    <h2 className={`mb-4 ${titleSize} font-bold`}>Cómo funciona</h2>
-                    <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>
-                        Conectamos propietarios de terrenos con promotores de energía renovable de forma simple, transparente y eficiente.
-                    </p>
+                    <h2 className={`mb-4 ${titleSize} font-bold`}>{t.howItWorks?.title}</h2>
+                    <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>{t.howItWorks?.quick?.subtitle}</p>
                 </div>
 
                 <div className="grid gap-8 md:grid-cols-2">
@@ -84,7 +84,7 @@ export function SeccionComoFuncionaSplit({ showCTA = true, compactMode = false }
                     <div>
                         <div className="mb-6 flex items-center gap-3">
                             <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-3 py-1 font-semibold">
-                                Para Propietarios
+                                {t.howItWorks?.landowners?.title}
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@ export function SeccionComoFuncionaSplit({ showCTA = true, compactMode = false }
                             {showCTA && (
                                 <div className="mt-4 text-center">
                                     <Link href="/login/propietario">
-                                        <Button className="bg-primary hover:bg-primary/90 h-12 px-6">Comenzar como propietario</Button>
+                                        <Button className="bg-primary hover:bg-primary/90 h-12 px-6">{t.cta?.landowner}</Button>
                                     </Link>
                                 </div>
                             )}
@@ -121,7 +121,7 @@ export function SeccionComoFuncionaSplit({ showCTA = true, compactMode = false }
                     <div>
                         <div className="mb-6 flex items-center justify-end gap-3 md:justify-start">
                             <div className="bg-secondary/10 text-secondary inline-flex items-center gap-2 rounded-full px-3 py-1 font-semibold">
-                                Para Promotores
+                                {t.howItWorks?.developers?.title}
                             </div>
                         </div>
 
@@ -148,7 +148,7 @@ export function SeccionComoFuncionaSplit({ showCTA = true, compactMode = false }
                                 <div className="mt-4 text-center md:text-right">
                                     <Link href="/login/promotor">
                                         <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground h-12 px-6">
-                                            Comenzar como promotor
+                                            {t.cta?.developer}
                                         </Button>
                                     </Link>
                                 </div>

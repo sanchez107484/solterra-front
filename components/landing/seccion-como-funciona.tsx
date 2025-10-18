@@ -30,12 +30,10 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                 <div className="container mx-auto max-w-6xl">
                     <div className="mb-16 text-center">
                         <div className="bg-primary/10 text-primary mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold">
-                            Para Propietarios
+                            {t.howItWorks?.landowners?.title}
                         </div>
-                        <h2 className={`mb-4 ${titleSize} font-bold`}>Monetiza tu terreno en 4 pasos</h2>
-                        <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>
-                            Genera ingresos pasivos mientras contribuyes a un futuro sostenible
-                        </p>
+                        <h2 className={`mb-4 ${titleSize} font-bold`}>{t.howItWorks?.landowners?.subtitle}</h2>
+                        <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>{t.benefits?.landowners?.benefit1Desc}</p>
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-2">
@@ -45,11 +43,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <UserPlus className="text-primary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-primary mb-2 text-sm font-semibold">PASO 1</div>
-                                    <h3 className="mb-3 text-2xl font-bold">Regístrate gratis</h3>
-                                    <p className="text-muted-foreground">
-                                        Crea tu cuenta como propietario en menos de 2 minutos. Sin costes ni compromisos.
-                                    </p>
+                                    <div className="text-primary mb-2 text-sm font-semibold">{t.howItWorks?.step1?.title}</div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step1?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.step1?.desc}</p>
                                 </div>
                             </div>
                         </Card>
@@ -60,12 +56,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <FileText className="text-primary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-primary mb-2 text-sm font-semibold">PASO 2</div>
-                                    <h3 className="mb-3 text-2xl font-bold">Lista tu terreno</h3>
-                                    <p className="text-muted-foreground">
-                                        Añade información sobre tu propiedad: ubicación, superficie, características. Nuestro equipo lo
-                                        verificará.
-                                    </p>
+                                    <div className="text-primary mb-2 text-sm font-semibold">{t.howItWorks?.step2?.title}</div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step2?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.step2?.desc}</p>
                                 </div>
                             </div>
                         </Card>
@@ -76,11 +69,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <Search className="text-primary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-primary mb-2 text-sm font-semibold">PASO 3</div>
-                                    <h3 className="mb-3 text-2xl font-bold">Recibe propuestas</h3>
-                                    <p className="text-muted-foreground">
-                                        Los promotores interesados contactarán contigo. Compara ofertas y elige la mejor opción.
-                                    </p>
+                                    <div className="text-primary mb-2 text-sm font-semibold">{t.howItWorks?.step3?.title}</div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step3?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.step3?.desc}</p>
                                 </div>
                             </div>
                         </Card>
@@ -91,11 +82,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <Handshake className="text-primary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-primary mb-2 text-sm font-semibold">PASO 4</div>
-                                    <h3 className="mb-3 text-2xl font-bold">Cierra el acuerdo</h3>
-                                    <p className="text-muted-foreground">
-                                        Firma el contrato y comienza a generar ingresos pasivos durante 20-25 años.
-                                    </p>
+                                    <div className="text-primary mb-2 text-sm font-semibold">{t.howItWorks?.step4?.title}</div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step4?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.step4?.desc}</p>
                                 </div>
                             </div>
                         </Card>
@@ -118,12 +107,10 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                 <div className="container mx-auto max-w-6xl">
                     <div className="mb-16 text-center">
                         <div className="bg-secondary/10 text-secondary mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold">
-                            Para Promotores
+                            {t.howItWorks?.developers?.title}
                         </div>
-                        <h2 className={`mb-4 ${titleSize} font-bold`}>Encuentra terrenos ideales en 4 pasos</h2>
-                        <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>
-                            Accede a una red de terrenos verificados y acelera tus proyectos
-                        </p>
+                        <h2 className={`mb-4 ${titleSize} font-bold`}>{t.howItWorks?.developers?.subtitle}</h2>
+                        <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>{t.benefits?.developers?.benefit1Desc}</p>
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-2">
@@ -133,11 +120,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <UserPlus className="text-secondary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-secondary mb-2 text-sm font-semibold">PASO 1</div>
-                                    <h3 className="mb-3 text-2xl font-bold">Regístrate como promotor</h3>
-                                    <p className="text-muted-foreground">
-                                        Crea tu perfil empresarial y accede a nuestra base de datos de terrenos disponibles.
-                                    </p>
+                                    <div className="text-secondary mb-2 text-sm font-semibold">{t.howItWorks?.step1?.title}</div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step1?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.step1?.desc}</p>
                                 </div>
                             </div>
                         </Card>
@@ -148,11 +133,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <FileText className="text-secondary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-secondary mb-2 text-sm font-semibold">PASO 2</div>
-                                    <h3 className="mb-3 text-2xl font-bold">Define tu proyecto</h3>
-                                    <p className="text-muted-foreground">
-                                        Especifica tipo de energía, capacidad, ubicación preferida y requisitos técnicos.
-                                    </p>
+                                    <div className="text-secondary mb-2 text-sm font-semibold">{t.howItWorks?.step2?.title}</div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step2?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.step2?.desc}</p>
                                 </div>
                             </div>
                         </Card>
@@ -163,11 +146,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <TrendingUp className="text-secondary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-secondary mb-2 text-sm font-semibold">PASO 3</div>
-                                    <h3 className="mb-3 text-2xl font-bold">Recibe matches</h3>
-                                    <p className="text-muted-foreground">
-                                        Nuestro algoritmo te mostrará terrenos compatibles con tu proyecto. Analiza y compara opciones.
-                                    </p>
+                                    <div className="text-secondary mb-2 text-sm font-semibold">{t.howItWorks?.step3?.title}</div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step3?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.step3?.desc}</p>
                                 </div>
                             </div>
                         </Card>
@@ -178,11 +159,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <Handshake className="text-secondary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-secondary mb-2 text-sm font-semibold">PASO 4</div>
-                                    <h3 className="mb-3 text-2xl font-bold">Contacta y negocia</h3>
-                                    <p className="text-muted-foreground">
-                                        Comunícate directamente con propietarios y cierra acuerdos de forma ágil y transparente.
-                                    </p>
+                                    <div className="text-secondary mb-2 text-sm font-semibold">{t.howItWorks?.step4?.title}</div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step4?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.step4?.desc}</p>
                                 </div>
                             </div>
                         </Card>

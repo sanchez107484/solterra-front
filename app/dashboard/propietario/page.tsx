@@ -5,9 +5,10 @@ import { DataTableTerrenos, type Terreno } from "@/components/dashboard/data-tab
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
+import { getTranslations, type Locale } from "@/lib/i18n"
 import { Calendar, MapPin, Plus, TrendingUp } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const terrenosData: Terreno[] = [
     {
@@ -41,6 +42,18 @@ const terrenosData: Terreno[] = [
 
 export default function DashboardPropietario() {
     const [hasTerrenos, setHasTerrenos] = useState(true)
+    const [locale, setLocale] = useState<Locale>("es")
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+        const saved = (localStorage.getItem("locale") as Locale) || "es"
+        setLocale(saved)
+    }, [])
+
+    if (!mounted) return null
+
+    const t = getTranslations(locale)
 
     return (
         <div className="bg-background flex min-h-screen">
@@ -51,13 +64,13 @@ export default function DashboardPropietario() {
                 <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-30 border-b backdrop-blur">
                     <div className="flex h-16 items-center justify-between px-8">
                         <div>
-                            <h1 className="text-2xl font-bold">Dashboard</h1>
-                            <p className="text-muted-foreground text-sm">Gestiona tus terrenos</p>
+                            <h1 className="text-2xl font-bold">{t?.dashboard?.owner?.title}</h1>
+                            <p className="text-muted-foreground text-sm">{t?.dashboard?.owner?.subtitle}</p>
                         </div>
                         <Link href="/dashboard/propietario/nuevo-terreno">
                             <Button className="gap-2">
                                 <Plus className="h-4 w-4" />
-                                Añadir Terreno
+                                {t?.dashboard?.owner?.addLand}
                             </Button>
                         </Link>
                     </div>
@@ -71,31 +84,34 @@ export default function DashboardPropietario() {
                                     <EmptyMedia>
                                         <MapPin className="h-12 w-12" />
                                     </EmptyMedia>
-                                    <EmptyTitle>Comienza a monetizar tu terreno</EmptyTitle>
-                                    <EmptyDescription>
-                                        Añade tu primer terreno y conecta con promotores de energía renovable interesados en tu propiedad.
-                                        Genera ingresos pasivos mientras contribuyes a un futuro sostenible.
-                                    </EmptyDescription>
+                                    <EmptyTitle>{t?.dashboard?.empty?.owner?.title}</EmptyTitle>
+                                    <EmptyDescription>{t?.dashboard?.empty?.owner?.description}</EmptyDescription>
                                 </EmptyHeader>
                                 <EmptyContent>
                                     <Link href="/dashboard/propietario/nuevo-terreno">
                                         <Button size="lg" className="gap-2">
                                             <Plus className="h-5 w-5" />
-                                            Añade tu primer terreno
+                                            {t?.dashboard?.empty?.owner?.addLand}
                                         </Button>
                                     </Link>
                                     <div className="mt-8 grid grid-cols-3 gap-6 border-t pt-6">
                                         <div className="text-center">
                                             <div className="text-primary text-2xl font-bold">€2,500</div>
-                                            <div className="text-muted-foreground text-xs">Ingreso promedio/ha/año</div>
+                                            <div className="text-muted-foreground text-xs">
+                                                {t?.dashboard?.empty?.owner?.metrics?.avgIncomeLabel}
+                                            </div>
                                         </div>
                                         <div className="text-center">
                                             <div className="text-primary text-2xl font-bold">25 años</div>
-                                            <div className="text-muted-foreground text-xs">Duración típica contrato</div>
+                                            <div className="text-muted-foreground text-xs">
+                                                {t?.dashboard?.empty?.owner?.metrics?.contractDurationLabel}
+                                            </div>
                                         </div>
                                         <div className="text-center">
                                             <div className="text-primary text-2xl font-bold">98%</div>
-                                            <div className="text-muted-foreground text-xs">Tasa de éxito</div>
+                                            <div className="text-muted-foreground text-xs">
+                                                {t?.dashboard?.empty?.owner?.metrics?.successRateLabel}
+                                            </div>
                                         </div>
                                     </div>
                                 </EmptyContent>
@@ -161,8 +177,8 @@ export default function DashboardPropietario() {
                             {/* Tabla de terrenos */}
                             <Card>
                                 <div className="border-b p-6">
-                                    <h2 className="text-xl font-bold">Tus Terrenos</h2>
-                                    <p className="text-muted-foreground text-sm">Gestiona y visualiza el estado de tus propiedades</p>
+                                    <h2 className="text-xl font-bold">{t?.dashboard?.owner?.yourLands}</h2>
+                                    <p className="text-muted-foreground text-sm">{t?.dashboard?.owner?.manageAndView}</p>
                                 </div>
                                 <div className="p-6">
                                     <DataTableTerrenos data={terrenosData} />

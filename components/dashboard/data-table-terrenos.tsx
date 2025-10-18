@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useTranslations } from "@/i18n/i18nContext"
 
 export type Terreno = {
     id: string
@@ -163,6 +164,7 @@ interface DataTableTerrenosProps {
 }
 
 export function DataTableTerrenos({ data }: DataTableTerrenosProps) {
+    const { t } = useTranslations()
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -193,8 +195,8 @@ export function DataTableTerrenos({ data }: DataTableTerrenosProps) {
                 <div className="relative max-w-sm flex-1">
                     <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                     <Input
-                        aria-label="Buscar terrenos por ubicación"
-                        placeholder="Buscar por ubicación..."
+                        aria-label={t.table?.search?.landsPlaceholder}
+                        placeholder={t.table?.search?.landsPlaceholder}
                         value={(table.getColumn("ubicacion")?.getFilterValue() as string) ?? ""}
                         onChange={(event) => table.getColumn("ubicacion")?.setFilterValue(event.target.value)}
                         className="h-10 pl-9"
@@ -252,7 +254,7 @@ export function DataTableTerrenos({ data }: DataTableTerrenosProps) {
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No se encontraron resultados.
+                                    {t.table?.noResults}
                                 </TableCell>
                             </TableRow>
                         )}

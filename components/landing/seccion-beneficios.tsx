@@ -58,7 +58,7 @@ export function SeccionBeneficios() {
 
                 {/* Beneficios Propietarios */}
                 <div className="mb-20">
-                    <h3 className="text-primary mb-8 text-center text-3xl font-bold">{t.benefits?.landowners.title}</h3>
+                    <h3 className="text-primary mb-8 text-center text-3xl font-bold">{t.benefits?.landowners?.title}</h3>
                     <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                         {beneficiosPropietarios.map((beneficio, index) => {
                             const Icon = beneficio.icon
@@ -100,7 +100,7 @@ export function SeccionBeneficios() {
 
                 {/* Beneficios Promotores */}
                 <div>
-                    <h3 className="text-secondary mb-8 text-center text-3xl font-bold">{t.benefits?.developers.title}</h3>
+                    <h3 className="text-secondary mb-8 text-center text-3xl font-bold">{t.benefits?.developers?.title}</h3>
                     <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                         {beneficiosPromotores.map((beneficio, index) => {
                             const Icon = beneficio.icon

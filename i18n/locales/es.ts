@@ -12,6 +12,7 @@ export const es = {
         subtitle: "La plataforma que une propietarios de terrenos rurales con desarrolladores de proyectos solares y eólicos",
         ctaLandowner: "Soy Propietario",
         ctaDeveloper: "Soy Promotor",
+        badge: "81% energía renovable para 2030",
     },
     benefits: {
         title: "¿Por qué Solterra?",
@@ -52,6 +53,18 @@ export const es = {
             title: "Desarrolla",
             desc: "Inicia tu proyecto de energía renovable",
         },
+        landowners: {
+            title: "Para Propietarios",
+            subtitle: "Monetiza tu terreno en 4 pasos",
+        },
+        developers: {
+            title: "Para Promotores",
+            subtitle: "Encuentra terrenos ideales en 4 pasos",
+        },
+        quick: {
+            title: "Cómo funciona (rápido)",
+            subtitle: "Propietarios y promotores lado a lado",
+        },
     },
     cta: {
         title: "¿Listo para comenzar?",
@@ -68,6 +81,215 @@ export const es = {
         privacy: "Privacidad",
         terms: "Términos",
         rights: "Todos los derechos reservados",
+    },
+    faq: {
+        title: "Preguntas Frecuentes",
+        subtitle: "Aquí encontrarás respuestas a las preguntas más comunes sobre nuestra plataforma",
+        categories: {
+            all: "Todas",
+            general: "General",
+            landowner: "Propietarios",
+            developer: "Promotores",
+        },
+        contactCta: "Contacta con nuestro equipo",
+        email: "info@solterra.com",
+    },
+    stats: {
+        impactLabel: "Impacto Real",
+        sourceNote:
+            "Datos basados en el Plan Nacional Integrado de Energía y Clima (PNIEC 2023-2030) y la experiencia de más de 200 proyectos completados",
+    },
+    testimonials: {
+        title: "Casos de Éxito",
+        subtitle: "Historias reales de propietarios y promotores que ya están transformando el sector energético",
+        trust: {
+            rating: "+200 valoraciones",
+            satisfaction: "Satisfacción",
+            contracts: "En contratos",
+        },
+    },
+    table: {
+        search: {
+            projectsPlaceholder: "Buscar por nombre...",
+            landsPlaceholder: "Buscar por ubicación...",
+        },
+        noResults: "No se encontraron resultados.",
+        pagination: {
+            previous: "Anterior",
+            next: "Siguiente",
+        },
+        columns: {
+            proyecto: "Proyecto",
+            tipo: "Tipo",
+            capacidad: "Capacidad",
+            estado: "Estado",
+            terrenos: "Terrenos",
+            ubicacion: "Ubicación",
+            hectareas: "Hectáreas",
+            interesados: "Interesados",
+            actions: "Acciones",
+        },
+        actionsMenu: {
+            viewMatches: "Ver matches",
+            editProject: "Editar proyecto",
+            viewTerrains: "Ver terrenos compatibles",
+            pauseProject: "Pausar proyecto",
+            viewDetails: "Ver detalles",
+            editLand: "Editar terreno",
+            viewInterested: "Ver interesados",
+            pauseListing: "Pausar publicación",
+        },
+    },
+    sidebar: {
+        login: "Iniciar sesión",
+        signup: "Registrarse",
+    },
+    contact: {
+        hero: {
+            title: "Contacta con nosotros",
+            subtitle: "Estamos aquí para ayudarte. Envíanos tu consulta y te responderemos lo antes posible.",
+        },
+        form: {
+            title: "Envíanos un mensaje",
+            nameLabel: "Nombre completo",
+            namePlaceholder: "Juan Pérez",
+            emailLabel: "Correo electrónico",
+            emailPlaceholder: "tu@email.com",
+            phoneLabel: "Teléfono (opcional)",
+            phonePlaceholder: "+34 600 000 000",
+            typeLabel: "Tipo de consulta",
+            typeOptions: {
+                empty: "Selecciona una opción",
+                landowner: "Soy propietario de terreno",
+                developer: "Soy promotor de proyectos",
+                general: "Consulta general",
+                support: "Soporte técnico",
+            },
+            messageLabel: "Mensaje",
+            messagePlaceholder: "Cuéntanos en qué podemos ayudarte...",
+            submit: "Enviar mensaje",
+        },
+        info: {
+            title: "Información de contacto",
+            emailTitle: "Email",
+            email: "info@solterradvisory.com",
+            emailNote: "Respuesta en 24-48 horas",
+            phoneTitle: "Teléfono",
+            phone: "+34 900 000 000",
+            phoneHours: "Lun-Vie: 9:00 - 18:00",
+            officeTitle: "Oficina",
+            officeAddress: "Calle Energía Renovable, 123",
+            officeCity: "28001 Madrid, España",
+            scheduleTitle: "Horario de atención",
+            schedule: {
+                monFri: "Lunes - Viernes",
+                sat: "Sábado",
+                sun: "Domingo",
+                monFriHours: "9:00 - 18:00",
+                satHours: "10:00 - 14:00",
+                sunHours: "Cerrado",
+            },
+        },
+    },
+    about: {
+        hero: {
+            title: "Sobre Solterra Advisory",
+            subtitle: "Impulsamos la transición energética conectando terrenos con proyectos de energía renovable",
+        },
+        mission: {
+            badge: "Nuestra Misión",
+            title: "Acelerar la transición hacia energías limpias",
+            p1: "En Solterra Advisory creemos que la energía renovable es el futuro. Nuestra misión es facilitar el desarrollo de proyectos solares y eólicos conectando a propietarios de terrenos rurales con promotores especializados.",
+            p2: "Eliminamos las barreras tradicionales del sector, haciendo que el proceso sea transparente, eficiente y beneficioso para todas las partes involucradas.",
+        },
+        values: {
+            title: "Nuestros valores",
+            transparency: {
+                title: "Transparencia",
+                desc: "Información clara y verificada en cada paso del proceso. Sin sorpresas ni costes ocultos.",
+            },
+            efficiency: {
+                title: "Eficiencia",
+                desc: "Tecnología avanzada que reduce tiempos y optimiza el matching entre terrenos y proyectos.",
+            },
+            sustainability: {
+                title: "Sostenibilidad",
+                desc: "Compromiso real con el medio ambiente y el desarrollo de energías limpias.",
+            },
+            ctaTitle: "Únete a la revolución energética",
+            ctaSubtitle: "Forma parte del cambio hacia un futuro más sostenible y rentable",
+            ctaOwner: "Soy propietario",
+            ctaDeveloper: "Soy promotor",
+        },
+    },
+    auth: {
+        common: {
+            back: "Volver al inicio",
+            remember: "Recordarme",
+        },
+        promoter: {
+            welcomeBack: "Bienvenido de nuevo",
+            createAccount: "Crear cuenta",
+            subtitleLogin: "Accede a tu cuenta de promotor",
+            subtitleRegister: "Regístrate como promotor de proyectos",
+            switchToRegister: "Regístrate",
+            switchToLogin: "Inicia sesión",
+            forgotPassword: "¿Olvidaste tu contraseña?",
+            loginButton: "Iniciar sesión",
+            registerButton: "Crear cuenta",
+            accessAsOwner: "Acceder como propietario",
+        },
+        owner: {
+            welcomeBack: "Bienvenido de nuevo",
+            createAccount: "Crear cuenta",
+            subtitleLogin: "Accede a tu cuenta de propietario",
+            subtitleRegister: "Regístrate como propietario de terreno",
+            switchToRegister: "Regístrate",
+            switchToLogin: "Inicia sesión",
+            forgotPassword: "¿Olvidaste tu contraseña?",
+            loginButton: "Iniciar sesión",
+            registerButton: "Crear cuenta",
+            accessAsPromoter: "Acceder como promotor",
+        },
+    },
+    dashboard: {
+        header: {
+            title: "Dashboard",
+            manageProjects: "Gestiona tus proyectos",
+            manageLands: "Gestiona tus terrenos",
+            newProject: "Nuevo Proyecto",
+            addLand: "Añadir Terreno",
+        },
+        empty: {
+            promoter: {
+                title: "Encuentra terrenos para tus proyectos",
+                description:
+                    "Añade tu primer proyecto y descubre terrenos ideales para desarrollar energía renovable. Conecta con propietarios y acelera el desarrollo de tus iniciativas sostenibles.",
+                addProject: "Añade tu primer proyecto",
+            },
+            owner: {
+                title: "Comienza a monetizar tu terreno",
+                description:
+                    "Añade tu primer terreno y conecta con promotores de energía renovable interesados en tu propiedad. Genera ingresos pasivos mientras contribuyes a un futuro sostenible.",
+                addLand: "Añade tu primer terreno",
+                metrics: {
+                    avgIncomeLabel: "Ingreso promedio/ha/año",
+                    contractDurationLabel: "Duración típica contrato",
+                    successRateLabel: "Tasa de éxito",
+                },
+            },
+        },
+        stats: {
+            projectsActive: "Proyectos Activos",
+            landsCompatible: "Terrenos Compatibles",
+            totalCapacity: "Capacidad Total",
+            estimatedInvestment: "Inversión Estimada",
+        },
+        table: {
+            yourProjects: "Tus Proyectos",
+            yourLands: "Tus Terrenos",
+            manageAndView: "Gestiona y visualiza el estado de tus propiedades",
+        },
     },
 }
 

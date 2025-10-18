@@ -12,6 +12,7 @@ export const en = {
         subtitle: "The platform that connects rural landowners with solar and wind project developers",
         ctaLandowner: "I'm a Landowner",
         ctaDeveloper: "I'm a Developer",
+        badge: "81% renewable energy by 2030",
     },
     benefits: {
         title: "Why Solterra?",
@@ -52,6 +53,18 @@ export const en = {
             title: "Develop",
             desc: "Start your renewable energy project",
         },
+        landowners: {
+            title: "For Landowners",
+            subtitle: "Monetize your land in 4 steps",
+        },
+        developers: {
+            title: "For Developers",
+            subtitle: "Find ideal land in 4 steps",
+        },
+        quick: {
+            title: "How it works (quick)",
+            subtitle: "Landowners and developers side-by-side",
+        },
     },
     cta: {
         title: "Ready to get started?",
@@ -68,6 +81,215 @@ export const en = {
         privacy: "Privacy",
         terms: "Terms",
         rights: "All rights reserved",
+    },
+    faq: {
+        title: "FAQ",
+        subtitle: "Find answers to the most common questions about our platform",
+        categories: {
+            all: "All",
+            general: "General",
+            landowner: "Landowners",
+            developer: "Developers",
+        },
+        contactCta: "Contact our team",
+        email: "info@solterra.com",
+    },
+    stats: {
+        impactLabel: "Real Impact",
+        sourceNote:
+            "Data based on the National Integrated Energy and Climate Plan (PNIEC 2023-2030) and the experience of over 200 completed projects",
+    },
+    testimonials: {
+        title: "Success Stories",
+        subtitle: "Real stories from landowners and developers transforming the energy sector",
+        trust: {
+            rating: "+200 reviews",
+            satisfaction: "Satisfaction",
+            contracts: "In contracts",
+        },
+    },
+    table: {
+        search: {
+            projectsPlaceholder: "Search by name...",
+            landsPlaceholder: "Search by location...",
+        },
+        noResults: "No results found.",
+        pagination: {
+            previous: "Previous",
+            next: "Next",
+        },
+        columns: {
+            proyecto: "Project",
+            tipo: "Type",
+            capacidad: "Capacity",
+            estado: "Status",
+            terrenos: "Plots",
+            ubicacion: "Location",
+            hectareas: "Hectares",
+            interesados: "Interested",
+            actions: "Actions",
+        },
+        actionsMenu: {
+            viewMatches: "View matches",
+            editProject: "Edit project",
+            viewTerrains: "View compatible plots",
+            pauseProject: "Pause project",
+            viewDetails: "View details",
+            editLand: "Edit land",
+            viewInterested: "View interested",
+            pauseListing: "Pause listing",
+        },
+    },
+    sidebar: {
+        login: "Log in",
+        signup: "Sign up",
+    },
+    contact: {
+        hero: {
+            title: "Contact us",
+            subtitle: "We're here to help. Send us your inquiry and we'll reply as soon as possible.",
+        },
+        form: {
+            title: "Send us a message",
+            nameLabel: "Full name",
+            namePlaceholder: "John Smith",
+            emailLabel: "Email",
+            emailPlaceholder: "you@company.com",
+            phoneLabel: "Phone (optional)",
+            phonePlaceholder: "+34 600 000 000",
+            typeLabel: "Inquiry type",
+            typeOptions: {
+                empty: "Select an option",
+                landowner: "I'm a landowner",
+                developer: "I'm a developer",
+                general: "General inquiry",
+                support: "Technical support",
+            },
+            messageLabel: "Message",
+            messagePlaceholder: "Tell us how we can help...",
+            submit: "Send message",
+        },
+        info: {
+            title: "Contact information",
+            emailTitle: "Email",
+            email: "info@solterradvisory.com",
+            emailNote: "Response within 24-48 hours",
+            phoneTitle: "Phone",
+            phone: "+34 900 000 000",
+            phoneHours: "Mon-Fri: 9:00 - 18:00",
+            officeTitle: "Office",
+            officeAddress: "Calle Energía Renovable, 123",
+            officeCity: "28001 Madrid, Spain",
+            scheduleTitle: "Opening hours",
+            schedule: {
+                monFri: "Monday - Friday",
+                sat: "Saturday",
+                sun: "Sunday",
+                monFriHours: "9:00 - 18:00",
+                satHours: "10:00 - 14:00",
+                sunHours: "Closed",
+            },
+        },
+    },
+    about: {
+        hero: {
+            title: "About Solterra Advisory",
+            subtitle: "We accelerate the energy transition by connecting land with renewable energy projects",
+        },
+        mission: {
+            badge: "Our Mission",
+            title: "Accelerate the transition to clean energy",
+            p1: "At Solterra Advisory we believe renewable energy is the future. Our mission is to facilitate the development of solar and wind projects by connecting rural landowners with specialized developers.",
+            p2: "We remove traditional barriers in the sector, making the process transparent, efficient and beneficial for all parties involved.",
+        },
+        values: {
+            title: "Our values",
+            transparency: {
+                title: "Transparency",
+                desc: "Clear, verified information at every step of the process. No surprises or hidden costs.",
+            },
+            efficiency: {
+                title: "Efficiency",
+                desc: "Advanced technology that reduces time and optimizes matching between land and projects.",
+            },
+            sustainability: {
+                title: "Sustainability",
+                desc: "Real commitment to the environment and the development of clean energy.",
+            },
+            ctaTitle: "Join the energy revolution",
+            ctaSubtitle: "Be part of the change toward a more sustainable and profitable future",
+            ctaOwner: "I'm an owner",
+            ctaDeveloper: "I'm a developer",
+        },
+    },
+    auth: {
+        common: {
+            back: "Back to home",
+            remember: "Remember me",
+        },
+        promoter: {
+            welcomeBack: "Welcome back",
+            createAccount: "Create account",
+            subtitleLogin: "Access your promoter account",
+            subtitleRegister: "Register as a project promoter",
+            switchToRegister: "Register",
+            switchToLogin: "Sign in",
+            forgotPassword: "Forgot your password?",
+            loginButton: "Sign in",
+            registerButton: "Create account",
+            accessAsOwner: "Access as owner",
+        },
+        owner: {
+            welcomeBack: "Welcome back",
+            createAccount: "Create account",
+            subtitleLogin: "Access your owner account",
+            subtitleRegister: "Register as a landowner",
+            switchToRegister: "Register",
+            switchToLogin: "Sign in",
+            forgotPassword: "Forgot your password?",
+            loginButton: "Sign in",
+            registerButton: "Create account",
+            accessAsPromoter: "Access as promoter",
+        },
+    },
+    dashboard: {
+        header: {
+            title: "Dashboard",
+            manageProjects: "Manage your projects",
+            manageLands: "Manage your lands",
+            newProject: "New Project",
+            addLand: "Add Land",
+        },
+        empty: {
+            promoter: {
+                title: "Find lands for your projects",
+                description:
+                    "Add your first project and discover ideal lands to develop renewable energy. Connect with landowners and accelerate your sustainable initiatives.",
+                addProject: "Add your first project",
+            },
+            owner: {
+                title: "Start monetizing your land",
+                description:
+                    "Add your first land and connect with renewable energy developers interested in your property. Generate passive income while contributing to a sustainable future.",
+                addLand: "Add your first land",
+                metrics: {
+                    avgIncomeLabel: "Average income/ha/year",
+                    contractDurationLabel: "Typical contract duration",
+                    successRateLabel: "Success rate",
+                },
+            },
+        },
+        stats: {
+            projectsActive: "Active Projects",
+            landsCompatible: "Compatible Lands",
+            totalCapacity: "Total Capacity",
+            estimatedInvestment: "Estimated Investment",
+        },
+        table: {
+            yourProjects: "Your Projects",
+            yourLands: "Your Lands",
+            manageAndView: "Manage and view the status of your properties",
+        },
     },
 }
 

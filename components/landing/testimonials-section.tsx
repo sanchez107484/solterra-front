@@ -1,6 +1,7 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
+import { useTranslations } from "@/i18n/i18nContext"
 import { Quote, Star } from "lucide-react"
 
 interface Testimonial {
@@ -48,21 +49,22 @@ const testimonials: Testimonial[] = [
 ]
 
 export function TestimonialsSection() {
+    const { t } = useTranslations()
     return (
         <section className="bg-muted/30 py-20 md:py-32">
             <div className="container mx-auto px-4">
                 <div className="mb-16 text-center">
                     <div className="bg-accent/20 border-accent/30 mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-2">
                         <Star className="text-accent-foreground fill-accent-foreground h-4 w-4" />
-                        <span className="text-accent-foreground text-sm font-semibold">Casos de Éxito</span>
+                        <span className="text-accent-foreground text-sm font-semibold">{t.testimonials?.title}</span>
                     </div>
                     <h2 className="mb-4 text-4xl font-bold md:text-5xl">
-                        Lo que dicen{" "}
-                        <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">nuestros clientes</span>
+                        {t.testimonials?.title}{" "}
+                        <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">
+                            {t.testimonials?.subtitle}
+                        </span>
                     </h2>
-                    <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
-                        Historias reales de propietarios y promotores que ya están transformando el sector energético
-                    </p>
+                    <p className="text-muted-foreground mx-auto max-w-2xl text-xl">{t.testimonials?.subtitle}</p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -122,18 +124,18 @@ export function TestimonialsSection() {
                                         <Star key={i} className="text-accent-foreground fill-accent-foreground h-4 w-4" />
                                     ))}
                                 </div>
-                                <div className="text-xs">+200 valoraciones</div>
+                                <div className="text-xs">{t.testimonials?.trust?.rating}</div>
                             </div>
                         </div>
                         <div className="bg-border h-8 w-px" />
                         <div className="text-center">
                             <div className="text-secondary-foreground text-2xl font-bold">98%</div>
-                            <div className="text-xs">Satisfacción</div>
+                            <div className="text-xs">{t.testimonials?.trust?.satisfaction}</div>
                         </div>
                         <div className="bg-border h-8 w-px" />
                         <div className="text-center">
                             <div className="text-accent-foreground text-2xl font-bold">€2M+</div>
-                            <div className="text-xs">En contratos</div>
+                            <div className="text-xs">{t.testimonials?.trust?.contracts}</div>
                         </div>
                     </div>
                 </div>

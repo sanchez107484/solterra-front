@@ -1,12 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { useTranslations } from "@/i18n/i18nContext"
 import { ArrowRight, ChevronDown, Leaf, Sun, Wind, Zap } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
 export function HeroSection() {
     const [isVisible, setIsVisible] = useState(false)
+    const { t } = useTranslations()
 
     useEffect(() => {
         setIsVisible(true)
@@ -67,23 +69,15 @@ export function HeroSection() {
                         {/* Badge */}
                         <div className="bg-primary/10 border-primary/20 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-2">
                             <Zap className="text-primary h-4 w-4 animate-pulse" />
-                            <span className="text-primary text-sm font-semibold">81% energía renovable para 2030</span>
+                            <span className="text-primary text-sm font-semibold">{t.hero?.badge ?? "81% energía renovable para 2030"}</span>
                         </div>
 
                         <h1 className="text-foreground mb-6 text-5xl font-bold tracking-tight text-balance md:text-6xl lg:text-7xl">
-                            Conectamos{" "}
-                            <span className="from-primary via-secondary to-primary animate-gradient bg-gradient-to-r bg-clip-text text-transparent">
-                                terrenos
-                            </span>{" "}
-                            con el futuro de la{" "}
-                            <span className="from-secondary via-accent to-secondary animate-gradient bg-gradient-to-r bg-clip-text text-transparent">
-                                energía renovable
-                            </span>
+                            {t.hero?.title}
                         </h1>
 
                         <p className="text-muted-foreground mx-auto mb-12 max-w-3xl text-xl text-pretty md:text-2xl lg:text-3xl">
-                            El marketplace que une propietarios de terrenos rurales con promotores de proyectos solares y eólicos.
-                            <span className="text-muted-foreground/80 mt-2 block text-lg md:text-xl">Seguro, transparente y rentable.</span>
+                            {t.hero?.subtitle}
                         </p>
 
                         {/* CTA Cards */}
@@ -95,10 +89,8 @@ export function HeroSection() {
                                         <Leaf className="text-primary h-6 w-6" />
                                     </div>
                                     <div className="from-primary/0 to-primary/10 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                    <h3 className="text-foreground relative z-10 mb-3 text-2xl font-bold">Soy propietario</h3>
-                                    <p className="text-muted-foreground relative z-10 mb-6">
-                                        Monetiza tu terreno con proyectos de energía renovable
-                                    </p>
+                                    <h3 className="text-foreground relative z-10 mb-3 text-2xl font-bold">{t.hero?.ctaLandowner}</h3>
+                                    <p className="text-muted-foreground relative z-10 mb-6">{t.benefits?.landowners?.benefit1Desc}</p>
                                     <div className="text-muted-foreground relative z-10 mb-6 flex items-center text-sm">
                                         <div className="flex items-center gap-2">
                                             <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-green-500"></span>
@@ -106,7 +98,7 @@ export function HeroSection() {
                                         </div>
                                     </div>
                                     <Button className="bg-primary hover:bg-primary/90 relative z-10 w-full transition-all group-hover:gap-3">
-                                        Comenzar
+                                        {t.cta?.landowner}
                                         <ArrowRight className="ml-2 h-5 w-5 transition-all group-hover:translate-x-1" />
                                     </Button>
                                 </div>
@@ -119,10 +111,8 @@ export function HeroSection() {
                                         <Zap className="text-secondary-foreground h-6 w-6" />
                                     </div>
                                     <div className="from-secondary/0 to-secondary/10 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                    <h3 className="text-foreground relative z-10 mb-3 text-2xl font-bold">Soy promotor</h3>
-                                    <p className="text-muted-foreground relative z-10 mb-6">
-                                        Encuentra terrenos ideales para tus proyectos renovables
-                                    </p>
+                                    <h3 className="text-foreground relative z-10 mb-3 text-2xl font-bold">{t.hero?.ctaDeveloper}</h3>
+                                    <p className="text-muted-foreground relative z-10 mb-6">{t.benefits?.developers?.benefit1Desc}</p>
                                     <div className="text-muted-foreground relative z-10 mb-6 flex items-center text-sm">
                                         <div className="flex items-center gap-2">
                                             <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-blue-500"></span>
@@ -130,7 +120,7 @@ export function HeroSection() {
                                         </div>
                                     </div>
                                     <Button className="bg-secondary hover:bg-secondary/90 relative z-10 w-full transition-all group-hover:gap-3">
-                                        Explorar
+                                        {t.cta?.developer}
                                         <ArrowRight className="ml-2 h-5 w-5 transition-all group-hover:translate-x-1" />
                                     </Button>
                                 </div>

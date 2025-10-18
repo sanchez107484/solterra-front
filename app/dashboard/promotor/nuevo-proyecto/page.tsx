@@ -7,10 +7,11 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { getTranslations, type Locale } from "@/lib/i18n"
 import { ArrowLeft, Briefcase, Check, ChevronRight, Home, Zap } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function NuevoProyecto() {
     const router = useRouter()
@@ -27,6 +28,19 @@ export default function NuevoProyecto() {
         presupuesto: "",
         timeline: "",
     })
+
+    const [locale, setLocale] = useState<Locale>("es")
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+        const saved = (localStorage.getItem("locale") as Locale) || "es"
+        setLocale(saved)
+    }, [])
+
+    if (!mounted) return null
+
+    const t = getTranslations(locale)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -51,13 +65,13 @@ export default function NuevoProyecto() {
                                 <span className="from-secondary to-secondary/70 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
                                     Solterra
                                 </span>
-                                <p className="text-muted-foreground text-xs">Advisory Marketplace</p>
+                                <p className="text-muted-foreground text-xs">{t?.common?.marketplace}</p>
                             </div>
                         </Link>
                         <Link href="/dashboard/promotor">
                             <Button variant="ghost" size="sm" className="hover:bg-secondary/10 gap-2">
                                 <ArrowLeft className="h-4 w-4" />
-                                Volver al dashboard
+                                {t?.common?.backToDashboard}
                             </Button>
                         </Link>
                     </div>
@@ -65,10 +79,10 @@ export default function NuevoProyecto() {
                         <Home className="h-4 w-4" />
                         <ChevronRight className="h-4 w-4" />
                         <Link href="/dashboard/promotor" className="hover:text-foreground transition-colors">
-                            Dashboard
+                            {t?.dashboard?.promoter?.dashboard}
                         </Link>
                         <ChevronRight className="h-4 w-4" />
-                        <span className="text-foreground font-medium">Nuevo Proyecto</span>
+                        <span className="text-foreground font-medium">{t?.dashboard?.promoter?.newProject}</span>
                     </div>
                 </div>
             </header>
@@ -98,10 +112,14 @@ export default function NuevoProyecto() {
                     </div>
                     <div className="flex justify-between text-sm">
                         <span className={step >= 1 ? "text-foreground font-medium" : "text-muted-foreground"}>
-                            Información del proyecto
+                            {t?.forms?.projectInfoTitle}
                         </span>
-                        <span className={step >= 2 ? "text-foreground font-medium" : "text-muted-foreground"}>Requisitos del terreno</span>
-                        <span className={step >= 3 ? "text-foreground font-medium" : "text-muted-foreground"}>Detalles adicionales</span>
+                        <span className={step >= 2 ? "text-foreground font-medium" : "text-muted-foreground"}>
+                            {t?.forms?.requirementsTitle}
+                        </span>
+                        <span className={step >= 3 ? "text-foreground font-medium" : "text-muted-foreground"}>
+                            {t?.forms?.additionalDetailsTitle}
+                        </span>
                     </div>
                 </div>
 
@@ -114,15 +132,15 @@ export default function NuevoProyecto() {
                                     <div className="bg-secondary/10 mb-4 inline-flex rounded-2xl p-4">
                                         <Briefcase className="text-secondary h-10 w-10" />
                                     </div>
-                                    <h2 className="mb-2 text-3xl font-bold">Información del proyecto</h2>
-                                    <p className="text-muted-foreground">Cuéntanos sobre tu proyecto renovable</p>
+                                    <h2 className="mb-2 text-3xl font-bold">{t?.forms?.projectInfoTitle}</h2>
+                                    <p className="text-muted-foreground">{t?.forms?.projectInfoSubtitle}</p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="nombre">Nombre del proyecto</Label>
+                                    <Label htmlFor="nombre">{t?.forms?.labels?.projectName}</Label>
                                     <Input
                                         id="nombre"
-                                        placeholder="Ej: Parque Solar Extremadura"
+                                        placeholder={t?.forms?.examples?.projectName}
                                         className="h-12"
                                         value={formData.nombre}
                                         onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
@@ -131,10 +149,10 @@ export default function NuevoProyecto() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="empresa">Empresa promotora</Label>
+                                    <Label htmlFor="empresa">{t?.forms?.labels?.company}</Label>
                                     <Input
                                         id="empresa"
-                                        placeholder="Ej: Energías Renovables S.L."
+                                        placeholder={t?.forms?.examples?.company}
                                         className="h-12"
                                         value={formData.empresa}
                                         onChange={(e) => setFormData({ ...formData, empresa: e.target.value })}
@@ -143,7 +161,7 @@ export default function NuevoProyecto() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Tipo de proyecto</Label>
+                                    <Label>{t?.forms?.labels?.projectType}</Label>
                                     <div className="grid grid-cols-2 gap-4">
                                         <button
                                             type="button"
@@ -154,8 +172,8 @@ export default function NuevoProyecto() {
                                                     : "border-border hover:border-primary/50"
                                             }`}
                                         >
-                                            <div className="mb-1 font-semibold">Solar</div>
-                                            <div className="text-muted-foreground text-sm">Paneles fotovoltaicos</div>
+                                            <div className="mb-1 font-semibold">{t?.forms?.examples?.solar}</div>
+                                            <div className="text-muted-foreground text-sm">{t?.forms?.examples?.solarDesc}</div>
                                         </button>
                                         <button
                                             type="button"
@@ -166,19 +184,19 @@ export default function NuevoProyecto() {
                                                     : "border-border hover:border-secondary/50"
                                             }`}
                                         >
-                                            <div className="mb-1 font-semibold">Eólico</div>
-                                            <div className="text-muted-foreground text-sm">Aerogeneradores</div>
+                                            <div className="mb-1 font-semibold">{t?.forms?.examples?.wind}</div>
+                                            <div className="text-muted-foreground text-sm">{t?.forms?.examples?.windDesc}</div>
                                         </button>
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="capacidad">Capacidad estimada (MW)</Label>
+                                    <Label htmlFor="capacidad">{t?.forms?.labels?.capacity}</Label>
                                     <Input
                                         id="capacidad"
                                         type="number"
                                         step="0.1"
-                                        placeholder="Ej: 20"
+                                        placeholder={t?.forms?.examples?.capacity}
                                         className="h-12"
                                         value={formData.capacidad}
                                         onChange={(e) => setFormData({ ...formData, capacidad: e.target.value })}
@@ -187,10 +205,10 @@ export default function NuevoProyecto() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="descripcion">Descripción del proyecto</Label>
+                                    <Label htmlFor="descripcion">{t?.forms?.labels?.description}</Label>
                                     <Textarea
                                         id="descripcion"
-                                        placeholder="Describe los objetivos y características principales de tu proyecto..."
+                                        placeholder={t?.forms?.examples?.projectDescription}
                                         className="min-h-32"
                                         value={formData.descripcion}
                                         onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
@@ -198,7 +216,7 @@ export default function NuevoProyecto() {
                                 </div>
 
                                 <Button type="button" onClick={nextStep} className="bg-secondary hover:bg-secondary/90 h-12 w-full">
-                                    Continuar
+                                    {t?.common?.continue}
                                 </Button>
                             </div>
                         )}
@@ -210,31 +228,31 @@ export default function NuevoProyecto() {
                                     <div className="bg-secondary/10 mb-4 inline-flex rounded-2xl p-4">
                                         <Briefcase className="text-secondary h-10 w-10" />
                                     </div>
-                                    <h2 className="mb-2 text-3xl font-bold">Requisitos del terreno</h2>
-                                    <p className="text-muted-foreground">Define qué tipo de terreno necesitas</p>
+                                    <h2 className="mb-2 text-3xl font-bold">{t?.forms?.requirementsTitle}</h2>
+                                    <p className="text-muted-foreground">{t?.forms?.requirementsSubtitle}</p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="provincias">Provincias de interés</Label>
+                                    <Label htmlFor="provincias">{t?.forms?.labels?.provinces}</Label>
                                     <Input
                                         id="provincias"
-                                        placeholder="Ej: Badajoz, Cáceres, Albacete"
+                                        placeholder={t?.forms?.examples?.provinces}
                                         className="h-12"
                                         value={formData.provincias}
                                         onChange={(e) => setFormData({ ...formData, provincias: e.target.value })}
                                         required
                                     />
-                                    <p className="text-muted-foreground text-sm">Separa múltiples provincias con comas</p>
+                                    <p className="text-muted-foreground text-sm">{t?.forms?.provincesNote}</p>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="hectareasMin">Hectáreas mínimas</Label>
+                                        <Label htmlFor="hectareasMin">{t?.forms?.labels?.minHectares}</Label>
                                         <Input
                                             id="hectareasMin"
                                             type="number"
                                             step="0.1"
-                                            placeholder="Ej: 10"
+                                            placeholder={t?.forms?.examples?.minHectares}
                                             className="h-12"
                                             value={formData.hectareasMin}
                                             onChange={(e) => setFormData({ ...formData, hectareasMin: e.target.value })}
@@ -242,12 +260,12 @@ export default function NuevoProyecto() {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="hectareasMax">Hectáreas máximas</Label>
+                                        <Label htmlFor="hectareasMax">{t?.forms?.labels?.maxHectares}</Label>
                                         <Input
                                             id="hectareasMax"
                                             type="number"
                                             step="0.1"
-                                            placeholder="Ej: 50"
+                                            placeholder={t?.forms?.examples?.maxHectares}
                                             className="h-12"
                                             value={formData.hectareasMax}
                                             onChange={(e) => setFormData({ ...formData, hectareasMax: e.target.value })}
@@ -256,33 +274,33 @@ export default function NuevoProyecto() {
                                 </div>
 
                                 <div className="bg-secondary/5 border-secondary/20 rounded-xl border p-6">
-                                    <h3 className="mb-3 font-semibold">Características deseables del terreno</h3>
+                                    <h3 className="mb-3 font-semibold">{t?.forms?.desiredLandFeaturesTitle}</h3>
                                     <div className="space-y-2">
                                         <label className="flex cursor-pointer items-center gap-2">
                                             <input type="checkbox" className="border-input rounded" />
-                                            <span className="text-sm">Acceso por carretera asfaltada</span>
+                                            <span className="text-sm">{t?.forms?.checkboxes?.roadAccess}</span>
                                         </label>
                                         <label className="flex cursor-pointer items-center gap-2">
                                             <input type="checkbox" className="border-input rounded" />
-                                            <span className="text-sm">Suministro eléctrico cercano</span>
+                                            <span className="text-sm">{t?.forms?.checkboxes?.electricitySupply}</span>
                                         </label>
                                         <label className="flex cursor-pointer items-center gap-2">
                                             <input type="checkbox" className="border-input rounded" />
-                                            <span className="text-sm">Terreno llano o con poca pendiente</span>
+                                            <span className="text-sm">{t?.forms?.checkboxes?.flatLand}</span>
                                         </label>
                                         <label className="flex cursor-pointer items-center gap-2">
                                             <input type="checkbox" className="border-input rounded" />
-                                            <span className="text-sm">Sin restricciones urbanísticas</span>
+                                            <span className="text-sm">{t?.forms?.checkboxes?.noUrbanRestrictions}</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div className="flex gap-4">
                                     <Button type="button" onClick={prevStep} variant="outline" className="h-12 flex-1 bg-transparent">
-                                        Atrás
+                                        {t?.common?.back}
                                     </Button>
                                     <Button type="button" onClick={nextStep} className="bg-secondary hover:bg-secondary/90 h-12 flex-1">
-                                        Continuar
+                                        {t?.common?.continue}
                                     </Button>
                                 </div>
                             </div>
@@ -295,28 +313,28 @@ export default function NuevoProyecto() {
                                     <div className="bg-secondary/10 mb-4 inline-flex rounded-2xl p-4">
                                         <Briefcase className="text-secondary h-10 w-10" />
                                     </div>
-                                    <h2 className="mb-2 text-3xl font-bold">Detalles adicionales</h2>
-                                    <p className="text-muted-foreground">Información sobre presupuesto y timeline</p>
+                                    <h2 className="mb-2 text-3xl font-bold">{t?.forms?.additionalDetailsTitle}</h2>
+                                    <p className="text-muted-foreground">{t?.forms?.additionalDetailsSubtitle}</p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="presupuesto">Presupuesto estimado (€)</Label>
+                                    <Label htmlFor="presupuesto">{t?.forms?.labels?.budget}</Label>
                                     <Input
                                         id="presupuesto"
                                         type="number"
-                                        placeholder="Ej: 15000000"
+                                        placeholder={t?.forms?.examples?.budget}
                                         className="h-12"
                                         value={formData.presupuesto}
                                         onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })}
                                     />
-                                    <p className="text-muted-foreground text-sm">Esta información es privada y solo orientativa</p>
+                                    <p className="text-muted-foreground text-sm">{t?.forms?.budgetNote}</p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="timeline">Timeline del proyecto</Label>
+                                    <Label htmlFor="timeline">{t?.forms?.labels?.timeline}</Label>
                                     <Textarea
                                         id="timeline"
-                                        placeholder="Describe las fases y plazos estimados del proyecto..."
+                                        placeholder={t?.forms?.examples?.timeline}
                                         className="min-h-24"
                                         value={formData.timeline}
                                         onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
@@ -324,21 +342,21 @@ export default function NuevoProyecto() {
                                 </div>
 
                                 <div className="bg-secondary/5 border-secondary/20 rounded-xl border p-6">
-                                    <h3 className="text-secondary mb-2 font-semibold">Próximos pasos</h3>
+                                    <h3 className="text-secondary mb-2 font-semibold">{t?.forms?.nextStepsTitle}</h3>
                                     <ul className="text-muted-foreground space-y-1 text-sm">
-                                        <li>• Tu proyecto será revisado por nuestro equipo</li>
-                                        <li>• Recibirás matches con terrenos compatibles</li>
-                                        <li>• Podrás contactar directamente con los propietarios</li>
-                                        <li>• Accederás a herramientas de análisis y comparación</li>
+                                        <li>{t?.forms?.nextSteps?.step1}</li>
+                                        <li>{t?.forms?.nextSteps?.step2}</li>
+                                        <li>{t?.forms?.nextSteps?.step3}</li>
+                                        <li>{t?.forms?.nextSteps?.step4}</li>
                                     </ul>
                                 </div>
 
                                 <div className="flex gap-4">
                                     <Button type="button" onClick={prevStep} variant="outline" className="h-12 flex-1 bg-transparent">
-                                        Atrás
+                                        {t?.common?.back}
                                     </Button>
                                     <Button type="submit" className="bg-secondary hover:bg-secondary/90 h-12 flex-1">
-                                        Crear proyecto
+                                        {t?.common?.createProject}
                                     </Button>
                                 </div>
                             </div>

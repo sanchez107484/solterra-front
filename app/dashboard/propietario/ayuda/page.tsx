@@ -4,9 +4,24 @@ import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
 import { SeccionComoFunciona } from "@/components/landing/seccion-como-funciona"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { getTranslations, type Locale } from "@/lib/i18n"
 import { BookOpen, HelpCircle } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export default function DashboardAyuda() {
+    const [locale, setLocale] = useState<Locale>("es")
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+        const saved = (localStorage.getItem("locale") as Locale) || "es"
+        setLocale(saved)
+    }, [])
+
+    if (!mounted) return null
+
+    const t = getTranslations(locale)
+
     return (
         <div className="bg-background flex min-h-screen">
             <DashboardSidebar userType="propietario" />
@@ -16,12 +31,12 @@ export default function DashboardAyuda() {
                 <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-30 border-b backdrop-blur">
                     <div className="flex h-16 items-center justify-between px-8">
                         <div>
-                            <h1 className="text-2xl font-bold">Centro de Ayuda</h1>
-                            <p className="text-muted-foreground text-sm">Aprende cómo funciona la plataforma</p>
+                            <h1 className="text-2xl font-bold">{t?.dashboard?.help?.title}</h1>
+                            <p className="text-muted-foreground text-sm">{t?.dashboard?.help?.subtitle}</p>
                         </div>
                         <Button variant="outline" className="gap-2">
                             <HelpCircle className="h-4 w-4" />
-                            Contactar soporte
+                            {t?.dashboard?.help?.contactSupport}
                         </Button>
                     </div>
                 </header>
@@ -34,11 +49,8 @@ export default function DashboardAyuda() {
                                 <BookOpen className="text-primary h-8 w-8" />
                             </div>
                             <div>
-                                <h2 className="mb-2 text-2xl font-bold">¿Primera vez en Solterra?</h2>
-                                <p className="text-muted-foreground text-lg">
-                                    Te explicamos paso a paso cómo maximizar el valor de tu terreno y conectar con los mejores promotores de
-                                    energía renovable.
-                                </p>
+                                <h2 className="mb-2 text-2xl font-bold">{t?.dashboard?.help?.firstTimeTitle}</h2>
+                                <p className="text-muted-foreground text-lg">{t?.dashboard?.help?.firstTimeDescOwner}</p>
                             </div>
                         </div>
                     </Card>

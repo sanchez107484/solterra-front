@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card"
 import { ChevronDown, HelpCircle } from "lucide-react"
 import { useState } from "react"
+import { useTranslations } from "../../i18n/i18nContext"
 
 interface FAQ {
     question: string
@@ -61,6 +62,7 @@ const faqs: FAQ[] = [
 export function FAQSection() {
     const [openIndex, setOpenIndex] = useState<number | null>(0)
     const [activeCategory, setActiveCategory] = useState<"general" | "propietario" | "promotor" | "all">("all")
+    const { t } = useTranslations()
 
     const filteredFaqs = activeCategory === "all" ? faqs : faqs.filter((faq) => faq.category === activeCategory)
 
@@ -70,23 +72,21 @@ export function FAQSection() {
                 <div className="mb-16 text-center">
                     <div className="bg-secondary/10 border-secondary/20 mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-2">
                         <HelpCircle className="text-secondary-foreground h-4 w-4" />
-                        <span className="text-secondary-foreground text-sm font-semibold">Preguntas Frecuentes</span>
+                        <span className="text-secondary-foreground text-sm font-semibold">{t.faq?.title}</span>
                     </div>
                     <h2 className="mb-4 text-4xl font-bold md:text-5xl">
-                        ¿Tienes <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">dudas?</span>
+                        {t.faq?.title} <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">?</span>
                     </h2>
-                    <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
-                        Aquí encontrarás respuestas a las preguntas más comunes sobre nuestra plataforma
-                    </p>
+                    <p className="text-muted-foreground mx-auto max-w-2xl text-xl">{t.faq?.subtitle}</p>
                 </div>
 
                 {/* Category filters */}
                 <div className="mb-12 flex flex-wrap justify-center gap-3">
                     {[
-                        { id: "all", label: "Todas" },
-                        { id: "general", label: "General" },
-                        { id: "propietario", label: "Propietarios" },
-                        { id: "promotor", label: "Promotores" },
+                        { id: "all", label: t?.faq?.categories?.all },
+                        { id: "general", label: t?.faq?.categories?.general },
+                        { id: "propietario", label: t?.faq?.categories?.landowner },
+                        { id: "promotor", label: t?.faq?.categories?.developer },
                     ].map((category) => (
                         <button
                             key={category.id}
@@ -123,7 +123,9 @@ export function FAQSection() {
                                                         : "bg-secondary/10 text-secondary-foreground"
                                                 }`}
                                             >
-                                                {faq.category === "propietario" ? "Propietario" : "Promotor"}
+                                                {faq.category === "propietario"
+                                                    ? t?.faq?.categories?.landowner
+                                                    : t?.faq?.categories?.developer}
                                             </span>
                                         )}
                                     </div>
@@ -151,12 +153,12 @@ export function FAQSection() {
 
                 {/* Contact CTA */}
                 <div className="mt-16 text-center">
-                    <p className="text-muted-foreground mb-4">¿No encuentras respuesta a tu pregunta?</p>
+                    <p className="text-muted-foreground mb-4">{t.faq?.contactCta}</p>
                     <a
-                        href="mailto:info@solterra.com"
+                        href={`mailto:${t.faq?.email}`}
                         className="text-primary inline-flex items-center gap-2 font-semibold hover:underline"
                     >
-                        Contacta con nuestro equipo
+                        {t.faq?.contactCta}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"

@@ -44,10 +44,8 @@ export default function Contacto() {
                 {/* Hero Section */}
                 <section className="from-primary/10 via-background to-secondary/10 relative bg-gradient-to-br px-6 py-24">
                     <div className="container mx-auto max-w-6xl text-center">
-                        <h1 className="mb-6 text-5xl font-bold text-balance md:text-6xl">Contacta con nosotros</h1>
-                        <p className="text-muted-foreground mx-auto max-w-3xl text-xl text-pretty">
-                            Estamos aquí para ayudarte. Envíanos tu consulta y te responderemos lo antes posible.
-                        </p>
+                        <h1 className="mb-6 text-5xl font-bold text-balance md:text-6xl">{t?.contact?.hero?.title}</h1>
+                        <p className="text-muted-foreground mx-auto max-w-3xl text-xl text-pretty">{t?.contact?.hero?.subtitle}</p>
                     </div>
                 </section>
 
@@ -57,44 +55,55 @@ export default function Contacto() {
                         <div className="grid gap-12 md:grid-cols-2">
                             {/* Contact Form */}
                             <div>
-                                <h2 className="mb-6 text-3xl font-bold">Envíanos un mensaje</h2>
+                                <h2 className="mb-6 text-3xl font-bold">{t?.contact?.form?.title}</h2>
                                 <Card className="border-2 p-8">
                                     <form onSubmit={handleSubmit} className="space-y-6">
                                         <div className="space-y-2">
-                                            <Label htmlFor="nombre">Nombre completo</Label>
-                                            <Input id="nombre" placeholder="Juan Pérez" className="h-12" required />
+                                            <Label htmlFor="nombre">{t?.contact?.form?.nameLabel}</Label>
+                                            <Input id="nombre" placeholder={t?.contact?.form?.namePlaceholder} className="h-12" required />
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="email">Correo electrónico</Label>
-                                            <Input id="email" type="email" placeholder="tu@email.com" className="h-12" required />
+                                            <Label htmlFor="email">{t?.contact?.form?.emailLabel}</Label>
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                placeholder={t?.contact?.form?.emailPlaceholder}
+                                                className="h-12"
+                                                required
+                                            />
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="telefono">Teléfono (opcional)</Label>
-                                            <Input id="telefono" type="tel" placeholder="+34 600 000 000" className="h-12" />
+                                            <Label htmlFor="telefono">{t?.contact?.form?.phoneLabel}</Label>
+                                            <Input
+                                                id="telefono"
+                                                type="tel"
+                                                placeholder={t?.contact?.form?.phonePlaceholder}
+                                                className="h-12"
+                                            />
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="tipo">Tipo de consulta</Label>
+                                            <Label htmlFor="tipo">{t?.contact?.form?.typeLabel}</Label>
                                             <select
                                                 id="tipo"
                                                 className="border-input bg-background ring-offset-background focus-visible:ring-ring h-12 w-full rounded-md border px-3 text-base focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                                                 required
                                             >
-                                                <option value="">Selecciona una opción</option>
-                                                <option value="propietario">Soy propietario de terreno</option>
-                                                <option value="promotor">Soy promotor de proyectos</option>
-                                                <option value="general">Consulta general</option>
-                                                <option value="soporte">Soporte técnico</option>
+                                                <option value="">{t?.contact?.form?.typeOptions?.empty}</option>
+                                                <option value="propietario">{t?.contact?.form?.typeOptions?.landowner}</option>
+                                                <option value="promotor">{t?.contact?.form?.typeOptions?.developer}</option>
+                                                <option value="general">{t?.contact?.form?.typeOptions?.general}</option>
+                                                <option value="soporte">{t?.contact?.form?.typeOptions?.support}</option>
                                             </select>
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="mensaje">Mensaje</Label>
+                                            <Label htmlFor="mensaje">{t?.contact?.form?.messageLabel}</Label>
                                             <Textarea
                                                 id="mensaje"
-                                                placeholder="Cuéntanos en qué podemos ayudarte..."
+                                                placeholder={t?.contact?.form?.messagePlaceholder}
                                                 className="min-h-32"
                                                 required
                                             />
@@ -102,7 +111,7 @@ export default function Contacto() {
 
                                         <Button type="submit" className="bg-primary hover:bg-primary/90 h-12 w-full gap-2">
                                             <Send className="h-5 w-5" />
-                                            Enviar mensaje
+                                            {t?.contact?.form?.submit}
                                         </Button>
                                     </form>
                                 </Card>
@@ -110,7 +119,7 @@ export default function Contacto() {
 
                             {/* Contact Info */}
                             <div>
-                                <h2 className="mb-6 text-3xl font-bold">Información de contacto</h2>
+                                <h2 className="mb-6 text-3xl font-bold">{t?.contact?.info?.title}</h2>
 
                                 <div className="space-y-6">
                                     <Card className="border-2 p-6 transition-shadow hover:shadow-lg">
@@ -119,9 +128,9 @@ export default function Contacto() {
                                                 <Mail className="text-primary h-6 w-6" />
                                             </div>
                                             <div>
-                                                <h3 className="mb-1 font-semibold">Email</h3>
-                                                <p className="text-muted-foreground">info@solterradvisory.com</p>
-                                                <p className="text-muted-foreground mt-1 text-sm">Respuesta en 24-48 horas</p>
+                                                <h3 className="mb-1 font-semibold">{t?.contact?.info?.emailTitle}</h3>
+                                                <p className="text-muted-foreground">{t?.contact?.info?.email}</p>
+                                                <p className="text-muted-foreground mt-1 text-sm">{t?.contact?.info?.emailNote}</p>
                                             </div>
                                         </div>
                                     </Card>
@@ -132,9 +141,9 @@ export default function Contacto() {
                                                 <Phone className="text-secondary h-6 w-6" />
                                             </div>
                                             <div>
-                                                <h3 className="mb-1 font-semibold">Teléfono</h3>
-                                                <p className="text-muted-foreground">+34 900 000 000</p>
-                                                <p className="text-muted-foreground mt-1 text-sm">Lun-Vie: 9:00 - 18:00</p>
+                                                <h3 className="mb-1 font-semibold">{t?.contact?.info?.phoneTitle}</h3>
+                                                <p className="text-muted-foreground">{t?.contact?.info?.phone}</p>
+                                                <p className="text-muted-foreground mt-1 text-sm">{t?.contact?.info?.phoneHours}</p>
                                             </div>
                                         </div>
                                     </Card>
@@ -145,28 +154,28 @@ export default function Contacto() {
                                                 <MapPin className="text-accent h-6 w-6" />
                                             </div>
                                             <div>
-                                                <h3 className="mb-1 font-semibold">Oficina</h3>
-                                                <p className="text-muted-foreground">Calle Energía Renovable, 123</p>
-                                                <p className="text-muted-foreground">28001 Madrid, España</p>
+                                                <h3 className="mb-1 font-semibold">{t?.contact?.info?.officeTitle}</h3>
+                                                <p className="text-muted-foreground">{t?.contact?.info?.officeAddress}</p>
+                                                <p className="text-muted-foreground">{t?.contact?.info?.officeCity}</p>
                                             </div>
                                         </div>
                                     </Card>
                                 </div>
 
                                 <Card className="from-primary/5 to-secondary/5 mt-8 border-2 bg-gradient-to-br p-6">
-                                    <h3 className="mb-3 font-bold">Horario de atención</h3>
+                                    <h3 className="mb-3 font-bold">{t?.contact?.info?.scheduleTitle}</h3>
                                     <div className="space-y-2 text-sm">
                                         <div className="flex justify-between">
-                                            <span className="text-muted-foreground">Lunes - Viernes</span>
-                                            <span className="font-medium">9:00 - 18:00</span>
+                                            <span className="text-muted-foreground">{t?.contact?.info?.schedule?.monFri}</span>
+                                            <span className="font-medium">{t?.contact?.info?.schedule?.monFriHours}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-muted-foreground">Sábado</span>
-                                            <span className="font-medium">10:00 - 14:00</span>
+                                            <span className="text-muted-foreground">{t?.contact?.info?.schedule?.sat}</span>
+                                            <span className="font-medium">{t?.contact?.info?.schedule?.satHours}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-muted-foreground">Domingo</span>
-                                            <span className="font-medium">Cerrado</span>
+                                            <span className="text-muted-foreground">{t?.contact?.info?.schedule?.sun}</span>
+                                            <span className="font-medium">{t?.contact?.info?.schedule?.sunHours}</span>
                                         </div>
                                     </div>
                                 </Card>
