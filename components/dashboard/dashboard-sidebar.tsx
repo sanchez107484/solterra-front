@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { Briefcase, LayoutDashboard, Leaf, LogOut, MapPin, Settings, User, Zap } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useTranslations } from "../i18n/i18nContext"
+import { useTranslations } from "../../i18n/i18nContext"
 
 interface DashboardSidebarProps {
     userType: "propietario" | "promotor"

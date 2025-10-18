@@ -1,6 +1,6 @@
 "use client"
 
-import { Footer } from "@/components/footer"
+import { FooterSection } from "@/components/footer-section"
 import { Sidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -209,7 +209,7 @@ export default function Nosotros() {
                     </div>
                 </section>
 
-                <Footer />
+                <FooterSection />
             </main>
         </div>
     )

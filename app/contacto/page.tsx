@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { Footer } from "@/components/footer"
+import { FooterSection } from "@/components/footer-section"
 import { Sidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -39,7 +39,7 @@ export default function Contacto() {
 
     return (
         <div className="flex min-h-screen">
-            <Sidebar t={t} />
+            <Sidebar />
             <main className="flex-1 lg:ml-64">
                 {/* Hero Section */}
                 <section className="from-primary/10 via-background to-secondary/10 relative bg-gradient-to-br px-6 py-24">
@@ -175,51 +175,7 @@ export default function Contacto() {
                     </div>
                 </section>
 
-                {/* FAQ Preview */}
-                <section className="from-primary/5 to-background bg-gradient-to-br px-6 py-20">
-                    <div className="container mx-auto max-w-6xl">
-                        <div className="mb-12 text-center">
-                            <h2 className="mb-4 text-3xl font-bold">Preguntas frecuentes</h2>
-                            <p className="text-muted-foreground">Quizás encuentres tu respuesta aquí</p>
-                        </div>
-
-                        <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
-                            <Card className="border-2 p-6">
-                                <h3 className="mb-2 font-bold">¿Cuánto cuesta usar Solterra?</h3>
-                                <p className="text-muted-foreground text-sm">
-                                    El registro y la publicación de terrenos es completamente gratuita. Solo cobramos una pequeña comisión
-                                    cuando se cierra un acuerdo exitoso.
-                                </p>
-                            </Card>
-
-                            <Card className="border-2 p-6">
-                                <h3 className="mb-2 font-bold">¿Cuánto tiempo tarda el proceso?</h3>
-                                <p className="text-muted-foreground text-sm">
-                                    Desde que listas tu terreno hasta recibir las primeras propuestas suele pasar entre 1-2 semanas. El
-                                    cierre del acuerdo depende de la negociación entre las partes.
-                                </p>
-                            </Card>
-
-                            <Card className="border-2 p-6">
-                                <h3 className="mb-2 font-bold">¿Verifican los terrenos y proyectos?</h3>
-                                <p className="text-muted-foreground text-sm">
-                                    Sí, nuestro equipo técnico verifica toda la información antes de publicarla en la plataforma para
-                                    garantizar la calidad y veracidad de los datos.
-                                </p>
-                            </Card>
-
-                            <Card className="border-2 p-6">
-                                <h3 className="mb-2 font-bold">¿Ofrecen asesoramiento legal?</h3>
-                                <p className="text-muted-foreground text-sm">
-                                    Proporcionamos orientación general, pero recomendamos que ambas partes cuenten con asesoramiento legal
-                                    independiente para la firma de contratos.
-                                </p>
-                            </Card>
-                        </div>
-                    </div>
-                </section>
-
-                <Footer t={t} />
+                <FooterSection />
             </main>
         </div>
     )

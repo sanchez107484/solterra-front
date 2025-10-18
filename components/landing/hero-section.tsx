@@ -5,7 +5,7 @@ import { ArrowRight, ChevronDown, Leaf, Sun, Wind, Zap } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-export function HeroSectionPro() {
+export function HeroSection() {
     const [isVisible, setIsVisible] = useState(false)
 
     useEffect(() => {

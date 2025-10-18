@@ -47,7 +47,7 @@ const testimonials: Testimonial[] = [
     },
 ]
 
-export function TestimonialsSectionPro() {
+export function TestimonialsSection() {
     return (
         <section className="bg-muted/30 py-20 md:py-32">
             <div className="container mx-auto px-4">

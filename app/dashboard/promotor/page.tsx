@@ -1,7 +1,7 @@
 "use client"
 
-import { DashboardSidebar } from "@/components/dashboard-sidebar"
-import { DataTableProyectos, type Proyecto } from "@/components/data-table-proyectos"
+import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
+import { DataTableProyectos, type Proyecto } from "@/components/dashboard/data-table-proyectos"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"

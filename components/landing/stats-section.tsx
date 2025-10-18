@@ -115,7 +115,7 @@ function AnimatedNumber({
     )
 }
 
-export function StatsSectionPro() {
+export function StatsSection() {
     return (
         <section className="from-background to-muted/30 bg-gradient-to-b py-20 md:py-32">
             <div className="container mx-auto px-4">

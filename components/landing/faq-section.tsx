@@ -58,7 +58,7 @@ const faqs: FAQ[] = [
     },
 ]
 
-export function FAQSectionPro() {
+export function FAQSection() {
     const [openIndex, setOpenIndex] = useState<number | null>(0)
     const [activeCategory, setActiveCategory] = useState<"general" | "propietario" | "promotor" | "all">("all")
 
