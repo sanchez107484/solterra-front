@@ -7,45 +7,60 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { getTranslations, type Locale } from "@/lib/i18n"
-import { ArrowLeft, Briefcase, Check, ChevronRight, Home, Zap } from "lucide-react"
+import { useProyectos } from "@/hooks/useProyectos"
+import { useTranslations } from "@/i18n/i18nContext"
+import { mapTipoUIToAPI } from "@/lib/mappers/proyecto"
+import { ArrowLeft, Briefcase, Check, ChevronRight, Home, Loader2, Zap } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 export default function NuevoProyecto() {
     const router = useRouter()
     const [step, setStep] = useState(1)
+    const [error, setError] = useState<string | null>(null)
+    const { createProyecto, isLoading } = useProyectos({ autoFetch: false })
+    const { t } = useTranslations()
+
     const [formData, setFormData] = useState({
         nombre: "",
-        empresa: "",
-        tipo: "solar",
+        // valor legible en UI; se mapeará a enum API al enviar
+        tipo: "Solar",
         capacidad: "",
         descripcion: "",
         provincias: "",
-        hectareasMin: "",
-        hectareasMax: "",
-        presupuesto: "",
-        timeline: "",
+        inversionEstimada: "",
+        fechaInicio: "",
     })
 
-    const [locale, setLocale] = useState<Locale>("es")
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setMounted(true)
-        const saved = (localStorage.getItem("locale") as Locale) || "es"
-        setLocale(saved)
-    }, [])
-
-    if (!mounted) return null
-
-    const t = getTranslations(locale)
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // TODO: Guardar en base de datos
-        router.push("/dashboard/promotor")
+        setError(null)
+
+        try {
+            // Preparar datos para el backend
+            const proyectoData = {
+                titulo: formData.nombre,
+                nombre: formData.nombre,
+                // mapear el valor legible de la UI al enum esperado por la API
+                tipo: mapTipoUIToAPI(formData.tipo as unknown as string),
+                capacidad: parseFloat(formData.capacidad),
+                superficieMinima: 0, // Valor por defecto, se puede ajustar según necesidades
+                descripcion: formData.descripcion || undefined,
+                provincias: formData.provincias ? formData.provincias.split(",").map((p) => p.trim()) : undefined,
+                inversionEstimada: formData.inversionEstimada ? parseFloat(formData.inversionEstimada) : undefined,
+                fechaInicio: formData.fechaInicio || undefined,
+            }
+
+            // Crear proyecto en el backend
+            await createProyecto(proyectoData)
+
+            // Redirigir al dashboard con mensaje de éxito
+            router.push("/dashboard/promotor?success=proyecto-creado")
+        } catch (err: any) {
+            console.error("Error al crear proyecto:", err)
+            setError(err.message || "Error al crear el proyecto. Por favor, inténtalo de nuevo.")
+        }
     }
 
     const nextStep = () => setStep(step + 1)
@@ -124,6 +139,13 @@ export default function NuevoProyecto() {
                 </div>
 
                 <Card className="border-2 p-8 shadow-xl">
+                    {error && (
+                        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+                            <p className="font-medium">Error</p>
+                            <p className="text-sm">{error}</p>
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit}>
                         {/* Step 1: Información del proyecto */}
                         {step === 1 && (
@@ -149,25 +171,13 @@ export default function NuevoProyecto() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="empresa">{t?.forms?.labels?.company}</Label>
-                                    <Input
-                                        id="empresa"
-                                        placeholder={t?.forms?.examples?.company}
-                                        className="h-12"
-                                        value={formData.empresa}
-                                        onChange={(e) => setFormData({ ...formData, empresa: e.target.value })}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
                                     <Label>{t?.forms?.labels?.projectType}</Label>
                                     <div className="grid grid-cols-2 gap-4">
                                         <button
                                             type="button"
-                                            onClick={() => setFormData({ ...formData, tipo: "solar" })}
+                                            onClick={() => setFormData({ ...formData, tipo: "Solar" })}
                                             className={`rounded-xl border-2 p-6 text-left transition-all ${
-                                                formData.tipo === "solar"
+                                                formData.tipo === "Solar"
                                                     ? "border-primary bg-primary/5"
                                                     : "border-border hover:border-primary/50"
                                             }`}
@@ -177,9 +187,9 @@ export default function NuevoProyecto() {
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setFormData({ ...formData, tipo: "eolico" })}
+                                            onClick={() => setFormData({ ...formData, tipo: "Eólico" })}
                                             className={`rounded-xl border-2 p-6 text-left transition-all ${
-                                                formData.tipo === "eolico"
+                                                formData.tipo === "Eólico"
                                                     ? "border-secondary bg-secondary/5"
                                                     : "border-border hover:border-secondary/50"
                                             }`}
@@ -240,59 +250,10 @@ export default function NuevoProyecto() {
                                         className="h-12"
                                         value={formData.provincias}
                                         onChange={(e) => setFormData({ ...formData, provincias: e.target.value })}
-                                        required
                                     />
-                                    <p className="text-muted-foreground text-sm">{t?.forms?.provincesNote}</p>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="hectareasMin">{t?.forms?.labels?.minHectares}</Label>
-                                        <Input
-                                            id="hectareasMin"
-                                            type="number"
-                                            step="0.1"
-                                            placeholder={t?.forms?.examples?.minHectares}
-                                            className="h-12"
-                                            value={formData.hectareasMin}
-                                            onChange={(e) => setFormData({ ...formData, hectareasMin: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="hectareasMax">{t?.forms?.labels?.maxHectares}</Label>
-                                        <Input
-                                            id="hectareasMax"
-                                            type="number"
-                                            step="0.1"
-                                            placeholder={t?.forms?.examples?.maxHectares}
-                                            className="h-12"
-                                            value={formData.hectareasMax}
-                                            onChange={(e) => setFormData({ ...formData, hectareasMax: e.target.value })}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="bg-secondary/5 border-secondary/20 rounded-xl border p-6">
-                                    <h3 className="mb-3 font-semibold">{t?.forms?.desiredLandFeaturesTitle}</h3>
-                                    <div className="space-y-2">
-                                        <label className="flex cursor-pointer items-center gap-2">
-                                            <input type="checkbox" className="border-input rounded" />
-                                            <span className="text-sm">{t?.forms?.checkboxes?.roadAccess}</span>
-                                        </label>
-                                        <label className="flex cursor-pointer items-center gap-2">
-                                            <input type="checkbox" className="border-input rounded" />
-                                            <span className="text-sm">{t?.forms?.checkboxes?.electricitySupply}</span>
-                                        </label>
-                                        <label className="flex cursor-pointer items-center gap-2">
-                                            <input type="checkbox" className="border-input rounded" />
-                                            <span className="text-sm">{t?.forms?.checkboxes?.flatLand}</span>
-                                        </label>
-                                        <label className="flex cursor-pointer items-center gap-2">
-                                            <input type="checkbox" className="border-input rounded" />
-                                            <span className="text-sm">{t?.forms?.checkboxes?.noUrbanRestrictions}</span>
-                                        </label>
-                                    </div>
+                                    <p className="text-muted-foreground text-sm">
+                                        Separa las provincias con comas (ej: Badajoz, Cáceres, Toledo)
+                                    </p>
                                 </div>
 
                                 <div className="flex gap-4">
@@ -318,27 +279,28 @@ export default function NuevoProyecto() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="presupuesto">{t?.forms?.labels?.budget}</Label>
+                                    <Label htmlFor="inversionEstimada">{t?.forms?.labels?.budget}</Label>
                                     <Input
-                                        id="presupuesto"
+                                        id="inversionEstimada"
                                         type="number"
-                                        placeholder={t?.forms?.examples?.budget}
+                                        placeholder="5000000"
                                         className="h-12"
-                                        value={formData.presupuesto}
-                                        onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })}
+                                        value={formData.inversionEstimada}
+                                        onChange={(e) => setFormData({ ...formData, inversionEstimada: e.target.value })}
                                     />
-                                    <p className="text-muted-foreground text-sm">{t?.forms?.budgetNote}</p>
+                                    <p className="text-muted-foreground text-sm">Inversión estimada en euros (opcional)</p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="timeline">{t?.forms?.labels?.timeline}</Label>
-                                    <Textarea
-                                        id="timeline"
-                                        placeholder={t?.forms?.examples?.timeline}
-                                        className="min-h-24"
-                                        value={formData.timeline}
-                                        onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                                    <Label htmlFor="fechaInicio">{t?.forms?.labels?.timeline}</Label>
+                                    <Input
+                                        id="fechaInicio"
+                                        type="date"
+                                        className="h-12"
+                                        value={formData.fechaInicio}
+                                        onChange={(e) => setFormData({ ...formData, fechaInicio: e.target.value })}
                                     />
+                                    <p className="text-muted-foreground text-sm">Fecha estimada de inicio del proyecto (opcional)</p>
                                 </div>
 
                                 <div className="bg-secondary/5 border-secondary/20 rounded-xl border p-6">
@@ -355,8 +317,19 @@ export default function NuevoProyecto() {
                                     <Button type="button" onClick={prevStep} variant="outline" className="h-12 flex-1 bg-transparent">
                                         {t?.common?.back}
                                     </Button>
-                                    <Button type="submit" className="bg-secondary hover:bg-secondary/90 h-12 flex-1">
-                                        {t?.common?.createProject}
+                                    <Button
+                                        type="submit"
+                                        className="bg-secondary hover:bg-secondary/90 h-12 flex-1 gap-2"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                Creando...
+                                            </>
+                                        ) : (
+                                            t?.common?.createProject || "Crear Proyecto"
+                                        )}
                                     </Button>
                                 </div>
                             </div>

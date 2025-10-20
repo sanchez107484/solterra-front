@@ -54,16 +54,6 @@ export function Sidebar() {
                                 {t.nav?.home}
                             </Button>
                         </Link>
-                        <Link href="/como-funciona">
-                            <Button
-                                variant="ghost"
-                                className="text-sidebar-foreground hover:bg-sidebar-accent w-full justify-start gap-3"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <Info className="h-5 w-5" />
-                                {t.nav?.howItWorks}
-                            </Button>
-                        </Link>
                         <Link href="/nosotros">
                             <Button
                                 variant="ghost"

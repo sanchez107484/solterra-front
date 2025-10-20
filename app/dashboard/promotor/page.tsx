@@ -1,50 +1,37 @@
 "use client"
 
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
-import { DataTableProyectos, type Proyecto } from "@/components/dashboard/data-table-proyectos"
+import { DataTableProyectos } from "@/components/dashboard/data-table-proyectos"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
-import { getTranslations, type Locale } from "@/lib/i18n"
+import { useTranslations } from "@/i18n/i18nContext"
 import { Briefcase, Calendar, MapPin, Plus, TrendingUp } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-
-const proyectosData: Proyecto[] = [
-    {
-        id: "1",
-        nombre: "Parque Solar Extremadura",
-        referencia: "PRO-001",
-        tipo: "Solar",
-        capacidad: 20,
-        estado: "Activo",
-        terrenos: 12,
-    },
-    {
-        id: "2",
-        nombre: "Eólico Aragón Norte",
-        referencia: "PRO-002",
-        tipo: "Eólico",
-        capacidad: 15,
-        estado: "En búsqueda",
-        terrenos: 6,
-    },
-]
+import { useProyectos } from "../../../hooks/useProyectos"
 
 export default function DashboardPromotor() {
-    const [hasProyectos, setHasProyectos] = useState(true)
-    const [locale, setLocale] = useState<Locale>("es")
-    const [mounted, setMounted] = useState(false)
+    const { t } = useTranslations()
 
-    useEffect(() => {
-        setMounted(true)
-        const saved = (localStorage.getItem("locale") as Locale) || "es"
-        setLocale(saved)
-    }, [])
+    // Hook para cargar proyectos desde el backend
+    const {
+        proyectos,
+        total,
+        isLoading: proyectosLoading,
+        fetchMine,
+    } = useProyectos({
+        autoFetch: false,
+    })
 
-    if (!mounted) return null
+    // Calcular estadísticas desde los datos reales
+    const stats = {
+        proyectosActivos: proyectos.filter((p: any) => p.estado === "Activo" || p.estado === "En desarrollo").length,
+        terrenosCompatibles: proyectos.reduce((sum: number, p: any) => sum + (p.terrenosCompatibles || 0), 0),
+        capacidadTotal: proyectos.reduce((sum: number, p: any) => sum + (p.capacidad || 0), 0),
+        inversionEstimada: proyectos.reduce((sum: number, p: any) => sum + (p.inversionEstimada || 0), 0),
+    }
 
-    const t = getTranslations(locale)
+    const hasProyectos = proyectos.length > 0
 
     return (
         <div className="bg-background flex min-h-screen">
@@ -68,7 +55,14 @@ export default function DashboardPromotor() {
                 </header>
 
                 <div className="p-8">
-                    {!hasProyectos ? (
+                    {proyectosLoading ? (
+                        <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
+                                <p className="text-muted-foreground text-sm">Cargando tus proyectos...</p>
+                            </div>
+                        </div>
+                    ) : !hasProyectos ? (
                         <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
                             <Empty className="max-w-2xl">
                                 <EmptyHeader>
@@ -112,10 +106,8 @@ export default function DashboardPromotor() {
                                             <p className="text-muted-foreground text-sm font-medium">
                                                 {t?.dashboard?.promoter?.statsCard?.activeProjects}
                                             </p>
-                                            <p className="text-3xl font-bold">2</p>
-                                            <p className="text-muted-foreground mt-1 text-xs">
-                                                {t?.dashboard?.promoter?.statsCard?.inDevelopment}
-                                            </p>
+                                            <p className="text-3xl font-bold">{stats.proyectosActivos}</p>
+                                            <p className="text-muted-foreground mt-1 text-xs">de {total} totales</p>
                                         </div>
                                         <div className="bg-secondary/10 rounded-full p-3">
                                             <Briefcase className="text-secondary-foreground h-5 w-5" />
@@ -129,7 +121,7 @@ export default function DashboardPromotor() {
                                             <p className="text-muted-foreground text-sm font-medium">
                                                 {t?.dashboard?.promoter?.statsCard?.compatibleLands}
                                             </p>
-                                            <p className="text-3xl font-bold">18</p>
+                                            <p className="text-3xl font-bold">{stats.terrenosCompatibles}</p>
                                             <p className="text-muted-foreground mt-1 text-xs">
                                                 {t?.dashboard?.promoter?.statsCard?.availableNow}
                                             </p>
@@ -146,7 +138,7 @@ export default function DashboardPromotor() {
                                             <p className="text-muted-foreground text-sm font-medium">
                                                 {t?.dashboard?.promoter?.statsCard?.totalCapacity}
                                             </p>
-                                            <p className="text-3xl font-bold">35 MW</p>
+                                            <p className="text-3xl font-bold">{stats.capacidadTotal} MW</p>
                                             <p className="text-muted-foreground mt-1 text-xs">
                                                 {t?.dashboard?.promoter?.statsCard?.planned}
                                             </p>
@@ -163,7 +155,7 @@ export default function DashboardPromotor() {
                                             <p className="text-muted-foreground text-sm font-medium">
                                                 {t?.dashboard?.promoter?.statsCard?.estimatedInvestment}
                                             </p>
-                                            <p className="text-3xl font-bold">€28M</p>
+                                            <p className="text-3xl font-bold">€{(stats.inversionEstimada / 1000000).toFixed(0)}M</p>
                                             <p className="text-muted-foreground mt-1 text-xs">
                                                 {t?.dashboard?.promoter?.statsCard?.totalProjects}
                                             </p>
@@ -182,7 +174,13 @@ export default function DashboardPromotor() {
                                     <p className="text-muted-foreground text-sm">{t?.dashboard?.promoter?.manageAndFind}</p>
                                 </div>
                                 <div className="p-6">
-                                    <DataTableProyectos data={proyectosData} />
+                                    <DataTableProyectos
+                                        data={proyectos.map((p: any) => ({
+                                            ...p,
+                                            referencia: p.id, // Temporal: usar ID como referencia si no existe
+                                            terrenos: p.terrenosCompatibles || 0,
+                                        }))}
+                                    />
                                 </div>
                             </Card>
                         </div>

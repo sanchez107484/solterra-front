@@ -32,11 +32,11 @@ import { useTranslations } from "@/i18n/i18nContext"
 export type Terreno = {
     id: string
     ubicacion: string
-    referencia: string
+    referencia?: string
     hectareas: number
-    tipo: "Solar" | "Eólico"
-    estado: "Activo" | "En revisión" | "Pausado"
-    interesados: number
+    tipo: "Solar" | "Eólico" | "Híbrido"
+    estado: "Activo" | "En revisión" | "Pausado" | "Arrendado" | "No disponible"
+    interesados?: number
 }
 
 export const columns: ColumnDef<Terreno>[] = [

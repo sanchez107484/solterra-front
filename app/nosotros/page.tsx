@@ -3,25 +3,13 @@
 import { FooterSection } from "@/components/footer-section"
 import { Sidebar } from "@/components/sidebar"
 import { Card } from "@/components/ui/card"
-import { getTranslations, type Locale } from "@/lib/i18n"
+import { useTranslations } from "@/i18n/i18nContext"
 import { Award, Globe, Leaf, Target, TrendingUp, Users } from "lucide-react"
 import Head from "next/head"
 import Link from "next/link"
-import { useEffect, useState } from "react"
 
 export default function Nosotros() {
-    const [locale, setLocale] = useState<Locale>("es")
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setMounted(true)
-        const savedLocale = (localStorage.getItem("locale") as Locale) || "es"
-        setLocale(savedLocale)
-    }, [])
-
-    if (!mounted) return null
-
-    const t = getTranslations(locale)
+    const { t } = useTranslations()
 
     return (
         <div className="flex min-h-screen">

@@ -28,15 +28,18 @@ import {
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useTranslations } from "@/i18n/i18nContext"
+import { mapTipoAPIToUI } from "@/lib/mappers/proyecto"
 
 export type Proyecto = {
     id: string
     nombre: string
-    referencia: string
-    tipo: "Solar" | "Eólico"
+    referencia?: string
+    // en backend usamos enums; en UI mostraremos etiquetas legibles
+    tipo: string
     capacidad: number
-    estado: "Activo" | "En búsqueda" | "Pausado"
-    terrenos: number
+    estado: string
+    terrenos?: number
+    terrenosCompatibles?: number
 }
 
 export const columns: ColumnDef<Proyecto>[] = [
@@ -65,7 +68,8 @@ export const columns: ColumnDef<Proyecto>[] = [
         accessorKey: "tipo",
         header: "Tipo",
         cell: ({ row }) => {
-            const tipo = row.getValue("tipo") as string
+            const tipoApi = row.getValue("tipo") as string
+            const tipo = mapTipoAPIToUI(tipoApi)
             return (
                 <span
                     className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${

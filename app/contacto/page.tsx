@@ -9,27 +9,11 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { getTranslations, type Locale } from "@/lib/i18n"
+import { useTranslations } from "@/i18n/i18nContext"
 import { Mail, MapPin, Phone, Send } from "lucide-react"
-import { useEffect, useState } from "react"
 
 export default function Contacto() {
-    const [locale, setLocale] = useState<Locale>("es")
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setMounted(true)
-        const savedLocale = localStorage.getItem("locale") as Locale
-        if (savedLocale) {
-            setLocale(savedLocale)
-        }
-    }, [])
-
-    if (!mounted) {
-        return null
-    }
-
-    const t = getTranslations(locale)
+    const { t } = useTranslations()
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
