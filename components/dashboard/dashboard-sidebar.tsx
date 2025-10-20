@@ -1,5 +1,6 @@
 "use client"
 
+import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
@@ -38,9 +39,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
             <div className="flex h-full flex-col">
                 {/* Logo */}
                 <div className="flex h-16 items-center gap-3 border-b px-6">
-                    <div className={cn("rounded-lg p-2", bgColor)}>
-                        <Icon className="text-primary-foreground h-5 w-5" />
-                    </div>
+                    <Logo />
                     <div>
                         <span className="font-bold">Solterra</span>
                         <p className="text-muted-foreground text-xs capitalize">{userType}</p>

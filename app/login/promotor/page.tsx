@@ -2,12 +2,13 @@
 
 import type React from "react"
 
+import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useTranslations } from "@/i18n/i18nContext"
-import { ArrowLeft, Building2, Eye, EyeOff, Lock, Mail, Zap } from "lucide-react"
+import { ArrowLeft, Building2, Eye, EyeOff, Lock, Mail } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -33,9 +34,7 @@ export default function LoginPromotor() {
 
                 <div className="relative z-10">
                     <Link href="/" className="text-secondary-foreground flex items-center gap-3">
-                        <div className="bg-secondary-foreground/20 rounded-xl p-2.5 backdrop-blur-sm">
-                            <Zap className="h-8 w-8" />
-                        </div>
+                        <Logo />
                         <div>
                             <span className="text-2xl font-bold">Solterra</span>
                             <p className="text-sm opacity-90">Advisory</p>
@@ -75,8 +74,8 @@ export default function LoginPromotor() {
 
                     <Card className="border-2 p-8 shadow-xl">
                         <div className="mb-8 text-center">
-                            <div className="bg-secondary/10 mb-4 inline-flex rounded-2xl p-4">
-                                <Zap className="text-secondary-foreground h-10 w-10" />
+                            <div className="mb-4 inline-flex rounded-2xl p-4">
+                                <Logo size={80} />
                             </div>
                             <h2 className="text-foreground mb-2 text-3xl font-bold">
                                 {isLogin ? t?.auth?.promoter?.welcomeBack : t?.auth?.promoter?.createAccount}

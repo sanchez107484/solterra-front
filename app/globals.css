@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+    --icon: oklch(0.96 0.03 95);
     /* Solterra brand colors - Paleta verde sostenibilidad con fondo blanco */
     --background: oklch(1 0 0); /* #FFFFFF - Blanco puro */
     --foreground: oklch(0.12 0.005 240); /* #111111 - Negro */
@@ -122,5 +123,12 @@
     }
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+/* Utilities */
+@layer utilities {
+    .bg-icon {
+        background-color: var(--icon) !important;
     }
 }

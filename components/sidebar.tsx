@@ -1,8 +1,9 @@
 "use client"
 
 import { LanguageSwitcher } from "@/components/language-switcher"
+import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
-import { Home, Info, Leaf, Mail, Menu, X } from "lucide-react"
+import { Home, Info, Mail, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useTranslations } from "../i18n/i18nContext"
@@ -33,9 +34,7 @@ export function Sidebar() {
                 <div className="flex h-full flex-col">
                     {/* Logo */}
                     <div className="border-sidebar-border flex items-center gap-3 border-b p-6">
-                        <div className="bg-primary rounded-xl p-2.5 shadow-lg">
-                            <Leaf className="text-primary-foreground h-6 w-6" />
-                        </div>
+                        <Logo />
                         <div>
                             <span className="text-sidebar-foreground text-xl font-bold">Solterra</span>
                             <p className="text-muted-foreground text-xs">Advisory</p>

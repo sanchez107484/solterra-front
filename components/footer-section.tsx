@@ -1,7 +1,8 @@
 "use client"
 
+import Logo from "@/components/logo"
 import { useTranslations } from "@/i18n/i18nContext"
-import { Facebook, Leaf, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react"
+import { Facebook, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react"
 import Link from "next/link"
 
 export function FooterSection() {
@@ -15,9 +16,7 @@ export function FooterSection() {
                     {/* Brand Column */}
                     <div className="lg:col-span-2">
                         <div className="mb-6 flex items-center gap-3">
-                            <div className="bg-primary rounded-xl p-2.5 shadow-lg">
-                                <Leaf className="text-primary-foreground h-6 w-6" />
-                            </div>
+                            <Logo />
                             <div>
                                 <span className="text-foreground text-2xl font-bold">Solterra</span>
                                 <p className="text-muted-foreground text-xs">Advisory</p>

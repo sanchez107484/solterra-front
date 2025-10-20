@@ -2,12 +2,13 @@
 
 import type React from "react"
 
+import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useTranslations } from "@/i18n/i18nContext"
-import { ArrowLeft, Eye, EyeOff, Leaf, Lock, Mail } from "lucide-react"
+import { ArrowLeft, Eye, EyeOff, Lock, Mail } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -33,9 +34,7 @@ export default function LoginPropietario() {
 
                 <div className="relative z-10">
                     <Link href="/" className="text-primary-foreground flex items-center gap-3">
-                        <div className="bg-primary-foreground/20 rounded-xl p-2.5 backdrop-blur-sm">
-                            <Leaf className="h-8 w-8" />
-                        </div>
+                        <Logo />
                         <div>
                             <span className="text-2xl font-bold">Solterra</span>
                             <p className="text-sm opacity-90">Advisory</p>
@@ -75,8 +74,8 @@ export default function LoginPropietario() {
 
                     <Card className="border-2 p-8 shadow-xl">
                         <div className="mb-8 text-center">
-                            <div className="bg-primary/10 mb-4 inline-flex rounded-2xl p-4">
-                                <Leaf className="text-primary h-10 w-10" />
+                            <div className="mb-4 inline-flex rounded-2xl p-4">
+                                <Logo size={80} />
                             </div>
                             <h2 className="text-foreground mb-2 text-3xl font-bold">
                                 {isLogin ? t?.auth?.owner?.welcomeBack : t?.auth?.owner?.createAccount}
