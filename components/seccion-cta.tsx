@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { useTranslations } from "@/i18n/i18nContext"
 import { ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
-import { useTranslations } from "../i18n/i18nContext"
 
 export function SeccionCTA() {
     const { t } = useTranslations()
