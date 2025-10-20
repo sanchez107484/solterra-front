@@ -66,6 +66,53 @@ export const en = {
             title: "How it works (quick)",
             subtitle: "Landowners and developers side-by-side",
         },
+        // Split/step-by-step copy used by SeccionComoFuncionaSplit / SeccionComoFunciona2
+        howItWorksSplit: {
+            landowners: {
+                step1: {
+                    step: "STEP 1",
+                    title: "Sign up for free",
+                    description: "Create your landowner account in under 2 minutes. No fees or commitments.",
+                },
+                step2: {
+                    step: "STEP 2",
+                    title: "List your land",
+                    description: "Add information about your property: location, area, features.",
+                },
+                step3: {
+                    step: "STEP 3",
+                    title: "Receive proposals",
+                    description: "Interested developers will contact you. Compare offers and choose the best option.",
+                },
+                step4: {
+                    step: "STEP 4",
+                    title: "Close the deal",
+                    description: "Sign the contract and start generating passive income for 20-25 years.",
+                },
+            },
+            developers: {
+                step1: {
+                    step: "STEP 1",
+                    title: "Register as a developer",
+                    description: "Create your company profile and access our database of available lands.",
+                },
+                step2: {
+                    step: "STEP 2",
+                    title: "Define your project",
+                    description: "Specify energy type, capacity, preferred location and technical requirements.",
+                },
+                step3: {
+                    step: "STEP 3",
+                    title: "Get matches",
+                    description: "Our algorithm will show lands compatible with your project. Analyze and compare options.",
+                },
+                step4: {
+                    step: "STEP 4",
+                    title: "Contact and negotiate",
+                    description: "Communicate directly with landowners and close agreements quickly and transparently.",
+                },
+            },
+        },
     },
     cta: {
         title: "Ready to get started?",

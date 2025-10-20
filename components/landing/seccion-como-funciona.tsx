@@ -6,12 +6,12 @@ import { useTranslations } from "@/i18n/i18nContext"
 import { FileText, Handshake, Search, TrendingUp, UserPlus } from "lucide-react"
 import Link from "next/link"
 
-interface SeccionComoFuncionaProps {
+interface SeccionComoFunciona2Props {
     showCTA?: boolean
     compactMode?: boolean
 }
 
-export function SeccionComoFunciona({ showCTA = true, compactMode = false }: SeccionComoFuncionaProps) {
+export function SeccionComoFunciona({ showCTA = true, compactMode = false }: SeccionComoFunciona2Props) {
     const sectionPadding = compactMode ? "py-12" : "py-20"
     const titleSize = compactMode ? "text-3xl" : "text-4xl"
     const subtitleSize = compactMode ? "text-lg" : "text-xl"
@@ -20,11 +20,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
     return (
         <section className="py-20 md:py-12">
             <div className="text-center">
-                <h2 className="text-foreground text-4xl font-bold md:text-5xl">¿Cómo Funciona?</h2>
-                {/* <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
-                    Conectamos propietarios y promotores para impulsar la energía renovable
-                </p> */}
+                <h2 className="text-foreground text-4xl font-bold md:text-5xl">{t.howItWorks?.title}</h2>
             </div>
+
             {/* Para Propietarios */}
             <section className={`bg-background px-6 ${sectionPadding}`}>
                 <div className="container mx-auto max-w-6xl">
@@ -33,7 +31,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                             {t.howItWorks?.landowners?.title}
                         </div>
                         <h2 className={`mb-4 ${titleSize} font-bold`}>{t.howItWorks?.landowners?.subtitle}</h2>
-                        <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>{t.benefits?.landowners?.benefit1Desc}</p>
+                        <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>
+                            {t.howItWorks?.howItWorksSplit?.landowners?.step1?.description}
+                        </p>
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-2">
@@ -43,9 +43,11 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <UserPlus className="text-primary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-primary mb-2 text-sm font-semibold">{t.howItWorks?.step1?.title}</div>
-                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step1?.title}</h3>
-                                    <p className="text-muted-foreground">{t.howItWorks?.step1?.desc}</p>
+                                    <div className="text-primary mb-2 text-sm font-semibold">
+                                        {t.howItWorks?.howItWorksSplit?.landowners?.step1?.step}
+                                    </div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.howItWorksSplit?.landowners?.step1?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.howItWorksSplit?.landowners?.step1?.description}</p>
                                 </div>
                             </div>
                         </Card>
@@ -56,9 +58,11 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <FileText className="text-primary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-primary mb-2 text-sm font-semibold">{t.howItWorks?.step2?.title}</div>
-                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step2?.title}</h3>
-                                    <p className="text-muted-foreground">{t.howItWorks?.step2?.desc}</p>
+                                    <div className="text-primary mb-2 text-sm font-semibold">
+                                        {t.howItWorks?.howItWorksSplit?.landowners?.step2?.step}
+                                    </div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.howItWorksSplit?.landowners?.step2?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.howItWorksSplit?.landowners?.step2?.description}</p>
                                 </div>
                             </div>
                         </Card>
@@ -69,9 +73,11 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <Search className="text-primary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-primary mb-2 text-sm font-semibold">{t.howItWorks?.step3?.title}</div>
-                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step3?.title}</h3>
-                                    <p className="text-muted-foreground">{t.howItWorks?.step3?.desc}</p>
+                                    <div className="text-primary mb-2 text-sm font-semibold">
+                                        {t.howItWorks?.howItWorksSplit?.landowners?.step3?.step}
+                                    </div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.howItWorksSplit?.landowners?.step3?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.howItWorksSplit?.landowners?.step3?.description}</p>
                                 </div>
                             </div>
                         </Card>
@@ -82,9 +88,11 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <Handshake className="text-primary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-primary mb-2 text-sm font-semibold">{t.howItWorks?.step4?.title}</div>
-                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step4?.title}</h3>
-                                    <p className="text-muted-foreground">{t.howItWorks?.step4?.desc}</p>
+                                    <div className="text-primary mb-2 text-sm font-semibold">
+                                        {t.howItWorks?.howItWorksSplit?.landowners?.step4?.step}
+                                    </div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.howItWorksSplit?.landowners?.step4?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.howItWorksSplit?.landowners?.step4?.description}</p>
                                 </div>
                             </div>
                         </Card>
@@ -94,7 +102,7 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                         <div className="mt-12 text-center">
                             <Link href="/login/propietario">
                                 <Button size="lg" className="bg-primary hover:bg-primary/90 h-14 px-8 text-lg">
-                                    Comenzar como propietario
+                                    {t.cta?.landowner}
                                 </Button>
                             </Link>
                         </div>
@@ -110,7 +118,9 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                             {t.howItWorks?.developers?.title}
                         </div>
                         <h2 className={`mb-4 ${titleSize} font-bold`}>{t.howItWorks?.developers?.subtitle}</h2>
-                        <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>{t.benefits?.developers?.benefit1Desc}</p>
+                        <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>
+                            {t.howItWorks?.howItWorksSplit?.developers?.step1?.description}
+                        </p>
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-2">
@@ -120,9 +130,11 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <UserPlus className="text-secondary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-secondary mb-2 text-sm font-semibold">{t.howItWorks?.step1?.title}</div>
-                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step1?.title}</h3>
-                                    <p className="text-muted-foreground">{t.howItWorks?.step1?.desc}</p>
+                                    <div className="text-secondary mb-2 text-sm font-semibold">
+                                        {t.howItWorks?.howItWorksSplit?.developers?.step1?.step}
+                                    </div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.howItWorksSplit?.developers?.step1?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.howItWorksSplit?.developers?.step1?.description}</p>
                                 </div>
                             </div>
                         </Card>
@@ -133,9 +145,11 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <FileText className="text-secondary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-secondary mb-2 text-sm font-semibold">{t.howItWorks?.step2?.title}</div>
-                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step2?.title}</h3>
-                                    <p className="text-muted-foreground">{t.howItWorks?.step2?.desc}</p>
+                                    <div className="text-secondary mb-2 text-sm font-semibold">
+                                        {t.howItWorks?.howItWorksSplit?.developers?.step2?.step}
+                                    </div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.howItWorksSplit?.developers?.step2?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.howItWorksSplit?.developers?.step2?.description}</p>
                                 </div>
                             </div>
                         </Card>
@@ -146,9 +160,11 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <TrendingUp className="text-secondary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-secondary mb-2 text-sm font-semibold">{t.howItWorks?.step3?.title}</div>
-                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step3?.title}</h3>
-                                    <p className="text-muted-foreground">{t.howItWorks?.step3?.desc}</p>
+                                    <div className="text-secondary mb-2 text-sm font-semibold">
+                                        {t.howItWorks?.howItWorksSplit?.developers?.step3?.step}
+                                    </div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.howItWorksSplit?.developers?.step3?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.howItWorksSplit?.developers?.step3?.description}</p>
                                 </div>
                             </div>
                         </Card>
@@ -159,9 +175,11 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                                     <Handshake className="text-secondary h-8 w-8" />
                                 </div>
                                 <div>
-                                    <div className="text-secondary mb-2 text-sm font-semibold">{t.howItWorks?.step4?.title}</div>
-                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.step4?.title}</h3>
-                                    <p className="text-muted-foreground">{t.howItWorks?.step4?.desc}</p>
+                                    <div className="text-secondary mb-2 text-sm font-semibold">
+                                        {t.howItWorks?.howItWorksSplit?.developers?.step4?.step}
+                                    </div>
+                                    <h3 className="mb-3 text-2xl font-bold">{t.howItWorks?.howItWorksSplit?.developers?.step4?.title}</h3>
+                                    <p className="text-muted-foreground">{t.howItWorks?.howItWorksSplit?.developers?.step4?.description}</p>
                                 </div>
                             </div>
                         </Card>
@@ -171,7 +189,7 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
                         <div className="mt-12 text-center">
                             <Link href="/login/promotor">
                                 <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-primary-foreground h-14 px-8 text-lg">
-                                    Comenzar como promotor
+                                    {t.cta?.developer}
                                 </Button>
                             </Link>
                         </div>
@@ -181,3 +199,5 @@ export function SeccionComoFunciona({ showCTA = true, compactMode = false }: Sec
         </section>
     )
 }
+
+export default SeccionComoFunciona

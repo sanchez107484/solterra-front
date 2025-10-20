@@ -66,6 +66,53 @@ export const es = {
             title: "Cómo funciona (rápido)",
             subtitle: "Propietarios y promotores lado a lado",
         },
+        // Split/step-by-step copy used by SeccionComoFuncionaSplit / SeccionComoFunciona2
+        howItWorksSplit: {
+            landowners: {
+                step1: {
+                    step: "PASO 1",
+                    title: "Regístrate gratis",
+                    description: "Crea tu cuenta como propietario en menos de 2 minutos. Sin costes ni compromisos.",
+                },
+                step2: {
+                    step: "PASO 2",
+                    title: "Lista tu terreno",
+                    description: "Añade información sobre tu propiedad: ubicación, superficie, características.",
+                },
+                step3: {
+                    step: "PASO 3",
+                    title: "Recibe propuestas",
+                    description: "Los promotores interesados contactarán contigo. Compara ofertas y elige la mejor opción.",
+                },
+                step4: {
+                    step: "PASO 4",
+                    title: "Cierra el acuerdo",
+                    description: "Firma el contrato y comienza a generar ingresos pasivos durante 20-25 años.",
+                },
+            },
+            developers: {
+                step1: {
+                    step: "PASO 1",
+                    title: "Regístrate como promotor",
+                    description: "Crea tu perfil empresarial y accede a nuestra base de datos de terrenos disponibles.",
+                },
+                step2: {
+                    step: "PASO 2",
+                    title: "Define tu proyecto",
+                    description: "Especifica tipo de energía, capacidad, ubicación preferida y requisitos técnicos.",
+                },
+                step3: {
+                    step: "PASO 3",
+                    title: "Recibe matches",
+                    description: "Nuestro algoritmo te mostrará terrenos compatibles con tu proyecto. Analiza y compara opciones.",
+                },
+                step4: {
+                    step: "PASO 4",
+                    title: "Contacta y negocia",
+                    description: "Comunícate directamente con propietarios y cierra acuerdos de forma ágil y transparente.",
+                },
+            },
+        },
     },
     cta: {
         title: "¿Listo para comenzar?",
