@@ -1,6 +1,6 @@
 /**
- * types/usuario.types.ts
- * Tipos de Usuario alineados con schema.prisma proporcionado.
+ * Tipos para Usuario (frontend)
+ * Hechos para seguir el patrón del backend. Ajusta si tu API difiere.
  */
 
 export type RolUsuario = "PROPIETARIO" | "PROMOTOR" | "ADMIN"
@@ -10,19 +10,19 @@ export type PlanTipo = "FREE" | "PRO" | "ENTERPRISE"
 export interface Usuario {
     id: string
     email: string
-    password?: string // sólo para DTOs/creación, no incluir en respuestas públicas
+    password?: string // sólo para DTOs/creación, no debe enviarse en responses públicas
     nombre?: string | null
     apellidos?: string | null
-    rol: RolUsuario
+    rol?: RolUsuario
     telefono?: string | null
     empresa?: string | null
     avatar?: string | null
     verificado?: boolean
     activo?: boolean
-    planActual?: PlanTipo
+    planActual?: PlanTipo | null
     planActivoHasta?: string | null
 
-    // Auditoría
+    // Auditoría / timestamps
     ultimoAcceso?: string | null
     creadoEn?: string
     actualizadoEn?: string
@@ -42,4 +42,12 @@ export interface LoginDTO {
     password: string
 }
 
-export default Usuario
+export type CreateUsuarioDTO = RegisterDTO
+export type UpdateUsuarioDTO = Partial<CreateUsuarioDTO>
+
+export interface UsuarioFilters {
+    q?: string
+    rol?: RolUsuario
+    page?: number
+    perPage?: number
+}
