@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toast } from "@/components/ui/use-toast"
+import { useAuth } from "@/contexts/AuthContext"
 import { useTranslations } from "@/i18n/i18nContext"
 import { ArrowLeft, Eye, EyeOff, Lock, Mail } from "lucide-react"
 import Link from "next/link"
@@ -16,13 +18,51 @@ import { useState } from "react"
 export default function LoginPropietario() {
     const [showPassword, setShowPassword] = useState(false)
     const [isLogin, setIsLogin] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
     const { t } = useTranslations()
+    const { login, register } = useAuth()
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Form state
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+        nombre: "",
+    })
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // TODO: Implementar lógica de autenticación real
-        router.push("/dashboard/propietario")
+        setIsLoading(true)
+
+        try {
+            if (isLogin) {
+                await login({ email: formData.email, password: formData.password })
+                toast({
+                    title: "¡Bienvenido!",
+                    description: "Has iniciado sesión correctamente",
+                })
+            } else {
+                await register({
+                    email: formData.email,
+                    password: formData.password,
+                    nombre: formData.nombre,
+                    rol: "PROPIETARIO",
+                })
+                toast({
+                    title: "¡Cuenta creada!",
+                    description: "Tu cuenta ha sido creada exitosamente",
+                })
+            }
+            router.push("/dashboard/propietario")
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error?.response?.data?.message || error?.message || "Hubo un problema. Intenta de nuevo.",
+                variant: "destructive",
+            })
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -89,7 +129,14 @@ export default function LoginPropietario() {
                             {!isLogin && (
                                 <div className="space-y-2">
                                     <Label htmlFor="name">{t?.contact?.form?.nameLabel}</Label>
-                                    <Input id="name" placeholder={t?.contact?.form?.namePlaceholder} className="h-12" />
+                                    <Input
+                                        id="name"
+                                        placeholder={t?.contact?.form?.namePlaceholder}
+                                        className="h-12"
+                                        value={formData.nombre}
+                                        onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                                        required={!isLogin}
+                                    />
                                 </div>
                             )}
 
@@ -102,6 +149,9 @@ export default function LoginPropietario() {
                                         type="email"
                                         placeholder={t?.contact?.form?.emailPlaceholder}
                                         className="h-12 pl-10"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        required
                                     />
                                 </div>
                             </div>
@@ -115,6 +165,10 @@ export default function LoginPropietario() {
                                         type={showPassword ? "text" : "password"}
                                         placeholder={t?.contact?.form?.passwordPlaceholder}
                                         className="h-12 pr-10 pl-10"
+                                        value={formData.password}
+                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                        required
+                                        minLength={6}
                                     />
                                     <button
                                         type="button"
@@ -138,8 +192,8 @@ export default function LoginPropietario() {
                                 </div>
                             )}
 
-                            <Button type="submit" className="bg-primary hover:bg-primary/90 h-12 w-full text-lg">
-                                {isLogin ? t?.contact?.form?.loginButton : t?.contact?.form?.registerButton}
+                            <Button type="submit" className="bg-primary hover:bg-primary/90 h-12 w-full text-lg" disabled={isLoading}>
+                                {isLoading ? "Cargando..." : isLogin ? t?.contact?.form?.loginButton : t?.contact?.form?.registerButton}
                             </Button>
                         </form>
 

@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { I18nProvider } from "@/i18n/i18nContext"
 import { Analytics } from "@vercel/analytics/next"
@@ -41,6 +42,7 @@ export default function RootLayout({
                             {children}
                             <Analytics />
                         </Suspense>
+                        <Toaster />
                     </I18nProvider>
                 </AuthProvider>
             </body>
