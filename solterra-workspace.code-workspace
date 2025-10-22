@@ -1,0 +1,19 @@
+{
+    "folders": [
+        {
+            "name": "Frontend (Next.js)",
+            "path": ".",
+        },
+        {
+            "name": "Backend (NestJS)",
+            "path": "../solterra-backend",
+        },
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/.next": true,
+            "**/dist": true,
+        },
+    },
+}
