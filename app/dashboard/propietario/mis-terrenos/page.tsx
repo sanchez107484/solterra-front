@@ -1,0 +1,241 @@
+"use client"
+
+import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
+import ProtectedRoute from "@/components/protected-route"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
+import { useTerrenos } from "@/hooks/useTerrenos"
+import { useTranslations } from "@/i18n/i18nContext"
+import { ArrowLeft, Calendar, Euro, Eye, Landmark, MapPin, MessageCircle, Ruler, TrendingUp } from "lucide-react"
+import Link from "next/link"
+import { useEffect } from "react"
+
+const getTerrenoStateColor = (estado: string) => {
+    switch (estado?.toUpperCase()) {
+        case "ACTIVO":
+            return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+        case "VENDIDO":
+            return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+        case "PAUSADO":
+            return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+        case "BORRADOR":
+            return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+        case "PENDIENTE_REVISION":
+            return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300"
+        default:
+            return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+    }
+}
+
+const getTerrenoStateLabel = (estado: string, t: any) => {
+    switch (estado?.toUpperCase()) {
+        case "ACTIVO":
+            return t("dashboard.owner.terrenos.states.active")
+        case "VENDIDO":
+            return t("dashboard.owner.terrenos.states.sold")
+        case "PAUSADO":
+            return t("dashboard.owner.terrenos.states.paused")
+        case "BORRADOR":
+            return t("dashboard.owner.terrenos.states.draft")
+        case "PENDIENTE_REVISION":
+            return t("dashboard.owner.terrenos.states.pending")
+        default:
+            return estado
+    }
+}
+
+const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("es-ES", {
+        style: "currency",
+        currency: "EUR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    }).format(amount)
+}
+
+export default function MisTerrenosPage() {
+    const { t } = useTranslations()
+    const { terrenos, fetchMine, isLoading } = useTerrenos({ autoFetch: false })
+
+    useEffect(() => {
+        fetchMine()
+    }, [fetchMine])
+
+    // Calcular estadísticas
+    const totalTerrenos = terrenos?.length || 0
+    const terrenosActivos = terrenos?.filter((t) => t.estado === "ACTIVO").length || 0
+    const terrenosVendidos = terrenos?.filter((t) => t.estado === "VENDIDO").length || 0
+    const valorTotal = terrenos?.reduce((sum, t) => sum + (t.precioVenta || 0), 0) || 0
+
+    return (
+        <ProtectedRoute requiredRole="PROPIETARIO" redirectTo="/login/propietario">
+            <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+                <DashboardSidebar userType="propietario" />
+                <main className="flex-1 p-6">
+                    {/* Header */}
+                    <div className="mb-6">
+                        <div className="mb-4 flex items-center gap-4">
+                            <Link href="/dashboard/propietario">
+                                <Button variant="ghost" size="sm">
+                                    <ArrowLeft className="mr-2 h-4 w-4" />
+                                    {t?.common?.back}
+                                </Button>
+                            </Link>
+                        </div>
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t?.dashboard?.owner?.terrenos?.title}</h1>
+                        <p className="mt-2 text-gray-600 dark:text-gray-300">{t?.dashboard?.owner?.terrenos?.description}</p>
+                    </div>
+
+                    {/* Estadísticas */}
+                    <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
+                        <Card className="p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                        {t?.dashboard?.owner?.terrenos?.stats?.total}
+                                    </p>
+                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalTerrenos}</p>
+                                </div>
+                                <Landmark className="h-8 w-8 text-blue-600" />
+                            </div>
+                        </Card>
+
+                        <Card className="p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                        {t?.dashboard?.owner?.terrenos?.stats?.active}
+                                    </p>
+                                    <p className="text-2xl font-bold text-green-600">{terrenosActivos}</p>
+                                </div>
+                                <TrendingUp className="h-8 w-8 text-green-600" />
+                            </div>
+                        </Card>
+
+                        <Card className="p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                        {t?.dashboard?.owner?.terrenos?.stats?.sold}
+                                    </p>
+                                    <p className="text-2xl font-bold text-red-600">{terrenosVendidos}</p>
+                                </div>
+                                <MessageCircle className="h-8 w-8 text-red-600" />
+                            </div>
+                        </Card>
+
+                        <Card className="p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                                        {t?.dashboard?.owner?.terrenos?.stats?.totalValue}
+                                    </p>
+                                    <p className="text-2xl font-bold text-purple-600">{formatCurrency(valorTotal)}</p>
+                                </div>
+                                <Euro className="h-8 w-8 text-purple-600" />
+                            </div>
+                        </Card>
+                    </div>
+
+                    {/* Lista de terrenos */}
+                    {isLoading ? (
+                        <div className="py-12 text-center">
+                            <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
+                            <p className="mt-2 text-gray-600">{t?.common?.loading}</p>
+                        </div>
+                    ) : !terrenos || terrenos.length === 0 ? (
+                        <Empty>
+                            <EmptyHeader>
+                                <EmptyMedia>
+                                    <Landmark className="h-16 w-16 text-gray-400" />
+                                </EmptyMedia>
+                                <EmptyTitle>{t?.dashboard?.owner?.terrenos?.empty?.title}</EmptyTitle>
+                                <EmptyDescription>{t?.dashboard?.owner?.terrenos?.empty?.description}</EmptyDescription>
+                            </EmptyHeader>
+                            <EmptyContent>
+                                <Link href="/dashboard/propietario/crear-terreno">
+                                    <Button>{t?.dashboard?.owner?.terrenos?.empty?.action}</Button>
+                                </Link>
+                            </EmptyContent>
+                        </Empty>
+                    ) : (
+                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                            {terrenos.map((terreno) => (
+                                <Card key={terreno.id} className="overflow-hidden transition-shadow hover:shadow-lg">
+                                    <div className="p-6">
+                                        {/* Header con estado */}
+                                        <div className="mb-4 flex items-start justify-between">
+                                            <div className="flex-1">
+                                                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                                                    {terreno.titulo}
+                                                </h3>
+                                                <Badge className={getTerrenoStateColor(terreno.estado)}>
+                                                    {getTerrenoStateLabel(terreno.estado, t)}
+                                                </Badge>
+                                            </div>
+                                        </div>
+
+                                        {/* Información principal */}
+                                        <div className="mb-4 space-y-3">
+                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                                <MapPin className="h-4 w-4" />
+                                                <span>
+                                                    {terreno.direccion}, {terreno.municipio}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                                <Ruler className="h-4 w-4" />
+                                                <span>{terreno.superficie?.toLocaleString()} ha</span>
+                                            </div>
+
+                                            {terreno.precioVenta && (
+                                                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                                    <Euro className="h-4 w-4" />
+                                                    <span className="font-semibold text-green-600">
+                                                        {formatCurrency(terreno.precioVenta)}
+                                                    </span>
+                                                </div>
+                                            )}
+
+                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                                <Calendar className="h-4 w-4" />
+                                                <span>
+                                                    {t?.dashboard?.owner?.terrenos?.created}:{" "}
+                                                    {new Date(terreno.creadoEn).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Descripción */}
+                                        {terreno.descripcion && (
+                                            <p className="mb-4 line-clamp-2 text-sm text-gray-600 dark:text-gray-300">
+                                                {terreno.descripcion}
+                                            </p>
+                                        )}
+
+                                        {/* Acciones */}
+                                        <div className="flex gap-2 border-t pt-4">
+                                            <Link href={`/dashboard/propietario/terrenos/${terreno.id}`} className="flex-1">
+                                                <Button variant="outline" size="sm" className="w-full">
+                                                    <Eye className="mr-2 h-4 w-4" />
+                                                    {t?.common?.view}
+                                                </Button>
+                                            </Link>
+                                            <Button variant="outline" size="sm">
+                                                <MessageCircle className="mr-2 h-4 w-4" />
+                                                {t?.dashboard?.owner?.terrenos?.contact}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </Card>
+                            ))}
+                        </div>
+                    )}
+                </main>
+            </div>
+        </ProtectedRoute>
+    )
+}

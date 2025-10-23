@@ -1,89 +1,175 @@
 "use client"
 
-import proyectosService from "@/services/proyectos.service"
+import { proyectosService, proyectosServiceWithHandling } from "@/services"
+import type { ProyectoFilters } from "@/types/api.types"
 import type { CreateProyectoDTO, Proyecto, UpdateProyectoDTO } from "@/types/proyecto.types"
 import { useCallback, useEffect, useState } from "react"
 
 type Options = {
     autoFetch?: boolean
-    filters?: Record<string, any>
-    pagination?: { page?: number; perPage?: number }
+    filters?: ProyectoFilters
+    withErrorHandling?: boolean // Si usar el servicio con manejo automático de errores
 }
 
 export function useProyectos(options: Options = {}) {
-    const { autoFetch = true, filters, pagination } = options
+    const { autoFetch = true, filters, withErrorHandling = false } = options
     const [proyectos, setProyectos] = useState<Proyecto[]>([])
-    const [total, setTotal] = useState<number>(0)
+    const [pagination, setPagination] = useState({
+        page: 1,
+        perPage: 10,
+        total: 0,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false,
+    })
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
+
+    // Elegir el servicio según la configuración
+    const service = withErrorHandling ? proyectosServiceWithHandling : proyectosService
 
     const fetchProyectos = useCallback(async () => {
         setIsLoading(true)
         setError(null)
         try {
-            const resp = await proyectosService.getAll({ ...(pagination as any), ...(filters as any) })
-            const data = resp.data ?? resp
-            setProyectos(data)
-            setTotal(resp.pagination?.total ?? (Array.isArray(data) ? data.length : 0))
-            return resp
+            const response = await service.getAll(filters)
+            setProyectos(response.data)
+            setPagination(response.pagination || { page: 1, perPage: 10, total: 0, totalPages: 0, hasNext: false, hasPrev: false })
+            return response
         } catch (err: any) {
-            setError(err?.message || "Error al cargar proyectos")
+            if (!withErrorHandling) {
+                setError(err?.message || "Error al cargar proyectos")
+            }
             throw err
         } finally {
             setIsLoading(false)
         }
-    }, [filters, pagination])
+    }, [filters, service, withErrorHandling])
 
-    // Algunos backends exponen un endpoint para "mis proyectos". Si no existe,
-    // simplemente reutilizamos `fetchProyectos` (el caller puede pasar filtros).
-    const fetchMine = fetchProyectos
+    const fetchMine = useCallback(
+        async (customFilters?: Omit<ProyectoFilters, "promotorId">) => {
+            setIsLoading(true)
+            setError(null)
+            try {
+                const response = await service.getMine({ ...filters, ...customFilters })
+                setProyectos(response.data)
+                setPagination(response.pagination || { page: 1, perPage: 10, total: 0, totalPages: 0, hasNext: false, hasPrev: false })
+                return response
+            } catch (err: any) {
+                if (!withErrorHandling) {
+                    setError(err?.message || "Error al cargar tus proyectos")
+                }
+                throw err
+            } finally {
+                setIsLoading(false)
+            }
+        },
+        [filters, service, withErrorHandling]
+    )
 
-    const createProyecto = useCallback(async (payload: CreateProyectoDTO) => {
-        setIsLoading(true)
-        setError(null)
-        try {
-            const created: Proyecto = await proyectosService.create(payload)
-            setProyectos((prev) => [created, ...prev])
-            setTotal((prev) => prev + 1)
-            return created
-        } catch (err: any) {
-            setError(err?.message || "Error al crear proyecto")
-            throw err
-        } finally {
-            setIsLoading(false)
-        }
-    }, [])
+    const createProyecto = useCallback(
+        async (payload: CreateProyectoDTO) => {
+            setIsLoading(true)
+            setError(null)
+            try {
+                const created = await service.create(payload)
+                setProyectos((prev) => [created, ...prev])
+                setPagination((prev) => ({ ...prev, total: prev.total + 1 }))
+                return created
+            } catch (err: any) {
+                if (!withErrorHandling) {
+                    setError(err?.message || "Error al crear proyecto")
+                }
+                throw err
+            } finally {
+                setIsLoading(false)
+            }
+        },
+        [service, withErrorHandling]
+    )
 
-    const updateProyecto = useCallback(async (id: string, payload: UpdateProyectoDTO) => {
-        setIsLoading(true)
-        setError(null)
-        try {
-            const updated: Proyecto = await proyectosService.update(id, payload)
-            setProyectos((prev) => prev.map((p) => (p.id === id ? updated : p)))
-            return updated
-        } catch (err: any) {
-            setError(err?.message || "Error al actualizar proyecto")
-            throw err
-        } finally {
-            setIsLoading(false)
-        }
-    }, [])
+    const updateProyecto = useCallback(
+        async (id: string, payload: UpdateProyectoDTO) => {
+            setIsLoading(true)
+            setError(null)
+            try {
+                const updated = await service.update(id, payload)
+                setProyectos((prev) => prev.map((p) => (p.id === id ? updated : p)))
+                return updated
+            } catch (err: any) {
+                if (!withErrorHandling) {
+                    setError(err?.message || "Error al actualizar proyecto")
+                }
+                throw err
+            } finally {
+                setIsLoading(false)
+            }
+        },
+        [service, withErrorHandling]
+    )
 
-    const deleteProyecto = useCallback(async (id: string) => {
-        setIsLoading(true)
-        setError(null)
-        try {
-            await proyectosService.delete(id)
-            setProyectos((prev) => prev.filter((p) => p.id !== id))
-            setTotal((prev) => Math.max(0, prev - 1))
-            return true
-        } catch (err: any) {
-            setError(err?.message || "Error al eliminar proyecto")
-            throw err
-        } finally {
-            setIsLoading(false)
-        }
-    }, [])
+    const deleteProyecto = useCallback(
+        async (id: string) => {
+            setIsLoading(true)
+            setError(null)
+            try {
+                await service.delete(id)
+                setProyectos((prev) => prev.filter((p) => p.id !== id))
+                setPagination((prev) => ({ ...prev, total: Math.max(0, prev.total - 1) }))
+                return true
+            } catch (err: any) {
+                if (!withErrorHandling) {
+                    setError(err?.message || "Error al eliminar proyecto")
+                }
+                throw err
+            } finally {
+                setIsLoading(false)
+            }
+        },
+        [service, withErrorHandling]
+    )
+
+    const bulkDelete = useCallback(
+        async (ids: string[]) => {
+            setIsLoading(true)
+            setError(null)
+            try {
+                const result = await service.bulkDelete(ids)
+                setProyectos((prev) => prev.filter((p) => !ids.includes(p.id)))
+                setPagination((prev) => ({ ...prev, total: Math.max(0, prev.total - result.deleted) }))
+                return result
+            } catch (err: any) {
+                if (!withErrorHandling) {
+                    setError(err?.message || "Error al eliminar proyectos")
+                }
+                throw err
+            } finally {
+                setIsLoading(false)
+            }
+        },
+        [service, withErrorHandling]
+    )
+
+    const searchProyectos = useCallback(
+        async (query: string, searchFilters?: Omit<ProyectoFilters, "search">) => {
+            setIsLoading(true)
+            setError(null)
+            try {
+                const response = await service.search(query, searchFilters)
+                setProyectos(response.data)
+                setPagination(response.pagination || { page: 1, perPage: 10, total: 0, totalPages: 0, hasNext: false, hasPrev: false })
+                return response
+            } catch (err: any) {
+                if (!withErrorHandling) {
+                    setError(err?.message || "Error al buscar proyectos")
+                }
+                throw err
+            } finally {
+                setIsLoading(false)
+            }
+        },
+        [service, withErrorHandling]
+    )
 
     useEffect(() => {
         if (autoFetch) void fetchProyectos()
@@ -91,7 +177,8 @@ export function useProyectos(options: Options = {}) {
 
     return {
         proyectos,
-        total,
+        pagination,
+        total: pagination?.total || 0, // Mantener compatibilidad con verificación
         isLoading,
         error,
         fetchProyectos,
@@ -99,46 +186,58 @@ export function useProyectos(options: Options = {}) {
         createProyecto,
         updateProyecto,
         deleteProyecto,
+        bulkDelete,
+        searchProyectos,
         refetch: fetchProyectos,
     }
 }
 
-export function useProyecto(id?: string) {
+export function useProyecto(id?: string, options: { withErrorHandling?: boolean } = {}) {
+    const { withErrorHandling = false } = options
     const [proyecto, setProyecto] = useState<Proyecto | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
+
+    // Elegir el servicio según la configuración
+    const service = withErrorHandling ? proyectosServiceWithHandling : proyectosService
 
     useEffect(() => {
         if (!id) return
         let mounted = true
         setIsLoading(true)
         setError(null)
-        proyectosService
+        service
             .getById(id)
             .then((p) => mounted && setProyecto(p))
-            .catch((e) => setError(e?.message || String(e)))
+            .catch((e) => {
+                if (mounted && !withErrorHandling) {
+                    setError(e?.message || String(e))
+                }
+            })
             .finally(() => mounted && setIsLoading(false))
 
         return () => {
             mounted = false
         }
-    }, [id])
+    }, [id, service, withErrorHandling])
 
     const refetch = useCallback(async () => {
         if (!id) return null
         setIsLoading(true)
         setError(null)
         try {
-            const p = await proyectosService.getById(id)
+            const p = await service.getById(id)
             setProyecto(p)
             return p
         } catch (e: any) {
-            setError(e?.message || String(e))
+            if (!withErrorHandling) {
+                setError(e?.message || String(e))
+            }
             throw e
         } finally {
             setIsLoading(false)
         }
-    }, [id])
+    }, [id, service, withErrorHandling])
 
     return { proyecto, isLoading, error, refetch }
 }

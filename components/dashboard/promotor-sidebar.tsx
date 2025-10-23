@@ -4,37 +4,19 @@ import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
-import { Briefcase, LayoutDashboard, Leaf, LogOut, MapPin, Settings, User, Zap } from "lucide-react"
+import { Briefcase, LayoutDashboard, LogOut, MapPin, Settings, User } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useTranslations } from "../../i18n/i18nContext"
 
-interface DashboardSidebarProps {
-    userType: "propietario" | "promotor"
-}
-
-export function DashboardSidebar({ userType }: DashboardSidebarProps) {
+export function PromotorSidebar() {
     const pathname = usePathname()
-    const { t } = useTranslations()
 
-    const isPropietario = userType === "propietario"
-    const Icon = isPropietario ? Leaf : Zap
-    const bgColor = isPropietario ? "bg-primary" : "bg-secondary"
-    const textColor = isPropietario ? "text-primary" : "text-secondary-foreground"
-
-    const navItems = isPropietario
-        ? [
-              { href: "/dashboard/propietario", label: "Dashboard", icon: LayoutDashboard },
-              { href: "/dashboard/propietario/mis-terrenos", label: "Mis Terrenos", icon: MapPin },
-              { href: "/dashboard/propietario/mis-proyectos", label: "Mis Proyectos", icon: Briefcase },
-              { href: "/dashboard/propietario/nuevo-terreno", label: "Añadir Terreno", icon: MapPin },
-          ]
-        : [
-              { href: "/dashboard/promotor", label: "Dashboard", icon: LayoutDashboard },
-              { href: "/dashboard/promotor/mis-proyectos", label: "Mis Proyectos", icon: Briefcase },
-              { href: "/dashboard/promotor/nuevo-proyecto", label: "Nuevo Proyecto", icon: Briefcase },
-              { href: "/dashboard/promotor/todos-terrenos", label: "Todos Terrenos", icon: MapPin },
-          ]
+    const navItems = [
+        { href: "/dashboard/promotor", label: "Dashboard", icon: LayoutDashboard },
+        { href: "/dashboard/promotor/mis-proyectos", label: "Mis Proyectos", icon: Briefcase },
+        { href: "/dashboard/promotor/nuevo-proyecto", label: "Nuevo Proyecto", icon: Briefcase },
+        { href: "/dashboard/promotor/todos-terrenos", label: "Todos Terrenos", icon: MapPin },
+    ]
 
     return (
         <aside className="bg-background fixed top-0 left-0 z-40 h-screen w-64 border-r">
@@ -44,7 +26,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                     <Logo />
                     <div>
                         <span className="font-bold">Solterra</span>
-                        <p className="text-muted-foreground text-xs capitalize">{userType}</p>
+                        <p className="text-muted-foreground text-xs">Promotor</p>
                     </div>
                 </div>
 
@@ -56,7 +38,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                             <Link key={item.href} href={item.href}>
                                 <Button
                                     variant={isActive ? "secondary" : "ghost"}
-                                    className={cn("w-full justify-start gap-3", isActive && textColor)}
+                                    className={cn("w-full justify-start gap-3", isActive && "text-secondary-foreground")}
                                 >
                                     <item.icon className="h-4 w-4" />
                                     {item.label}

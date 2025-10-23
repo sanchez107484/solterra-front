@@ -10,7 +10,7 @@ interface ProtectedRouteProps {
     redirectTo?: string
 }
 
-export function ProtectedRoute({ children, requiredRole, redirectTo = "/login/propietario" }: ProtectedRouteProps) {
+export function ProtectedRoute({ children, requiredRole, redirectTo }: ProtectedRouteProps) {
     const { auth } = useAuth()
     const router = useRouter()
 
@@ -18,9 +18,12 @@ export function ProtectedRoute({ children, requiredRole, redirectTo = "/login/pr
         // Esperar a que termine de cargar
         if (auth.isLoading) return
 
-        // Si no está autenticado, redirigir al login
+        // Si no está autenticado
         if (!auth.isAuthenticated) {
-            router.push(redirectTo)
+            // Si se especifica redirectTo (páginas del dashboard), usar ese destino
+            // Si no se especifica redirectTo, ir al home (comportamiento por defecto)
+            const destination = redirectTo || "/"
+            router.push(destination)
             return
         }
 

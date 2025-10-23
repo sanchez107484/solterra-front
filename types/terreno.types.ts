@@ -108,13 +108,10 @@ export interface CreateTerrenoDTO {
     potencialSolar?: number | null
     potencialEolico?: number | null
 
-    distanciaSubestacion?: number | null
-    nombreSubestacion?: string | null
-    capacidadSubestacion?: number | null
-
     servidumbres?: string | null
     restriccionesAmbientales?: string | null
-    zonasProtegidas?: boolean | null
+    // Nota: zonasProtegidas, distanciaSubestacion, nombreSubestacion, capacidadSubestacion
+    // no están en el DTO del backend actual
 }
 
 export interface UpdateTerrenoDTO extends Partial<CreateTerrenoDTO> {
