@@ -6,7 +6,7 @@ import { useEffect } from "react"
 
 interface ProtectedRouteProps {
     children: React.ReactNode
-    requiredRole?: "PROPIETARIO" | "PROMOTOR" | "ADMIN"
+    requiredRole?: "PROPIETARIO" | "PROMOTOR" | "ADMIN" | Array<"PROPIETARIO" | "PROMOTOR" | "ADMIN">
     redirectTo?: string
 }
 
@@ -28,11 +28,20 @@ export function ProtectedRoute({ children, requiredRole, redirectTo }: Protected
         }
 
         // Si requiere un rol específico y no lo tiene, redirigir
-        if (requiredRole && auth.user?.rol !== requiredRole) {
-            // Redirigir a su dashboard correcto o a home
-            const userDashboard =
-                auth.user?.rol === "PROPIETARIO" ? "/dashboard/propietario" : auth.user?.rol === "PROMOTOR" ? "/dashboard/promotor" : "/"
-            router.push(userDashboard)
+        if (requiredRole && auth.user?.rol) {
+            const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole]
+            const hasRequiredRole = allowedRoles.includes(auth.user.rol)
+
+            if (!hasRequiredRole) {
+                // Redirigir a su dashboard correcto o a home
+                const userDashboard =
+                    auth.user?.rol === "PROPIETARIO"
+                        ? "/dashboard/propietario"
+                        : auth.user?.rol === "PROMOTOR"
+                          ? "/dashboard/promotor"
+                          : "/"
+                router.push(userDashboard)
+            }
         }
     }, [auth.isAuthenticated, auth.isLoading, auth.user?.rol, requiredRole, redirectTo, router])
 
@@ -54,8 +63,13 @@ export function ProtectedRoute({ children, requiredRole, redirectTo }: Protected
     }
 
     // Si requiere rol y no lo tiene, no mostrar (se está redirigiendo)
-    if (requiredRole && auth.user?.rol !== requiredRole) {
-        return null
+    if (requiredRole && auth.user?.rol) {
+        const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole]
+        const hasRequiredRole = allowedRoles.includes(auth.user.rol)
+
+        if (!hasRequiredRole) {
+            return null
+        }
     }
 
     return <>{children}</>

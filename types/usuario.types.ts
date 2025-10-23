@@ -34,6 +34,8 @@ export interface RegisterDTO {
     password: string
     nombre?: string
     apellidos?: string
+    telefono?: string
+    empresa?: string
     rol?: RolUsuario
 }
 

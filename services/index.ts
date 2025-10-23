@@ -2,6 +2,7 @@ import { ErrorHandlerService } from "@/lib/error-handler"
 import type { ApiError } from "@/types/api.types"
 import { proyectosService } from "./proyectos.service"
 import { terrenosService } from "./terrenos.service"
+import { usuariosService } from "./usuarios.service"
 
 /**
  * Función helper que envuelve llamadas a servicios con manejo de errores automático
@@ -97,4 +98,4 @@ export const terrenosServiceWithHandling = {
 }
 
 // Exportar también los servicios originales para casos donde no se quiera el manejo automático
-export { proyectosService, terrenosService }
+export { proyectosService, terrenosService, usuariosService }

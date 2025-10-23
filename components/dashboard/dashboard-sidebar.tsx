@@ -70,7 +70,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
 
                 {/* User section */}
                 <div className="space-y-1 p-4">
-                    <Link href="/dashboard/perfil">
+                    <Link href="/perfil">
                         <Button variant="ghost" className="w-full justify-start gap-3">
                             <User className="h-4 w-4" />
                             Mi Perfil

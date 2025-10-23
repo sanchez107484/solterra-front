@@ -39,6 +39,45 @@ export const usuariosService = {
         const resp = await api.get(`${USUARIOS_ENDPOINT}/mine`, { params })
         return resp.data
     },
+
+    // Obtener perfil del usuario actual
+    async getProfile() {
+        const resp = await api.get(`${USUARIOS_ENDPOINT}/me`)
+        return resp.data.data ?? resp.data
+    },
+
+    // Actualizar perfil del usuario actual
+    async updateProfile(payload: UpdateUsuarioDTO) {
+        const resp = await api.patch(`${USUARIOS_ENDPOINT}/me`, payload)
+        return resp.data.data ?? resp.data
+    },
+
+    // Cambiar contraseña
+    async changePassword(currentPassword: string, newPassword: string) {
+        const resp = await api.patch(`${USUARIOS_ENDPOINT}/me/password`, {
+            currentPassword,
+            newPassword,
+        })
+        return resp.data
+    },
+
+    // Subir avatar
+    async uploadAvatar(file: File) {
+        const formData = new FormData()
+        formData.append("avatar", file)
+        const resp = await api.post(`${USUARIOS_ENDPOINT}/me/avatar`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        return resp.data.data ?? resp.data
+    },
+
+    // Obtener estadísticas del usuario
+    async getStats() {
+        const resp = await api.get(`${USUARIOS_ENDPOINT}/me/stats`)
+        return resp.data.data ?? resp.data
+    },
 }
 
 export default usuariosService
