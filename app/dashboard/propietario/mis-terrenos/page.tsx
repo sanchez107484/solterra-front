@@ -10,7 +10,7 @@ import { useTerrenos } from "@/hooks/useTerrenos"
 import { useTranslations } from "@/i18n/i18nContext"
 import { ArrowLeft, Calendar, Euro, Eye, Landmark, MapPin, MessageCircle, Ruler, TrendingUp } from "lucide-react"
 import Link from "next/link"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 
 const getTerrenoStateColor = (estado: string) => {
     switch (estado?.toUpperCase()) {
@@ -29,23 +29,6 @@ const getTerrenoStateColor = (estado: string) => {
     }
 }
 
-const getTerrenoStateLabel = (estado: string, t: any) => {
-    switch (estado?.toUpperCase()) {
-        case "ACTIVO":
-            return t("dashboard.owner.terrenos.states.active")
-        case "VENDIDO":
-            return t("dashboard.owner.terrenos.states.sold")
-        case "PAUSADO":
-            return t("dashboard.owner.terrenos.states.paused")
-        case "BORRADOR":
-            return t("dashboard.owner.terrenos.states.draft")
-        case "PENDIENTE_REVISION":
-            return t("dashboard.owner.terrenos.states.pending")
-        default:
-            return estado
-    }
-}
-
 const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("es-ES", {
         style: "currency",
@@ -58,6 +41,26 @@ const formatCurrency = (amount: number) => {
 export default function MisTerrenosPage() {
     const { t } = useTranslations()
     const { terrenos, fetchMine, isLoading } = useTerrenos({ autoFetch: false })
+
+    const getTerrenoStateLabel = useCallback(
+        (estado: string) => {
+            switch (estado?.toUpperCase()) {
+                case "ACTIVO":
+                    return t?.dashboard?.owner?.terrenos?.states?.active || "Activo"
+                case "VENDIDO":
+                    return t?.dashboard?.owner?.terrenos?.states?.sold || "Vendido"
+                case "PAUSADO":
+                    return t?.dashboard?.owner?.terrenos?.states?.paused || "Pausado"
+                case "BORRADOR":
+                    return t?.dashboard?.owner?.terrenos?.states?.draft || "Borrador"
+                case "PENDIENTE_REVISION":
+                    return t?.dashboard?.owner?.terrenos?.states?.pending || "Pendiente de revisión"
+                default:
+                    return estado
+            }
+        },
+        [t]
+    )
 
     useEffect(() => {
         fetchMine()
@@ -172,7 +175,7 @@ export default function MisTerrenosPage() {
                                                     {terreno.titulo}
                                                 </h3>
                                                 <Badge className={getTerrenoStateColor(terreno.estado)}>
-                                                    {getTerrenoStateLabel(terreno.estado, t)}
+                                                    {getTerrenoStateLabel(terreno.estado)}
                                                 </Badge>
                                             </div>
                                         </div>

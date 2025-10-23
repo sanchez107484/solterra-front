@@ -51,6 +51,9 @@ export const authService = {
 
     logout(): void {
         this.removeToken()
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("user")
+        }
     },
 }
 
