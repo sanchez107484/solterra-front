@@ -96,7 +96,7 @@ export function HeroSection() {
                                     </p>
                                     <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
                                         <div className="flex items-center gap-2">
-                                            <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-green-500 md:h-2 md:w-2"></span>
+                                            <span className="bg-primary inline-block h-1.5 w-1.5 animate-pulse rounded-full md:h-2 md:w-2"></span>
                                             <span className="font-medium">{t.hero?.cards?.landowner?.income}</span>
                                         </div>
                                     </div>
@@ -122,7 +122,7 @@ export function HeroSection() {
                                     </p>
                                     <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
                                         <div className="flex items-center gap-2">
-                                            <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500 md:h-2 md:w-2"></span>
+                                            <span className="bg-secondary inline-block h-1.5 w-1.5 animate-pulse rounded-full md:h-2 md:w-2"></span>
                                             <span className="font-medium">{t.hero?.cards?.developer?.lands}</span>
                                         </div>
                                     </div>
@@ -137,20 +137,20 @@ export function HeroSection() {
                         {/* Trust badges - más compactos */}
                         <div className="text-muted-foreground flex flex-wrap items-center justify-center gap-4 text-xs md:gap-6 md:text-sm">
                             <div className="flex items-center gap-2">
-                                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-green-500/20 md:h-8 md:w-8">
-                                    <span className="text-xs font-bold text-green-600 md:text-sm">✓</span>
+                                <div className="bg-primary/20 flex h-7 w-7 items-center justify-center rounded-full md:h-8 md:w-8">
+                                    <span className="text-primary text-xs font-bold md:text-sm">✓</span>
                                 </div>
                                 <span className="font-medium">{t.hero?.trustBadges?.kyc}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500/20 md:h-8 md:w-8">
-                                    <span className="text-xs font-bold text-blue-600 md:text-sm">✓</span>
+                                <div className="bg-secondary/20 flex h-7 w-7 items-center justify-center rounded-full md:h-8 md:w-8">
+                                    <span className="text-secondary text-xs font-bold md:text-sm">✓</span>
                                 </div>
                                 <span className="font-medium">{t.hero?.trustBadges?.contracts}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500/20 md:h-8 md:w-8">
-                                    <span className="text-xs font-bold text-amber-600 md:text-sm">✓</span>
+                                <div className="bg-primary/20 flex h-7 w-7 items-center justify-center rounded-full md:h-8 md:w-8">
+                                    <span className="text-primary text-xs font-bold md:text-sm">✓</span>
                                 </div>
                                 <span className="font-medium">{t.hero?.trustBadges?.support}</span>
                             </div>
