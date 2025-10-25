@@ -14,26 +14,40 @@ export const en = {
         ctaLandowner: "I'm a Landowner",
         ctaDeveloper: "I'm a Developer",
         badge: "81% renewable energy by 2030",
+        trustBadges: {
+            kyc: "KYC Verification",
+            contracts: "Secure contracts",
+            support: "24/7 Support",
+        },
+        cards: {
+            landowner: {
+                income: "€2,500/ha/year average",
+            },
+            developer: {
+                lands: "500+ available lands",
+            },
+        },
     },
     benefits: {
         title: "Why Solterra?",
+        subtitle: "Connecting landowners and developers to drive renewable energy",
         landowners: {
             title: "For Landowners",
-            benefit1: "Monetize your land",
-            benefit1Desc: "Generate passive income with your property",
-            benefit2: "Transparent process",
-            benefit2Desc: "Complete tracking of every project",
-            benefit3: "Expert advisory",
-            benefit3Desc: "We guide you through every step",
+            benefit1: "Passive Income",
+            benefit1Desc: "Generate consistent income by leasing your land for renewable projects",
+            benefit2: "Sustainable Impact",
+            benefit2Desc: "Contribute to energy transition and environmental care",
+            benefit3: "Secure Process",
+            benefit3Desc: "KYC verification and legal contracts that protect your interests",
         },
         developers: {
             title: "For Developers",
-            benefit1: "Verified land",
-            benefit1Desc: "Access properties with validated documentation",
-            benefit2: "Geospatial analysis",
-            benefit2Desc: "Irradiation, wind, and grid connection data",
-            benefit3: "Save time",
-            benefit3Desc: "Find the ideal land faster",
+            benefit1: "Verified Land",
+            benefit1Desc: "Access pre-evaluated land with accurate geospatial data",
+            benefit2: "Save Time",
+            benefit2Desc: "Find ideal land in minutes with our matching algorithm",
+            benefit3: "Direct Connection",
+            benefit3Desc: "Communicate directly with landowners interested in your project",
         },
     },
     howItWorks: {
@@ -192,8 +206,30 @@ export const en = {
     },
     stats: {
         impactLabel: "Real Impact",
+        title: "The numbers that",
+        titleHighlight: "support",
+        titleEnd: "our mission",
         sourceNote:
             "Data based on the National Integrated Energy and Climate Plan (PNIEC 2023-2030) and the experience of over 200 completed projects",
+        cards: {
+            renewable: {
+                label: "Renewable Energy 2030",
+                description: "PNIEC target for electricity generation",
+            },
+            lands: {
+                label: "Available Lands",
+                description: "Verified hectares throughout Spain",
+            },
+            income: {
+                label: "Income per hectare/year",
+                description: "Average rent in solar projects",
+            },
+            duration: {
+                label: "Contract duration",
+                suffix: " years",
+                description: "Typical lease period",
+            },
+        },
     },
     testimonials: {
         title: "Success Stories",

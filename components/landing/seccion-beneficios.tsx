@@ -7,20 +7,20 @@ export function SeccionBeneficios() {
     const beneficiosPropietarios = [
         {
             icon: TrendingUp,
-            title: "Ingresos Pasivos",
-            description: "Genera ingresos constantes arrendando tu terreno para proyectos renovables",
+            title: t.benefits?.landowners?.benefit1,
+            description: t.benefits?.landowners?.benefit1Desc,
             color: "primary",
         },
         {
             icon: Leaf,
-            title: "Impacto Sostenible",
-            description: "Contribuye a la transición energética y al cuidado del medio ambiente",
+            title: t.benefits?.landowners?.benefit2,
+            description: t.benefits?.landowners?.benefit2Desc,
             color: "primary",
         },
         {
             icon: Shield,
-            title: "Proceso Seguro",
-            description: "Verificación KYC y contratos legales que protegen tus intereses",
+            title: t.benefits?.landowners?.benefit3,
+            description: t.benefits?.landowners?.benefit3Desc,
             color: "primary",
         },
     ]
@@ -28,20 +28,20 @@ export function SeccionBeneficios() {
     const beneficiosPromotores = [
         {
             icon: MapPin,
-            title: "Terrenos Verificados",
-            description: "Accede a terrenos pre-evaluados con datos geoespaciales precisos",
+            title: t.benefits?.developers?.benefit1,
+            description: t.benefits?.developers?.benefit1Desc,
             color: "secondary",
         },
         {
             icon: Clock,
-            title: "Ahorra Tiempo",
-            description: "Encuentra terrenos ideales en minutos con nuestro algoritmo de matching",
+            title: t.benefits?.developers?.benefit2,
+            description: t.benefits?.developers?.benefit2Desc,
             color: "secondary",
         },
         {
             icon: Users,
-            title: "Conexión Directa",
-            description: "Comunícate directamente con propietarios interesados en tu proyecto",
+            title: t.benefits?.developers?.benefit3,
+            description: t.benefits?.developers?.benefit3Desc,
             color: "secondary",
         },
     ]
@@ -51,9 +51,7 @@ export function SeccionBeneficios() {
             <div className="container mx-auto px-4">
                 <div className="mb-16 text-center">
                     <h2 className="text-foreground mb-4 text-4xl font-bold md:text-5xl">{t.benefits?.title}</h2>
-                    <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
-                        Conectamos propietarios y promotores para impulsar la energía renovable
-                    </p>
+                    <p className="text-muted-foreground mx-auto max-w-2xl text-xl">{t.benefits?.subtitle}</p>
                 </div>
 
                 {/* Beneficios Propietarios */}

@@ -85,34 +85,34 @@ export function StatsSection() {
             icon: TrendingUp,
             value: 81,
             suffix: "%",
-            label: "Energía Renovable 2030",
+            label: t.stats?.cards?.renewable?.label,
             color: "primary",
-            description: "Objetivo del PNIEC para generación eléctrica",
+            description: t.stats?.cards?.renewable?.description,
         },
         {
             icon: MapPin,
             value: 500,
             suffix: "+",
-            label: "Terrenos Disponibles",
+            label: t.stats?.cards?.lands?.label,
             color: "secondary",
-            description: "Hectáreas verificadas en toda España",
+            description: t.stats?.cards?.lands?.description,
         },
         {
             icon: Euro,
             value: 2500,
             suffix: "",
             prefix: "€",
-            label: "Ingreso por hectárea/año",
-            color: "accent",
-            description: "Renta media en proyectos solares",
+            label: t.stats?.cards?.income?.label,
+            color: "primary",
+            description: t.stats?.cards?.income?.description,
         },
         {
             icon: Calendar,
             value: 25,
-            suffix: " años",
-            label: "Duración de contratos",
-            color: "primary",
-            description: "Periodo típico de arrendamiento",
+            suffix: t.stats?.cards?.duration?.suffix,
+            label: t.stats?.cards?.duration?.label,
+            color: "secondary",
+            description: t.stats?.cards?.duration?.description,
         },
     ]
 
@@ -126,9 +126,11 @@ export function StatsSection() {
                     </div>
 
                     <h2 className="mb-4 text-4xl font-bold md:text-5xl">
-                        Los números que{" "}
-                        <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">respaldan</span> nuestra
-                        misión
+                        {t.stats?.title}{" "}
+                        <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">
+                            {t.stats?.titleHighlight}
+                        </span>{" "}
+                        {t.stats?.titleEnd}
                     </h2>
 
                     <p className="text-muted-foreground mx-auto max-w-2xl text-xl">{t.stats?.sourceNote}</p>

@@ -14,26 +14,40 @@ export const es = {
         ctaLandowner: "Soy Propietario",
         ctaDeveloper: "Soy Promotor",
         badge: "81% energía renovable para 2030",
+        trustBadges: {
+            kyc: "Verificación KYC",
+            contracts: "Contratos seguros",
+            support: "Soporte 24/7",
+        },
+        cards: {
+            landowner: {
+                income: "€2,500/ha/año promedio",
+            },
+            developer: {
+                lands: "500+ terrenos disponibles",
+            },
+        },
     },
     benefits: {
         title: "¿Por qué Solterra?",
+        subtitle: "Conectamos propietarios y promotores para impulsar la energía renovable",
         landowners: {
             title: "Para Propietarios",
-            benefit1: "Monetiza tu terreno",
-            benefit1Desc: "Genera ingresos pasivos con tu tierra",
-            benefit2: "Proceso transparente",
-            benefit2Desc: "Seguimiento completo de cada proyecto",
-            benefit3: "Asesoría experta",
-            benefit3Desc: "Te guiamos en cada paso del proceso",
+            benefit1: "Ingresos Pasivos",
+            benefit1Desc: "Genera ingresos constantes arrendando tu terreno para proyectos renovables",
+            benefit2: "Impacto Sostenible",
+            benefit2Desc: "Contribuye a la transición energética y al cuidado del medio ambiente",
+            benefit3: "Proceso Seguro",
+            benefit3Desc: "Verificación KYC y contratos legales que protegen tus intereses",
         },
         developers: {
             title: "Para Promotores",
-            benefit1: "Terrenos verificados",
-            benefit1Desc: "Accede a propiedades con documentación validada",
-            benefit2: "Análisis geoespacial",
-            benefit2Desc: "Datos de irradiación, viento y conexión a red",
-            benefit3: "Ahorra tiempo",
-            benefit3Desc: "Encuentra el terreno ideal más rápido",
+            benefit1: "Terrenos Verificados",
+            benefit1Desc: "Accede a terrenos pre-evaluados con datos geoespaciales precisos",
+            benefit2: "Ahorra Tiempo",
+            benefit2Desc: "Encuentra terrenos ideales en minutos con nuestro algoritmo de matching",
+            benefit3: "Conexión Directa",
+            benefit3Desc: "Comunícate directamente con propietarios interesados en tu proyecto",
         },
     },
     howItWorks: {
@@ -192,8 +206,30 @@ export const es = {
     },
     stats: {
         impactLabel: "Impacto Real",
+        title: "Los números que",
+        titleHighlight: "respaldan",
+        titleEnd: "nuestra misión",
         sourceNote:
             "Datos basados en el Plan Nacional Integrado de Energía y Clima (PNIEC 2023-2030) y la experiencia de más de 200 proyectos completados",
+        cards: {
+            renewable: {
+                label: "Energía Renovable 2030",
+                description: "Objetivo del PNIEC para generación eléctrica",
+            },
+            lands: {
+                label: "Terrenos Disponibles",
+                description: "Hectáreas verificadas en toda España",
+            },
+            income: {
+                label: "Ingreso por hectárea/año",
+                description: "Renta media en proyectos solares",
+            },
+            duration: {
+                label: "Duración de contratos",
+                suffix: " años",
+                description: "Periodo típico de arrendamiento",
+            },
+        },
     },
     testimonials: {
         title: "Casos de Éxito",
