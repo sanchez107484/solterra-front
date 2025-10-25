@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     generator: "v0.app",
     icons: {
         icon: [
-            { url: "/solterra-logo.svg", type: "image/svg+xml" },
+            { url: "/solterra-logo2.svg", type: "image/svg+xml" },
             { url: "/placeholder-logo.png", type: "image/png", sizes: "32x32" },
         ],
         apple: [{ url: "/placeholder-logo.png", sizes: "180x180", type: "image/png" }],
@@ -31,7 +31,7 @@ export default function RootLayout({
         <html lang="es">
             <head>
                 {/* Prefer SVG favicon, fallback to PNG. To add a .ico file, place `/favicon.ico` in `public/`. */}
-                <link rel="icon" href="/solterra-logo.svg" type="image/svg+xml" />
+                <link rel="icon" href="/solterra-logo2.svg" type="image/svg+xml" />
                 <link rel="icon" href="/placeholder-logo.png" sizes="32x32" />
                 <link rel="apple-touch-icon" href="/placeholder-logo.png" />
             </head>
