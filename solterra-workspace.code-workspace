@@ -15,5 +15,6 @@
             "**/.next": true,
             "**/dist": true,
         },
+        "chat.agent.maxRequests": 50,
     },
 }

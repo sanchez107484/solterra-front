@@ -26,7 +26,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
         ? [
               { href: "/dashboard/propietario", label: "Dashboard", icon: LayoutDashboard },
               { href: "/dashboard/propietario/mis-terrenos", label: "Mis Terrenos", icon: MapPin },
-              { href: "/dashboard/propietario/mis-proyectos", label: "Mis Proyectos", icon: Briefcase },
+              { href: "/dashboard/propietario/mis-proyectos", label: "Todos los Proyectos", icon: Briefcase },
               { href: "/dashboard/propietario/nuevo-terreno", label: "Añadir Terreno", icon: MapPin },
           ]
         : [
