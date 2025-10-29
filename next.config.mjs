@@ -1,28 +1,62 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // En producción, NO ignorar errores de ESLint y TypeScript
     eslint: {
-        ignoreDuringBuilds: true,
+        // Permitir builds solo en desarrollo con errores de lint
+        ignoreDuringBuilds: process.env.NODE_ENV === 'development',
     },
     typescript: {
-        ignoreBuildErrors: true,
+        // Permitir builds solo en desarrollo con errores de TS
+        ignoreBuildErrors: process.env.NODE_ENV === 'development',
     },
-    // Desactivar el indicador de DevTools en desarrollo
-    devIndicators: {
-        devIndicators: false,
-    },
-    // Allow specific dev origins (e.g. devices on the same LAN) to access _next/* resources.
-    // This silences the cross-origin dev warning when you open the dev server from another device.
-    experimental: {
-        allowedDevOrigins: [
-            // Common case: local machine IP with default Next dev port
-            "http://192.168.100.162:3000",
-            // Include bare IP in case a different port or proxy is used
-            "http://192.168.100.162",
+    
+    // Optimización de imágenes habilitada en producción
+    images: {
+        // En desarrollo puedes usar unoptimized: true para rapidez
+        unoptimized: process.env.NODE_ENV === 'development',
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '**',
+            },
         ],
     },
-    images: {
-        unoptimized: true,
+
+    // Headers de seguridad para producción
+    async headers() {
+        return [
+            {
+                source: '/(.*)',
+                headers: [
+                    {
+                        key: 'X-DNS-Prefetch-Control',
+                        value: 'on',
+                    },
+                    {
+                        key: 'Strict-Transport-Security',
+                        value: 'max-age=63072000; includeSubDomains; preload',
+                    },
+                    {
+                        key: 'X-Content-Type-Options',
+                        value: 'nosniff',
+                    },
+                ],
+            },
+        ]
     },
+
+    // Configuración de desarrollo (solo aplica en modo dev)
+    ...(process.env.NODE_ENV === 'development' && {
+        devIndicators: {
+            appIsrStatus: false,
+        },
+        experimental: {
+            allowedDevOrigins: [
+                'http://192.168.100.162:3000',
+                'http://192.168.100.162',
+            ],
+        },
+    }),
 }
 
 export default nextConfig
