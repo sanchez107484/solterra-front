@@ -61,7 +61,8 @@ export default function TerrenoDetallePage() {
 
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"
 
-                const response = await fetch(`${API_URL}/terrenos/${terrenoId}/matches`, {
+                // Usar el endpoint correcto del módulo Matches
+                const response = await fetch(`${API_URL}/matches/terreno/${terrenoId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -70,7 +71,22 @@ export default function TerrenoDetallePage() {
 
                 if (response.ok) {
                     const data = await response.json()
-                    setMatches(data.matches || [])
+                    console.log("Matches response:", data)
+
+                    // Transformar los datos del backend al formato esperado por MatchesTable
+                    const transformedMatches = Array.isArray(data)
+                        ? data.map((match: any) => ({
+                              id: match.proyecto?.id || match.id,
+                              titulo: match.proyecto?.titulo || "",
+                              tipo: match.proyecto?.tipo || "",
+                              potenciaObjetivo: match.proyecto?.potenciaObjetivo,
+                              provincia: match.proyecto?.provincia,
+                              compatibilidad: match.scoreTotal || 0,
+                              estado: match.proyecto?.estado || match.estado,
+                          }))
+                        : []
+
+                    setMatches(transformedMatches)
                 }
             } catch (error) {
                 console.error("Error loading matches:", error)

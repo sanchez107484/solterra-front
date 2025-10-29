@@ -1,17 +1,19 @@
 "use client"
 
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
+import { ProjectFilters } from "@/components/dashboard/project-filters"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useProyectos } from "@/hooks/useProyectos"
 import { useTranslations } from "@/i18n/i18nContext"
-import { Battery, Briefcase, Building2, Eye, Leaf, MapPin, Search, Sun, TrendingUp, Wind, Zap } from "lucide-react"
+import { ArrowUpDown, Battery, Briefcase, Building2, Eye, Leaf, MapPin, Sun, TrendingUp, Wind, Zap } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 
 const getProjectTypeIcon = (tipo: string) => {
-    const iconClass = "h-5 w-5"
+    const iconClass = "h-4 w-4"
     switch (tipo?.toUpperCase()) {
         case "SOLAR_FOTOVOLTAICO":
         case "SOLAR":
@@ -32,27 +34,65 @@ const getProjectTypeIcon = (tipo: string) => {
     }
 }
 
-const getProjectTypeLabel = (tipo: string) => {
-    switch (tipo?.toUpperCase()) {
-        case "SOLAR_FOTOVOLTAICO":
+const getProjectTypeLabel = (tipo: string, t: any) => {
+    const typeKey = tipo?.toUpperCase().replace("_", "")
+    switch (typeKey) {
+        case "SOLARFOTOVOLTAICO":
         case "SOLAR":
-            return "Solar"
+            return t?.dashboard?.owner?.projects?.allProjects?.types?.solar || "Solar"
         case "EOLICO":
-        case "EÓLICO":
-            return "Eólico"
+            return t?.dashboard?.owner?.projects?.allProjects?.types?.eolico || "Eólico"
         case "HIBRIDACION":
         case "HÍBRIDO":
-            return "Híbrido"
+            return t?.dashboard?.owner?.projects?.allProjects?.types?.hibrido || "Híbrido"
         case "ALMACENAMIENTO":
-            return "Almacenamiento"
+            return t?.dashboard?.owner?.projects?.allProjects?.types?.almacenamiento || "Almacenamiento"
         case "HIDROGENO":
-            return "Hidrógeno"
+            return t?.dashboard?.owner?.projects?.allProjects?.types?.hidrogeno || "Hidrógeno"
         case "BIOMETANO":
-            return "Biometano"
+            return t?.dashboard?.owner?.projects?.allProjects?.types?.biometano || "Biometano"
         default:
-            return tipo || "Otro"
+            return t?.dashboard?.owner?.projects?.allProjects?.types?.otro || tipo || "Otro"
     }
 }
+
+const getStatusColor = (estado: string) => {
+    switch (estado?.toUpperCase()) {
+        case "ACTIVO":
+            return "bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-300"
+        case "EN_DESARROLLO":
+            return "bg-blue-100 text-blue-800 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300"
+        case "PAUSADO":
+            return "bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-300"
+        case "COMPLETADO":
+            return "bg-purple-100 text-purple-800 hover:bg-purple-100 dark:bg-purple-900 dark:text-purple-300"
+        case "EN_BUSQUEDA":
+            return "bg-orange-100 text-orange-800 hover:bg-orange-100 dark:bg-orange-900 dark:text-orange-300"
+        default:
+            return "bg-gray-100 text-gray-800 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
+    }
+}
+
+const getStatusLabel = (estado: string, t: any) => {
+    const statusKey = estado?.toUpperCase()
+    switch (statusKey) {
+        case "ACTIVO":
+            return t?.dashboard?.owner?.projects?.allProjects?.status?.activo || "Activo"
+        case "EN_DESARROLLO":
+            return t?.dashboard?.owner?.projects?.allProjects?.status?.en_desarrollo || "En Desarrollo"
+        case "PAUSADO":
+            return t?.dashboard?.owner?.projects?.allProjects?.status?.pausado || "Pausado"
+        case "COMPLETADO":
+            return t?.dashboard?.owner?.projects?.allProjects?.status?.completado || "Completado"
+        case "EN_BUSQUEDA":
+            return t?.dashboard?.owner?.projects?.allProjects?.status?.en_busqueda || "En Búsqueda"
+        default:
+            return estado || "Desconocido"
+    }
+}
+
+type SortField = "titulo" | "tipo" | "potenciaObjetivo" | "provincia" | "estado" | "creadoEn"
+type SortOrder = "asc" | "desc"
 
 export default function TodosProyectosPage() {
     const { t } = useTranslations()
@@ -61,23 +101,32 @@ export default function TodosProyectosPage() {
     const [searchTerm, setSearchTerm] = useState("")
     const [tipoFilter, setTipoFilter] = useState<string>("TODOS")
     const [provinciaFilter, setProvinciaFilter] = useState<string>("TODOS")
+    const [estadoFilter, setEstadoFilter] = useState<string>("TODOS")
+    const [sortField, setSortField] = useState<SortField>("creadoEn")
+    const [sortOrder, setSortOrder] = useState<SortOrder>("desc")
 
     useEffect(() => {
         fetchProyectos()
     }, [fetchProyectos])
 
-    const proyectosActivos =
-        proyectos?.filter((p: any) => p.estado?.toUpperCase() === "ACTIVO" || p.estado?.toUpperCase() === "EN_DESARROLLO") || []
+    // El backend ya filtra por estado ACTIVO, no necesitamos filtrar aquí
+    const proyectosActivos = proyectos || []
 
-    const filteredProyectos = useMemo(() => {
+    console.log("DEBUG - proyectos desde hook:", proyectos)
+    console.log("DEBUG - proyectosActivos:", proyectosActivos)
+    console.log("DEBUG - isLoading:", isLoading)
+
+    const filteredAndSortedProyectos = useMemo(() => {
         let filtered = proyectosActivos
 
+        // Aplicar filtros
         if (searchTerm) {
             filtered = filtered.filter(
                 (p: any) =>
                     p.titulo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     p.descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    p.provincia?.toLowerCase().includes(searchTerm.toLowerCase())
+                    p.provincia?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    p.promotor?.nombre?.toLowerCase().includes(searchTerm.toLowerCase())
             )
         }
 
@@ -89,138 +138,245 @@ export default function TodosProyectosPage() {
             filtered = filtered.filter((p: any) => p.provincia === provinciaFilter)
         }
 
-        return filtered
-    }, [proyectosActivos, searchTerm, tipoFilter, provinciaFilter])
+        if (estadoFilter !== "TODOS") {
+            filtered = filtered.filter((p: any) => p.estado?.toUpperCase() === estadoFilter)
+        }
+
+        // Aplicar ordenamiento
+        const sorted = [...filtered].sort((a: any, b: any) => {
+            let aValue = a[sortField]
+            let bValue = b[sortField]
+
+            // Manejo especial para campos anidados
+            if (sortField === "creadoEn") {
+                aValue = new Date(aValue).getTime()
+                bValue = new Date(bValue).getTime()
+            }
+
+            if (aValue === null || aValue === undefined) return 1
+            if (bValue === null || bValue === undefined) return -1
+
+            if (typeof aValue === "string") {
+                aValue = aValue.toLowerCase()
+                bValue = bValue.toLowerCase()
+            }
+
+            if (aValue < bValue) return sortOrder === "asc" ? -1 : 1
+            if (aValue > bValue) return sortOrder === "asc" ? 1 : -1
+            return 0
+        })
+
+        return sorted
+    }, [proyectosActivos, searchTerm, tipoFilter, provinciaFilter, estadoFilter, sortField, sortOrder])
 
     const provincias = Array.from(new Set(proyectosActivos.map((p: any) => p.provincia).filter(Boolean)))
+
+    const handleSort = (field: SortField) => {
+        if (sortField === field) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+        } else {
+            setSortField(field)
+            setSortOrder("asc")
+        }
+    }
+
+    const handleClearFilters = () => {
+        setSearchTerm("")
+        setTipoFilter("TODOS")
+        setProvinciaFilter("TODOS")
+        setEstadoFilter("TODOS")
+    }
+
+    const SortIcon = ({ field }: { field: SortField }) => (
+        <Button variant="ghost" size="sm" className="h-8 gap-1 px-2" onClick={() => handleSort(field)}>
+            <ArrowUpDown className="h-3 w-3" />
+            {sortField === field && <span className="text-xs">({sortOrder === "asc" ? "↑" : "↓"})</span>}
+        </Button>
+    )
 
     return (
         <>
             <DashboardHeader
-                title="Proyectos disponibles"
+                title={t?.dashboard?.owner?.projects?.allProjects?.title || "Proyectos Disponibles"}
+                subtitle={t?.dashboard?.owner?.projects?.allProjects?.subtitle || "Explora proyectos de energía renovable"}
                 breadcrumbs={[
                     { label: t?.dashboard?.breadcrumbs?.dashboard || "Dashboard", href: "/dashboard/propietario" },
-                    { label: "Proyectos disponibles" },
+                    { label: t?.dashboard?.owner?.projects?.allProjects?.title || "Proyectos disponibles" },
                 ]}
                 userType="propietario"
             />
 
             <main className="p-6">
-                <Card className="mb-6">
-                    <div className="p-6">
-                        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                            <div className="relative max-w-md flex-1">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="Buscar por nombre, descripción o ubicación..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full rounded-lg border border-gray-300 bg-white py-2 pr-4 pl-10 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-800"
-                                />
-                            </div>
+                <ProjectFilters
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                    tipoFilter={tipoFilter}
+                    onTipoChange={setTipoFilter}
+                    provinciaFilter={provinciaFilter}
+                    onProvinciaChange={setProvinciaFilter}
+                    estadoFilter={estadoFilter}
+                    onEstadoChange={setEstadoFilter}
+                    provincias={provincias}
+                    onClearFilters={handleClearFilters}
+                    showEstadoFilter={true}
+                    translations={{
+                        searchPlaceholder: t?.dashboard?.owner?.projects?.allProjects?.searchPlaceholder || "Buscar...",
+                        allTypes: t?.dashboard?.owner?.projects?.allProjects?.filters?.allTypes || "Todos los tipos",
+                        allProvinces: t?.dashboard?.owner?.projects?.allProjects?.filters?.allProvinces || "Todas las provincias",
+                        allStatuses: t?.dashboard?.owner?.projects?.allProjects?.filters?.allStatuses || "Todos los estados",
+                        clearFilters: t?.dashboard?.owner?.projects?.allProjects?.filters?.clearFilters || "Limpiar filtros",
+                        types: {
+                            solar: t?.dashboard?.owner?.projects?.allProjects?.types?.solar || "Solar",
+                            eolico: t?.dashboard?.owner?.projects?.allProjects?.types?.eolico || "Eólico",
+                            hibrido: t?.dashboard?.owner?.projects?.allProjects?.types?.hibrido || "Híbrido",
+                            almacenamiento: t?.dashboard?.owner?.projects?.allProjects?.types?.almacenamiento || "Almacenamiento",
+                        },
+                        statuses: {
+                            activo: t?.dashboard?.owner?.projects?.allProjects?.status?.activo || "Activo",
+                            en_desarrollo: t?.dashboard?.owner?.projects?.allProjects?.status?.en_desarrollo || "En Desarrollo",
+                            pausado: t?.dashboard?.owner?.projects?.allProjects?.status?.pausado || "Pausado",
+                        },
+                    }}
+                />
 
-                            <div className="flex flex-wrap gap-2">
-                                <select
-                                    value={tipoFilter}
-                                    onChange={(e) => setTipoFilter(e.target.value)}
-                                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-800"
-                                >
-                                    <option value="TODOS">Todos los tipos</option>
-                                    <option value="SOLAR">Solar</option>
-                                    <option value="EOLICO">Eólico</option>
-                                    <option value="HÍBRIDO">Híbrido</option>
-                                    <option value="ALMACENAMIENTO">Almacenamiento</option>
-                                </select>
-
-                                <select
-                                    value={provinciaFilter}
-                                    onChange={(e) => setProvinciaFilter(e.target.value)}
-                                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-800"
-                                >
-                                    <option value="TODOS">Todas las provincias</option>
-                                    {provincias.map((prov) => (
-                                        <option key={prov} value={prov}>
-                                            {prov}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                            Mostrando {filteredProyectos.length} de {proyectosActivos.length} proyectos
-                        </div>
-                    </div>
-                </Card>
+                {/* Contador de resultados */}
+                <div className="text-muted-foreground mb-4 text-sm">
+                    {t?.dashboard?.owner?.projects?.allProjects?.table?.showing
+                        ?.replace("{count}", filteredAndSortedProyectos.length.toString())
+                        .replace("{total}", proyectosActivos.length.toString()) ||
+                        `Mostrando ${filteredAndSortedProyectos.length} de ${proyectosActivos.length} proyectos`}
+                </div>
 
                 {isLoading ? (
-                    <div className="flex min-h-[50vh] items-center justify-center">
-                        <div className="flex flex-col items-center gap-4">
-                            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
-                            <p className="text-muted-foreground text-sm">Cargando proyectos...</p>
+                    <Card className="p-12">
+                        <div className="flex flex-col items-center justify-center gap-4">
+                            <div className="border-t-primary h-8 w-8 animate-spin rounded-full border-4 border-gray-300" />
+                            <p className="text-muted-foreground text-sm">
+                                {t?.dashboard?.owner?.projects?.allProjects?.table?.loading || "Cargando proyectos..."}
+                            </p>
                         </div>
-                    </div>
-                ) : filteredProyectos.length > 0 ? (
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {filteredProyectos.map((proyecto: any) => (
-                            <Card key={proyecto.id} className="overflow-hidden transition-shadow hover:shadow-lg">
-                                <div className="p-6">
-                                    <div className="mb-4 flex items-start justify-between gap-4">
-                                        <div className="flex-1">
-                                            <div className="mb-2 flex items-center gap-2">
-                                                {getProjectTypeIcon(proyecto.tipo)}
-                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{proyecto.titulo}</h3>
+                    </Card>
+                ) : filteredAndSortedProyectos.length > 0 ? (
+                    <Card>
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="min-w-[250px]">
+                                            <div className="flex items-center gap-1">
+                                                {t?.dashboard?.owner?.projects?.allProjects?.table?.project || "Proyecto"}
+                                                <SortIcon field="titulo" />
                                             </div>
-                                            <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
-                                                {proyecto.estado}
-                                            </Badge>
-                                        </div>
-                                    </div>
-
-                                    {proyecto.descripcion && (
-                                        <p className="mb-4 line-clamp-2 text-sm text-gray-600 dark:text-gray-300">{proyecto.descripcion}</p>
-                                    )}
-
-                                    <div className="mb-4 space-y-2">
-                                        {proyecto.potenciaObjetivo && (
-                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                                <TrendingUp className="h-4 w-4 flex-shrink-0 text-purple-500" />
-                                                <span>{proyecto.potenciaObjetivo} MW</span>
+                                        </TableHead>
+                                        <TableHead>
+                                            <div className="flex items-center gap-1">
+                                                {t?.dashboard?.owner?.projects?.allProjects?.table?.type || "Tipo"}
+                                                <SortIcon field="tipo" />
                                             </div>
-                                        )}
-
-                                        {proyecto.provincia && (
-                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                                <MapPin className="h-4 w-4 flex-shrink-0 text-red-500" />
-                                                <span>{proyecto.provincia}</span>
+                                        </TableHead>
+                                        <TableHead>
+                                            <div className="flex items-center gap-1">
+                                                {t?.dashboard?.owner?.projects?.allProjects?.table?.power || "Potencia"}
+                                                <SortIcon field="potenciaObjetivo" />
                                             </div>
-                                        )}
-
-                                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                            <Briefcase className="h-4 w-4 flex-shrink-0 text-blue-500" />
-                                            <span>{getProjectTypeLabel(proyecto.tipo)}</span>
-                                        </div>
-                                    </div>
-
-                                    <Link href={`/dashboard/propietario/proyectos/${proyecto.id}`} className="block">
-                                        <Button variant="outline" size="sm" className="w-full gap-2">
-                                            <Eye className="h-4 w-4" />
-                                            Ver detalles
-                                        </Button>
-                                    </Link>
-                                </div>
-                            </Card>
-                        ))}
-                    </div>
+                                        </TableHead>
+                                        <TableHead>
+                                            <div className="flex items-center gap-1">
+                                                {t?.dashboard?.owner?.projects?.allProjects?.table?.location || "Ubicación"}
+                                                <SortIcon field="provincia" />
+                                            </div>
+                                        </TableHead>
+                                        <TableHead>
+                                            <div className="flex items-center gap-1">
+                                                {t?.dashboard?.owner?.projects?.allProjects?.table?.status || "Estado"}
+                                                <SortIcon field="estado" />
+                                            </div>
+                                        </TableHead>
+                                        <TableHead>{t?.dashboard?.owner?.projects?.allProjects?.table?.promoter || "Promotor"}</TableHead>
+                                        <TableHead className="text-right">
+                                            {t?.dashboard?.owner?.projects?.allProjects?.table?.actions || "Acciones"}
+                                        </TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {filteredAndSortedProyectos.map((proyecto: any) => (
+                                        <TableRow key={proyecto.id} className="hover:bg-muted/50">
+                                            <TableCell>
+                                                <div className="flex items-start gap-3">
+                                                    <div className="flex-shrink-0 pt-1">{getProjectTypeIcon(proyecto.tipo)}</div>
+                                                    <div className="min-w-0">
+                                                        <div className="text-foreground font-medium">{proyecto.titulo}</div>
+                                                        {proyecto.descripcion && (
+                                                            <div className="text-muted-foreground mt-1 line-clamp-2 text-sm">
+                                                                {proyecto.descripcion}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-sm">{getProjectTypeLabel(proyecto.tipo, t)}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                {proyecto.potenciaObjetivo ? (
+                                                    <div className="flex items-center gap-1 text-sm">
+                                                        <TrendingUp className="h-3 w-3 text-purple-500" />
+                                                        <span className="font-medium">{proyecto.potenciaObjetivo} MW</span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-muted-foreground text-sm">-</span>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {proyecto.provincia ? (
+                                                    <div className="flex items-center gap-1 text-sm">
+                                                        <MapPin className="h-3 w-3 text-red-500" />
+                                                        <span>{proyecto.provincia}</span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-muted-foreground text-sm">-</span>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge className={getStatusColor(proyecto.estado)}>
+                                                    {getStatusLabel(proyecto.estado, t)}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <Briefcase className="h-3 w-3 text-blue-500" />
+                                                    <span className="truncate">
+                                                        {proyecto.promotor?.nombre || proyecto.promotor?.email || "-"}
+                                                    </span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <Link href={`/dashboard/propietario/proyectos/${proyecto.id}`}>
+                                                    <Button variant="outline" size="sm" className="gap-2">
+                                                        <Eye className="h-3 w-3" />
+                                                        {t?.dashboard?.owner?.projects?.viewDetails || "Ver detalles"}
+                                                    </Button>
+                                                </Link>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </Card>
                 ) : (
                     <Card className="p-12">
                         <div className="text-center">
-                            <Briefcase className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                            <h3 className="mb-2 text-lg font-semibold">No se encontraron proyectos</h3>
+                            <Briefcase className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+                            <h3 className="mb-2 text-lg font-semibold">
+                                {t?.dashboard?.owner?.projects?.allProjects?.table?.noResults || "No se encontraron proyectos"}
+                            </h3>
                             <p className="text-muted-foreground text-sm">
-                                {searchTerm || tipoFilter !== "TODOS" || provinciaFilter !== "TODOS"
-                                    ? "Intenta ajustar los filtros de búsqueda"
+                                {searchTerm || tipoFilter !== "TODOS" || provinciaFilter !== "TODOS" || estadoFilter !== "TODOS"
+                                    ? t?.dashboard?.owner?.projects?.allProjects?.table?.noResultsDesc ||
+                                      "Intenta ajustar los filtros de búsqueda"
                                     : "No hay proyectos disponibles en este momento"}
                             </p>
                         </div>

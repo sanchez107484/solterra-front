@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { MapPin, Ruler } from "lucide-react"
+import { Eye, MapPin, Ruler } from "lucide-react"
+import Link from "next/link"
 
 interface TerrenoCardProps {
     terreno: {
@@ -35,9 +37,24 @@ export function TerrenoCard({ terreno, isSelected = false, onClick }: TerrenoCar
 
     return (
         <Card
-            className={`cursor-pointer overflow-hidden transition-all hover:shadow-lg ${isSelected ? "ring-primary ring-2" : ""}`}
+            className={`relative cursor-pointer overflow-hidden transition-all hover:shadow-lg ${isSelected ? "ring-primary ring-2" : ""}`}
             onClick={onClick}
         >
+            {/* Botón ver detalles - esquina superior derecha */}
+            <Link
+                href={`/dashboard/propietario/mis-terrenos/${terreno.id}`}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute top-2 right-2 z-10"
+            >
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 rounded-full bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800"
+                >
+                    <Eye className="h-3.5 w-3.5" />
+                </Button>
+            </Link>
+
             <div className="p-4">
                 {/* Header */}
                 <div className="mb-3 flex items-start justify-between gap-2">

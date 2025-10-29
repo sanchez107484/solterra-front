@@ -33,6 +33,7 @@ export function useProyectos(options: Options = {}) {
         setError(null)
         try {
             const response = await service.getAll(filters)
+            console.log("Fetched proyectos:", response)
             setProyectos(response.data)
             setPagination(response.pagination || { page: 1, perPage: 10, total: 0, totalPages: 0, hasNext: false, hasPrev: false })
             return response
