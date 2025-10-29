@@ -7,9 +7,9 @@ import { Card } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { useTerrenos } from "@/hooks/useTerrenos"
 import { useTranslations } from "@/i18n/i18nContext"
-import { Calendar, Grid3x3, MapPin, MoveHorizontal, Plus, TrendingUp } from "lucide-react"
+import { Calendar, ChevronLeft, ChevronRight, Grid3x3, MapPin, MoveHorizontal, Plus, TrendingUp } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface TerrenoConMatches {
     id: string
@@ -36,6 +36,9 @@ export default function DashboardPropietario() {
     const [selectedTerrenoId, setSelectedTerrenoId] = useState<string | null>(null)
     const [isLoadingMatches, setIsLoadingMatches] = useState(false)
     const [viewMode, setViewMode] = useState<"horizontal" | "grid">("horizontal")
+    const [canScrollLeft, setCanScrollLeft] = useState(false)
+    const [canScrollRight, setCanScrollRight] = useState(false)
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
 
     const { terrenos, total, isLoading: terrenosLoading, fetchMine } = useTerrenos({ autoFetch: false })
 
@@ -57,81 +60,55 @@ export default function DashboardPropietario() {
 
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"
 
-                const matchesPromises = terrenos.map(async (terreno) => {
-                    try {
-                        const response = await fetch(`${API_URL}/matches/terreno/${terreno.id}`, {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                "Content-Type": "application/json",
-                            },
-                        })
+                // Hacer una sola petición batch al backend para evitar N+1 requests
+                if (!token) {
+                    setIsLoadingMatches(false)
+                    return
+                }
 
-                        if (response.ok) {
-                            const matches = await response.json()
+                try {
+                    const resp = await fetch(`${API_URL}/terrenos/me-with-matches`, {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    })
 
-                            // Ordenar matches: activos primero, luego por fecha de creación descendente
-                            const sortedMatches = (Array.isArray(matches) ? matches : [])
-                                .sort((a, b) => {
-                                    // Primero por estado (activos primero)
-                                    if (a.estado === "ACEPTADO" && b.estado !== "ACEPTADO") return -1
-                                    if (a.estado !== "ACEPTADO" && b.estado === "ACEPTADO") return 1
-
-                                    // Luego por fecha de creación (más reciente primero)
-                                    const dateA = new Date(a.creadoEn || a.createdAt || 0).getTime()
-                                    const dateB = new Date(b.creadoEn || b.createdAt || 0).getTime()
-                                    return dateB - dateA
-                                })
-                                .map((match) => ({
-                                    id: match.proyecto?.id || match.proyectoId || "",
-                                    titulo: match.proyecto?.titulo || "Proyecto sin título",
-                                    tipo: match.proyecto?.tipo || "N/A",
-                                    potenciaObjetivo: match.proyecto?.potenciaObjetivo,
-                                    provincia: match.proyecto?.provincia,
-                                    compatibilidad: match.scoreTotal || 0,
-                                    estado: match.estado || "PENDIENTE",
-                                }))
-
-                            return {
-                                id: terreno.id,
-                                titulo: terreno.titulo || `${terreno.municipio}, ${terreno.provincia}`,
-                                municipio: terreno.municipio,
-                                provincia: terreno.provincia,
-                                superficie: (terreno as any).superficie || 0,
-                                estado: terreno.estado || "ACTIVO",
-                                matchCount: sortedMatches.length,
-                                matches: sortedMatches,
-                            }
-                        }
-                        return {
+                    if (resp.ok) {
+                        const body = await resp.json()
+                        // body.data should be an array of terrenos with matches embedded
+                        const results = (body?.data || []).map((terreno: any) => ({
                             id: terreno.id,
                             titulo: terreno.titulo || `${terreno.municipio}, ${terreno.provincia}`,
                             municipio: terreno.municipio,
                             provincia: terreno.provincia,
                             superficie: (terreno as any).superficie || 0,
                             estado: terreno.estado || "ACTIVO",
-                            matchCount: 0,
-                            matches: [],
+                            matchCount: terreno.matchCount ?? (Array.isArray(terreno.matches) ? terreno.matches.length : 0),
+                            matches: Array.isArray(terreno.matches)
+                                ? terreno.matches.map((m: any) => ({
+                                      id: m.proyecto?.id || m.proyectoId || "",
+                                      titulo: m.proyecto?.titulo || "Proyecto sin título",
+                                      tipo: m.proyecto?.tipo || "N/A",
+                                      potenciaObjetivo: m.proyecto?.potenciaObjetivo,
+                                      provincia: m.proyecto?.provincia,
+                                      compatibilidad: m.scoreTotal || 0,
+                                      estado: m.estado || "PENDIENTE",
+                                  }))
+                                : [],
+                        }))
+
+                        setTerrenosConMatches(results)
+
+                        if (results.length > 0 && !selectedTerrenoId) {
+                            setSelectedTerrenoId(results[0].id)
                         }
-                    } catch (error) {
-                        console.error(`Error loading matches for terreno ${terreno.id}:`, error)
-                        return {
-                            id: terreno.id,
-                            titulo: terreno.titulo || `${terreno.municipio}, ${terreno.provincia}`,
-                            municipio: terreno.municipio,
-                            provincia: terreno.provincia,
-                            superficie: (terreno as any).superficie || 0,
-                            estado: terreno.estado || "ACTIVO",
-                            matchCount: 0,
-                            matches: [],
-                        }
+                    } else {
+                        console.error("Batch matches request failed", resp.statusText)
                     }
-                })
-
-                const results = await Promise.all(matchesPromises)
-                setTerrenosConMatches(results)
-
-                if (results.length > 0 && !selectedTerrenoId) {
-                    setSelectedTerrenoId(results[0].id)
+                } catch (err) {
+                    console.error("Error fetching batch matches:", err)
                 }
             } catch (error) {
                 console.error("Error loading matches:", error)
@@ -142,6 +119,45 @@ export default function DashboardPropietario() {
 
         loadMatches()
     }, [terrenos.length, hasTerrenos])
+
+    // Función para verificar si se puede hacer scroll
+    const checkScroll = () => {
+        if (scrollContainerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
+            setCanScrollLeft(scrollLeft > 0)
+            setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
+        }
+    }
+
+    // Función para hacer scroll suave
+    const scroll = (direction: "left" | "right") => {
+        if (scrollContainerRef.current) {
+            const scrollAmount = 380 // ancho de la tarjeta + gap
+            const newScrollLeft =
+                direction === "left"
+                    ? scrollContainerRef.current.scrollLeft - scrollAmount
+                    : scrollContainerRef.current.scrollLeft + scrollAmount
+
+            scrollContainerRef.current.scrollTo({
+                left: newScrollLeft,
+                behavior: "smooth",
+            })
+        }
+    }
+
+    // Verificar scroll al montar y cuando cambia el contenido
+    useEffect(() => {
+        checkScroll()
+        const container = scrollContainerRef.current
+        if (container) {
+            container.addEventListener("scroll", checkScroll)
+            window.addEventListener("resize", checkScroll)
+            return () => {
+                container.removeEventListener("scroll", checkScroll)
+                window.removeEventListener("resize", checkScroll)
+            }
+        }
+    }, [terrenosConMatches, viewMode])
 
     const stats = {
         terrenosActivos: terrenos.filter((t) => String(t?.estado ?? "").toUpperCase() === "ACTIVO").length,
@@ -166,7 +182,7 @@ export default function DashboardPropietario() {
                 userType="propietario"
             />
 
-            <div className="p-6">
+            <div className="mx-auto max-w-[1600px] p-6">
                 {terrenosLoading ? (
                     <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
                         <div className="flex flex-col items-center gap-4">
@@ -220,74 +236,79 @@ export default function DashboardPropietario() {
                         </Empty>
                     </div>
                 ) : (
-                    <div className="space-y-6">
+                    <div className="space-y-8">
+                        {/* Stats Cards con mejor diseño */}
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                            <Card className="p-6">
+                            <Card className="p-6 transition-all hover:shadow-md">
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-muted-foreground text-sm font-medium">
                                             {t?.dashboard?.owner?.stats?.activeLands || "Terrenos activos"}
                                         </p>
-                                        <p className="text-3xl font-bold">{stats.terrenosActivos}</p>
+                                        <p className="mt-2 text-3xl font-bold">{stats.terrenosActivos}</p>
                                         <p className="text-muted-foreground mt-1 text-xs">de {total} totales</p>
                                     </div>
                                     <div className="bg-primary/10 rounded-full p-3">
-                                        <MapPin className="text-primary h-5 w-5" />
+                                        <MapPin className="text-primary h-6 w-6" />
                                     </div>
                                 </div>
                             </Card>
 
-                            <Card className="p-6">
+                            <Card className="p-6 transition-all hover:shadow-md">
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-muted-foreground text-sm font-medium">Matches disponibles</p>
-                                        <p className="text-3xl font-bold">{stats.totalMatches}</p>
+                                        <p className="mt-2 text-3xl font-bold">{stats.totalMatches}</p>
                                         <p className="text-muted-foreground mt-1 text-xs">proyectos compatibles</p>
                                     </div>
-                                    <div className="bg-secondary/10 rounded-full p-3">
-                                        <TrendingUp className="text-secondary-foreground h-5 w-5" />
+                                    <div className="rounded-full bg-green-100 p-3">
+                                        <TrendingUp className="h-6 w-6 text-green-600" />
                                     </div>
                                 </div>
                             </Card>
 
-                            <Card className="p-6">
+                            <Card className="p-6 transition-all hover:shadow-md">
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-muted-foreground text-sm font-medium">
                                             {t?.dashboard?.owner?.stats?.totalHectares || "Hectáreas totales"}
                                         </p>
-                                        <p className="text-3xl font-bold">{stats.hectareasTotales.toFixed(1)}</p>
+                                        <p className="mt-2 text-3xl font-bold">{stats.hectareasTotales.toFixed(1)}</p>
                                         <p className="text-muted-foreground mt-1 text-xs">en {terrenos.length} ubicaciones</p>
                                     </div>
-                                    <div className="bg-accent/10 rounded-full p-3">
-                                        <MapPin className="text-accent h-5 w-5" />
+                                    <div className="rounded-full bg-blue-100 p-3">
+                                        <MapPin className="h-6 w-6 text-blue-600" />
                                     </div>
                                 </div>
                             </Card>
 
-                            <Card className="p-6">
+                            <Card className="p-6 transition-all hover:shadow-md">
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-muted-foreground text-sm font-medium">
                                             {t?.dashboard?.owner?.stats?.estimatedIncome || "Ingresos estimados"}
                                         </p>
-                                        <p className="text-3xl font-bold">€{(stats.ingresosEstimados / 1000).toFixed(0)}K</p>
+                                        <p className="mt-2 text-3xl font-bold">€{(stats.ingresosEstimados / 1000).toFixed(0)}K</p>
                                         <p className="text-muted-foreground mt-1 text-xs">
                                             {t?.dashboard?.owner?.stats?.perYear || "por año"}
                                         </p>
                                     </div>
-                                    <div className="bg-primary/10 rounded-full p-3">
-                                        <Calendar className="text-primary h-5 w-5" />
+                                    <div className="rounded-full bg-amber-100 p-3">
+                                        <Calendar className="h-6 w-6 text-amber-600" />
                                     </div>
                                 </div>
                             </Card>
                         </div>
 
-                        <div>
-                            <div className="mb-4 flex items-center justify-between">
-                                <h2 className="text-xl font-bold">
-                                    {t?.dashboard?.owner?.main?.selectLand || "Selecciona un terreno para ver matches"}
-                                </h2>
+                        {/* Sección de Terrenos */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h2 className="text-2xl font-bold">{t?.dashboard?.owner?.main?.selectLand || "Tus Terrenos"}</h2>
+                                    <p className="text-muted-foreground mt-1 text-sm">
+                                        Selecciona un terreno para ver sus proyectos compatibles
+                                    </p>
+                                </div>
                                 <div className="flex gap-2">
                                     <Button
                                         variant={viewMode === "horizontal" ? "default" : "outline"}
@@ -296,7 +317,7 @@ export default function DashboardPropietario() {
                                         className="gap-2"
                                     >
                                         <MoveHorizontal className="h-4 w-4" />
-                                        {t?.dashboard?.owner?.main?.viewModes?.horizontal || "Vista horizontal"}
+                                        {t?.dashboard?.owner?.main?.viewModes?.horizontal || "Horizontal"}
                                     </Button>
                                     <Button
                                         variant={viewMode === "grid" ? "default" : "outline"}
@@ -305,21 +326,54 @@ export default function DashboardPropietario() {
                                         className="gap-2"
                                     >
                                         <Grid3x3 className="h-4 w-4" />
-                                        {t?.dashboard?.owner?.main?.viewModes?.grid || "Vista cuadrícula"}
+                                        {t?.dashboard?.owner?.main?.viewModes?.grid || "Cuadrícula"}
                                     </Button>
                                 </div>
                             </div>
 
                             {viewMode === "horizontal" ? (
-                                <div className="relative">
-                                    {/* Gradientes para indicar más contenido */}
-                                    <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-8 bg-gradient-to-r from-white to-transparent dark:from-gray-950" />
-                                    <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-8 bg-gradient-to-l from-white to-transparent dark:from-gray-950" />
+                                <div className="group relative">
+                                    {/* Botón scroll izquierda */}
+                                    {canScrollLeft && (
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="absolute top-1/2 left-0 z-20 h-10 w-10 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-gray-50"
+                                            onClick={() => scroll("left")}
+                                        >
+                                            <ChevronLeft className="h-5 w-5" />
+                                        </Button>
+                                    )}
 
-                                    <div className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 overflow-x-auto overflow-y-visible">
-                                        <div className="flex gap-4 px-1 py-2 pb-4">
+                                    {/* Botón scroll derecha */}
+                                    {canScrollRight && (
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="absolute top-1/2 right-0 z-20 h-10 w-10 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-gray-50"
+                                            onClick={() => scroll("right")}
+                                        >
+                                            <ChevronRight className="h-5 w-5" />
+                                        </Button>
+                                    )}
+
+                                    {/* Gradientes sutiles */}
+                                    {canScrollLeft && (
+                                        <div className="from-background pointer-events-none absolute top-0 left-0 z-10 h-full w-20 bg-gradient-to-r to-transparent" />
+                                    )}
+                                    {canScrollRight && (
+                                        <div className="from-background pointer-events-none absolute top-0 right-0 z-10 h-full w-20 bg-gradient-to-l to-transparent" />
+                                    )}
+
+                                    {/* Container con scroll */}
+                                    <div
+                                        ref={scrollContainerRef}
+                                        className="scrollbar-hide overflow-x-auto overflow-y-visible py-2"
+                                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                    >
+                                        <div className="flex gap-4 px-1">
                                             {terrenosConMatches.map((terreno) => (
-                                                <div key={terreno.id} className="max-w-[320px] min-w-[320px] flex-shrink-0">
+                                                <div key={terreno.id} className="w-[360px] flex-shrink-0">
                                                     <TerrenoCard
                                                         terreno={terreno}
                                                         isSelected={selectedTerrenoId === terreno.id}
@@ -344,20 +398,17 @@ export default function DashboardPropietario() {
                             )}
                         </div>
 
+                        {/* Sección de Matches */}
                         {selectedTerreno && (
-                            <div>
-                                <div className="mb-4">
-                                    <h2 className="text-xl font-bold">
-                                        {(t?.dashboard?.owner?.main?.matchesFor || "Matches para {land}").replace(
-                                            "{land}",
-                                            selectedTerreno.titulo
-                                        )}
+                            <div className="space-y-4">
+                                <div>
+                                    <h2 className="text-2xl font-bold">
+                                        {(t?.dashboard?.owner?.main?.matchesFor || "Proyectos Compatibles").replace("{land}", "")}
                                     </h2>
-                                    <p className="text-muted-foreground text-sm">
-                                        {(t?.dashboard?.owner?.main?.matchesFound || "{count} proyectos compatibles encontrados").replace(
-                                            "{count}",
-                                            selectedTerreno.matchCount.toString()
-                                        )}
+                                    <p className="text-muted-foreground mt-1 text-sm">
+                                        {(t?.dashboard?.owner?.main?.matchesFound || "{count} proyectos encontrados para {land}")
+                                            .replace("{count}", selectedTerreno.matchCount.toString())
+                                            .replace("{land}", selectedTerreno.titulo)}
                                     </p>
                                 </div>
 
@@ -379,88 +430,84 @@ export default function DashboardPropietario() {
                                         </Empty>
                                     </Card>
                                 ) : (
-                                    <div className="relative">
-                                        <div className="scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 flex gap-4 overflow-x-auto pb-4">
-                                            {selectedTerreno.matches.map((match) => (
-                                                <Card
-                                                    key={match.id}
-                                                    className="max-w-[320px] min-w-[320px] flex-shrink-0 cursor-pointer p-6 transition-shadow hover:shadow-lg"
-                                                >
-                                                    <div className="space-y-4">
-                                                        <div className="flex items-start justify-between gap-2">
-                                                            <div className="min-w-0 flex-1">
-                                                                <h3 className="mb-1 line-clamp-2 text-base font-semibold">
-                                                                    {match.titulo}
-                                                                </h3>
-                                                                <p className="text-muted-foreground text-xs">
-                                                                    {match.tipo?.replace(/_/g, " ")}
-                                                                </p>
-                                                            </div>
-                                                            <div
-                                                                className={`rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap ${
-                                                                    match.estado === "ACEPTADO"
-                                                                        ? "bg-green-100 text-green-700"
-                                                                        : match.estado === "RECHAZADO"
-                                                                          ? "bg-red-100 text-red-700"
-                                                                          : "bg-yellow-100 text-yellow-700"
-                                                                }`}
-                                                            >
-                                                                {match.estado === "ACEPTADO"
-                                                                    ? t?.dashboard?.owner?.main?.matches?.active || "Activo"
-                                                                    : match.estado === "RECHAZADO"
-                                                                      ? t?.dashboard?.owner?.main?.matches?.rejected || "Rechazado"
-                                                                      : t?.dashboard?.owner?.main?.matches?.pending || "Pendiente"}
-                                                            </div>
+                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                        {selectedTerreno.matches.map((match) => (
+                                            <Card
+                                                key={match.id}
+                                                className="cursor-pointer p-6 transition-all hover:-translate-y-1 hover:shadow-lg"
+                                            >
+                                                <div className="space-y-4">
+                                                    <div className="flex items-start justify-between gap-2">
+                                                        <div className="min-w-0 flex-1">
+                                                            <h3 className="mb-1 line-clamp-2 text-base font-semibold">{match.titulo}</h3>
+                                                            <p className="text-muted-foreground text-xs">
+                                                                {match.tipo?.replace(/_/g, " ")}
+                                                            </p>
                                                         </div>
+                                                        <div
+                                                            className={`rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap ${
+                                                                match.estado === "ACEPTADO"
+                                                                    ? "bg-green-100 text-green-700"
+                                                                    : match.estado === "RECHAZADO"
+                                                                      ? "bg-red-100 text-red-700"
+                                                                      : "bg-yellow-100 text-yellow-700"
+                                                            }`}
+                                                        >
+                                                            {match.estado === "ACEPTADO"
+                                                                ? t?.dashboard?.owner?.main?.matches?.active || "Activo"
+                                                                : match.estado === "RECHAZADO"
+                                                                  ? t?.dashboard?.owner?.main?.matches?.rejected || "Rechazado"
+                                                                  : t?.dashboard?.owner?.main?.matches?.pending || "Pendiente"}
+                                                        </div>
+                                                    </div>
 
+                                                    <div className="space-y-3">
+                                                        {match.potenciaObjetivo && (
+                                                            <div className="flex items-center justify-between text-sm">
+                                                                <span className="text-muted-foreground">
+                                                                    {t?.dashboard?.owner?.main?.matches?.power || "Potencia:"}
+                                                                </span>
+                                                                <span className="font-semibold">{match.potenciaObjetivo} MW</span>
+                                                            </div>
+                                                        )}
+                                                        {match.provincia && (
+                                                            <div className="flex items-center justify-between text-sm">
+                                                                <span className="text-muted-foreground">
+                                                                    {t?.dashboard?.owner?.main?.matches?.location || "Ubicación:"}
+                                                                </span>
+                                                                <span className="font-semibold">{match.provincia}</span>
+                                                            </div>
+                                                        )}
                                                         <div className="space-y-2">
-                                                            {match.potenciaObjetivo && (
-                                                                <div className="flex items-center justify-between text-sm">
-                                                                    <span className="text-muted-foreground">
-                                                                        {t?.dashboard?.owner?.main?.matches?.power || "Potencia:"}
-                                                                    </span>
-                                                                    <span className="font-medium">{match.potenciaObjetivo} MW</span>
-                                                                </div>
-                                                            )}
-                                                            {match.provincia && (
-                                                                <div className="flex items-center justify-between text-sm">
-                                                                    <span className="text-muted-foreground">
-                                                                        {t?.dashboard?.owner?.main?.matches?.location || "Ubicación:"}
-                                                                    </span>
-                                                                    <span className="font-medium">{match.provincia}</span>
-                                                                </div>
-                                                            )}
                                                             <div className="flex items-center justify-between text-sm">
                                                                 <span className="text-muted-foreground">
                                                                     {t?.dashboard?.owner?.main?.matches?.compatibility || "Compatibilidad:"}
                                                                 </span>
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="h-2 w-20 overflow-hidden rounded-full bg-gray-200">
-                                                                        <div
-                                                                            className={`h-full ${
-                                                                                match.compatibilidad >= 80
-                                                                                    ? "bg-green-500"
-                                                                                    : match.compatibilidad >= 60
-                                                                                      ? "bg-yellow-500"
-                                                                                      : "bg-orange-500"
-                                                                            }`}
-                                                                            style={{ width: `${match.compatibilidad}%` }}
-                                                                        />
-                                                                    </div>
-                                                                    <span className="text-primary font-bold">{match.compatibilidad}%</span>
-                                                                </div>
+                                                                <span className="text-primary font-bold">{match.compatibilidad}%</span>
+                                                            </div>
+                                                            <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                                                                <div
+                                                                    className={`h-full transition-all ${
+                                                                        match.compatibilidad >= 80
+                                                                            ? "bg-green-500"
+                                                                            : match.compatibilidad >= 60
+                                                                              ? "bg-yellow-500"
+                                                                              : "bg-orange-500"
+                                                                    }`}
+                                                                    style={{ width: `${match.compatibilidad}%` }}
+                                                                />
                                                             </div>
                                                         </div>
-
-                                                        <Link href={`/dashboard/propietario/proyectos/${match.id}`}>
-                                                            <Button className="w-full" size="sm">
-                                                                {t?.dashboard?.owner?.main?.matches?.viewProject || "Ver proyecto"}
-                                                            </Button>
-                                                        </Link>
                                                     </div>
-                                                </Card>
-                                            ))}
-                                        </div>
+
+                                                    <Link href={`/dashboard/propietario/proyectos/${match.id}`}>
+                                                        <Button className="w-full" size="sm">
+                                                            {t?.dashboard?.owner?.main?.matches?.viewProject || "Ver proyecto"}
+                                                        </Button>
+                                                    </Link>
+                                                </div>
+                                            </Card>
+                                        ))}
                                     </div>
                                 )}
                             </div>
@@ -468,6 +515,12 @@ export default function DashboardPropietario() {
                     </div>
                 )}
             </div>
+
+            <style jsx global>{`
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
         </>
     )
 }

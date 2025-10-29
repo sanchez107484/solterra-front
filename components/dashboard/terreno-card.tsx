@@ -37,7 +37,7 @@ export function TerrenoCard({ terreno, isSelected = false, onClick }: TerrenoCar
 
     return (
         <Card
-            className={`relative cursor-pointer overflow-hidden transition-all hover:shadow-lg ${isSelected ? "ring-primary ring-2" : ""}`}
+            className={`relative h-full w-full cursor-pointer overflow-hidden transition-all hover:shadow-lg ${isSelected ? "ring-primary ring-2" : ""}`}
             onClick={onClick}
         >
             {/* Botón ver detalles - esquina superior derecha */}
