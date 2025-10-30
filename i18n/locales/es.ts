@@ -140,6 +140,8 @@ export const es = {
         continue: "Continuar",
         back: "Atrás",
         createProject: "Crear proyecto",
+        untitledProject: "Proyecto sin título",
+        na: "N/A",
         submit: "Enviar",
         loading: "Cargando...",
         myProfile: "Mi Perfil",
@@ -514,6 +516,8 @@ export const es = {
             stats: {
                 activeLands: "Terrenos Activos",
                 totalActiveLands: "de {total} totales",
+                matchesLabel: "Matches disponibles",
+                matchesSubtitle: "proyectos compatibles",
                 interestedPromoters: "Promotores Interesados",
                 allLands: "en todos tus terrenos",
                 totalHectares: "Hectáreas Totales",
@@ -523,6 +527,7 @@ export const es = {
             },
             main: {
                 selectLand: "Selecciona un terreno para ver matches",
+                selectLandDesc: "Selecciona un terreno para ver sus proyectos compatibles",
                 matchesFor: "Matches para {land}",
                 matchesFound: "{count} proyectos compatibles encontrados",
                 noMatches: "No hay matches disponibles",
@@ -684,8 +689,11 @@ export const es = {
                 addLand: "Añade tu primer terreno",
                 metrics: {
                     avgIncomeLabel: "Ingreso promedio/ha/año",
+                    avgIncomeValue: "€2,500",
                     contractDurationLabel: "Duración típica contrato",
+                    contractDurationValue: "25 años",
                     successRateLabel: "Tasa de éxito",
+                    successRateValue: "98%",
                 },
             },
         },

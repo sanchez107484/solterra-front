@@ -140,6 +140,8 @@ export const en = {
         continue: "Continue",
         back: "Back",
         createProject: "Create project",
+        untitledProject: "Untitled project",
+        na: "N/A",
         submit: "Submit",
         loading: "Loading...",
         myProfile: "My Profile",
@@ -511,6 +513,8 @@ export const en = {
             stats: {
                 activeLands: "Active Lands",
                 totalActiveLands: "of {total} total",
+                matchesLabel: "Available matches",
+                matchesSubtitle: "compatible projects",
                 interestedPromoters: "Interested Promoters",
                 allLands: "in all your lands",
                 totalHectares: "Total Hectares",
@@ -520,6 +524,7 @@ export const en = {
             },
             main: {
                 selectLand: "Select a land to view matches",
+                selectLandDesc: "Select a land to view its compatible projects",
                 matchesFor: "Matches for {land}",
                 matchesFound: "{count} compatible projects found",
                 noMatches: "No matches available",
@@ -684,8 +689,11 @@ export const en = {
                 addLand: "Add your first land",
                 metrics: {
                     avgIncomeLabel: "Average income/ha/year",
+                    avgIncomeValue: "€2,500",
                     contractDurationLabel: "Typical contract duration",
+                    contractDurationValue: "25 years",
                     successRateLabel: "Success rate",
+                    successRateValue: "98%",
                 },
             },
         },
