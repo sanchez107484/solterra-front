@@ -89,8 +89,8 @@ export default function DashboardPropietario() {
                             matches: Array.isArray(terreno.matches)
                                 ? terreno.matches.map((m: any) => ({
                                       id: m.proyecto?.id || m.proyectoId || "",
-                                      titulo: m.proyecto?.titulo || (t?.common?.untitledProject ?? "Proyecto sin título"),
-                                      tipo: m.proyecto?.tipo || (t?.common?.na ?? "N/A"),
+                                      titulo: m.proyecto?.titulo || (t?.common?.untitledProject ?? ""),
+                                      tipo: m.proyecto?.tipo || (t?.common?.na ?? ""),
                                       potenciaObjetivo: m.proyecto?.potenciaObjetivo,
                                       provincia: m.proyecto?.provincia,
                                       compatibilidad: m.scoreTotal || 0,
@@ -162,8 +162,14 @@ export default function DashboardPropietario() {
     const stats = {
         terrenosActivos: terrenos.filter((t) => String(t?.estado ?? "").toUpperCase() === "ACTIVO").length,
         totalMatches: terrenosConMatches.reduce((sum, t) => sum + t.matchCount, 0),
-        hectareasTotales: terrenos.reduce((sum, t) => sum + (Number((t as any).superficie ?? (t as any).hectareas) || 0), 0),
-        ingresosEstimados: terrenos.reduce((sum, t) => sum + (Number((t as any).superficie ?? (t as any).hectareas) || 0) * 2500, 0),
+        hectareasTotales: terrenos.reduce(
+            (sum, terrain) => sum + (Number((terrain as any).superficie ?? (terrain as any).hectareas) || 0),
+            0
+        ),
+        ingresosEstimados: terrenos.reduce(
+            (sum, terrain) => sum + (Number((terrain as any).superficie ?? (terrain as any).hectareas) || 0) * 2500,
+            0
+        ),
     }
 
     return (

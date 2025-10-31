@@ -225,6 +225,7 @@ export default function TodosProyectosPage() {
                         allProvinces: t?.dashboard?.owner?.projects?.allProjects?.filters?.allProvinces || "Todas las provincias",
                         allStatuses: t?.dashboard?.owner?.projects?.allProjects?.filters?.allStatuses || "Todos los estados",
                         clearFilters: t?.dashboard?.owner?.projects?.allProjects?.filters?.clearFilters || "Limpiar filtros",
+                        moreFilters: t?.dashboard?.owner?.projects?.allProjects?.filters?.moreFilters || "Más filtros",
                         types: {
                             solar: t?.dashboard?.owner?.projects?.allProjects?.types?.solar || "Solar",
                             eolico: t?.dashboard?.owner?.projects?.allProjects?.types?.eolico || "Eólico",

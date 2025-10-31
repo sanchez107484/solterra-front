@@ -58,7 +58,7 @@ export default function PerfilPage() {
 
     useEffect(() => {
         if (user) {
-            console.log("User object:", user)
+            console.warn("User object:", user)
             setProfileForm({
                 nombre: user.nombre || "",
                 apellidos: user.apellidos || "",
@@ -99,12 +99,12 @@ export default function PerfilPage() {
 
             toast({
                 title: t?.profile?.form?.saved,
-                description: "Los cambios se han guardado correctamente.",
+                description: t?.profile?.form?.savedDesc,
             })
-        } catch (error) {
+        } catch {
             toast({
                 title: t?.profile?.form?.error,
-                description: "No se pudo actualizar el perfil. Inténtalo de nuevo.",
+                description: t?.profile?.form?.errorDesc,
                 variant: "destructive",
             })
         } finally {
@@ -117,7 +117,7 @@ export default function PerfilPage() {
 
         if (passwordForm.newPassword !== passwordForm.confirmPassword) {
             toast({
-                title: "Error",
+                title: t?.common?.errorTitle,
                 description: t?.profile?.security?.passwordMismatch,
                 variant: "destructive",
             })
@@ -126,7 +126,7 @@ export default function PerfilPage() {
 
         if (passwordForm.newPassword.length < 6) {
             toast({
-                title: "Error",
+                title: t?.common?.errorTitle,
                 description: t?.profile?.security?.passwordRequirements,
                 variant: "destructive",
             })
@@ -140,7 +140,7 @@ export default function PerfilPage() {
 
             toast({
                 title: t?.profile?.security?.changed,
-                description: "Tu contraseña se ha cambiado correctamente.",
+                description: t?.profile?.security?.changedDesc,
             })
 
             setPasswordForm({
@@ -148,10 +148,10 @@ export default function PerfilPage() {
                 newPassword: "",
                 confirmPassword: "",
             })
-        } catch (error) {
+        } catch {
             toast({
                 title: t?.profile?.security?.error,
-                description: "No se pudo cambiar la contraseña. Verifica que la contraseña actual sea correcta.",
+                description: t?.profile?.security?.errorDesc,
                 variant: "destructive",
             })
         } finally {
@@ -170,7 +170,7 @@ export default function PerfilPage() {
         // Validar tipo de archivo
         if (!file.type.startsWith("image/")) {
             toast({
-                title: "Error",
+                title: t?.common?.errorTitle,
                 description: t?.profile?.avatar?.invalidFileType,
                 variant: "destructive",
             })
@@ -180,7 +180,7 @@ export default function PerfilPage() {
         // Validar tamaño (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
             toast({
-                title: "Error",
+                title: t?.common?.errorTitle,
                 description: t?.profile?.avatar?.fileTooLarge,
                 variant: "destructive",
             })
@@ -192,13 +192,13 @@ export default function PerfilPage() {
             await uploadAvatar(file)
             toast({
                 title: t?.profile?.avatar?.uploadSuccess,
-                description: "Tu imagen de perfil se ha actualizado correctamente.",
+                description: t?.profile?.avatar?.uploadSuccessDesc,
             })
         } catch (error) {
             console.error("Error uploading avatar:", error)
             toast({
                 title: t?.profile?.avatar?.uploadError,
-                description: "No se pudo subir la imagen. Inténtalo de nuevo.",
+                description: t?.profile?.avatar?.uploadErrorDesc,
                 variant: "destructive",
             })
         } finally {
@@ -211,21 +211,31 @@ export default function PerfilPage() {
     }
 
     const getRoleDisplayName = (role: string) => {
-        const roleNames = {
-            PROPIETARIO: "Propietario",
-            PROMOTOR: "Promotor",
-            ADMIN: "Administrador",
+        if (!t?.profile?.roles) return role
+        switch (role) {
+            case "PROPIETARIO":
+                return t.profile.roles.PROPIETARIO
+            case "PROMOTOR":
+                return t.profile.roles.PROMOTOR
+            case "ADMIN":
+                return t.profile.roles.ADMIN
+            default:
+                return role
         }
-        return roleNames[role as keyof typeof roleNames] || role
     }
 
     const getPlanDisplayName = (plan: string) => {
-        const planNames = {
-            FREE: "Gratuito",
-            PRO: "Profesional",
-            ENTERPRISE: "Empresarial",
+        if (!t?.profile?.plans) return plan
+        switch (plan) {
+            case "FREE":
+                return t.profile.plans.FREE
+            case "PRO":
+                return t.profile.plans.PRO
+            case "ENTERPRISE":
+                return t.profile.plans.ENTERPRISE
+            default:
+                return plan
         }
-        return planNames[plan as keyof typeof planNames] || plan
     }
 
     const getAvatarUrl = (avatarPath: string | null | undefined) => {
@@ -241,7 +251,7 @@ export default function PerfilPage() {
         const baseUrl = API_URL.replace("/api/v1", "")
         const fullUrl = `${baseUrl}${avatarPath.startsWith("/") ? "" : "/"}${avatarPath}`
 
-        console.log("Avatar debugging:", {
+        console.warn("Avatar debugging:", {
             originalPath: avatarPath,
             API_URL,
             baseUrl,
@@ -293,9 +303,9 @@ export default function PerfilPage() {
                                                         <Avatar className="h-24 w-24 cursor-pointer" onClick={handleAvatarClick}>
                                                             <AvatarImage
                                                                 src={getAvatarUrl(user?.avatar)}
-                                                                alt={user?.nombre || "Usuario"}
+                                                                alt={user?.nombre || t?.profile?.avatar?.fallbackUser}
                                                                 onError={(e) => {
-                                                                    console.log("Error loading avatar:", e)
+                                                                    console.warn("Error loading avatar:", e)
                                                                     // Fallback en caso de error
                                                                     e.currentTarget.style.display = "none"
                                                                 }}
@@ -341,32 +351,34 @@ export default function PerfilPage() {
                                             <CardHeader>
                                                 <CardTitle className="flex items-center gap-2">
                                                     <Shield className="h-5 w-5" />
-                                                    Información de la Cuenta
+                                                    {t?.profile?.account?.title}
                                                 </CardTitle>
                                             </CardHeader>
                                             <CardContent className="space-y-3">
                                                 <div className="flex items-center justify-between">
-                                                    <span className="text-sm font-medium">Rol:</span>
+                                                    <span className="text-sm font-medium">{t?.profile?.account?.labels?.role}</span>
                                                     <span className="text-muted-foreground text-sm">
                                                         {getRoleDisplayName(user?.rol || "")}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center justify-between">
-                                                    <span className="text-sm font-medium">Plan:</span>
+                                                    <span className="text-sm font-medium">{t?.profile?.account?.labels?.plan}</span>
                                                     <span className="text-muted-foreground text-sm">
                                                         {getPlanDisplayName(user?.planActual || "FREE")}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center justify-between">
-                                                    <span className="text-sm font-medium">Verificado:</span>
+                                                    <span className="text-sm font-medium">{t?.profile?.account?.labels?.verified}</span>
                                                     <span className={`text-sm ${user?.verificado ? "text-green-600" : "text-orange-600"}`}>
-                                                        {user?.verificado ? "Sí" : "Pendiente"}
+                                                        {user?.verificado ? t?.common?.yes : t?.profile?.account?.verifiedPending}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center justify-between">
-                                                    <span className="text-sm font-medium">Cuenta creada:</span>
+                                                    <span className="text-sm font-medium">{t?.profile?.account?.labels?.created}</span>
                                                     <span className="text-muted-foreground text-sm">
-                                                        {user?.creadoEn ? new Date(user.creadoEn).toLocaleDateString("es-ES") : "-"}
+                                                        {user?.creadoEn
+                                                            ? new Date(user.creadoEn).toLocaleDateString("es-ES")
+                                                            : t?.common?.na}
                                                     </span>
                                                 </div>
                                             </CardContent>
@@ -514,7 +526,9 @@ export default function PerfilPage() {
                                                                         </span>
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
-                                                                        <span className="text-sm font-medium">Superficie Total:</span>
+                                                                        <span className="text-sm font-medium">
+                                                                            {t?.profile?.stats?.surfaceTotal}
+                                                                        </span>
                                                                         <span className="text-muted-foreground text-sm">
                                                                             {stats.superficieTotal || 0} ha
                                                                         </span>
@@ -522,7 +536,9 @@ export default function PerfilPage() {
                                                                 </div>
                                                                 <div className="space-y-2">
                                                                     <div className="flex items-center justify-between">
-                                                                        <span className="text-sm font-medium">Valor Total:</span>
+                                                                        <span className="text-sm font-medium">
+                                                                            {t?.profile?.stats?.totalValue}
+                                                                        </span>
                                                                         <span className="text-muted-foreground text-sm">
                                                                             {new Intl.NumberFormat("es-ES", {
                                                                                 style: "currency",
@@ -532,7 +548,9 @@ export default function PerfilPage() {
                                                                         </span>
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
-                                                                        <span className="text-sm font-medium">Ingresos Generados:</span>
+                                                                        <span className="text-sm font-medium">
+                                                                            {t?.profile?.stats?.generatedIncome}
+                                                                        </span>
                                                                         <span className="text-muted-foreground text-sm">
                                                                             {new Intl.NumberFormat("es-ES", {
                                                                                 style: "currency",
@@ -575,7 +593,9 @@ export default function PerfilPage() {
                                                                 </div>
                                                                 <div className="space-y-2">
                                                                     <div className="flex items-center justify-between">
-                                                                        <span className="text-sm font-medium">Presupuesto Total:</span>
+                                                                        <span className="text-sm font-medium">
+                                                                            {t?.profile?.stats?.budgetTotal}
+                                                                        </span>
                                                                         <span className="text-muted-foreground text-sm">
                                                                             {new Intl.NumberFormat("es-ES", {
                                                                                 style: "currency",
@@ -585,7 +605,9 @@ export default function PerfilPage() {
                                                                         </span>
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
-                                                                        <span className="text-sm font-medium">Potencia Total:</span>
+                                                                        <span className="text-sm font-medium">
+                                                                            {t?.profile?.stats?.totalPower}
+                                                                        </span>
                                                                         <span className="text-muted-foreground text-sm">
                                                                             {stats.potenciaTotal || 0} MW
                                                                         </span>
@@ -645,10 +667,10 @@ export default function PerfilPage() {
                                                     <div className="py-8 text-center">
                                                         <TrendingUp className="text-muted-foreground mx-auto h-12 w-12" />
                                                         <h3 className="text-muted-foreground mt-2 text-sm font-medium">
-                                                            No hay estadísticas disponibles
+                                                            {t?.profile?.stats?.noDataTitle}
                                                         </h3>
                                                         <p className="text-muted-foreground mt-1 text-sm">
-                                                            Las estadísticas aparecerán cuando tengas actividad en la plataforma
+                                                            {t?.profile?.stats?.noDataDesc}
                                                         </p>
                                                     </div>
                                                 )}

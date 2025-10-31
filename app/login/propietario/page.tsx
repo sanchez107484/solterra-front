@@ -38,8 +38,8 @@ export default function LoginPropietario() {
             if (isLogin) {
                 await login({ email: formData.email, password: formData.password })
                 toast({
-                    title: "¡Bienvenido!",
-                    description: "Has iniciado sesión correctamente",
+                    title: t?.auth?.owner?.toast?.welcomeTitle,
+                    description: t?.auth?.owner?.toast?.welcomeDesc,
                 })
             } else {
                 await register({
@@ -49,15 +49,20 @@ export default function LoginPropietario() {
                     rol: "PROPIETARIO",
                 })
                 toast({
-                    title: "¡Cuenta creada!",
-                    description: "Tu cuenta ha sido creada exitosamente",
+                    title: t?.auth?.owner?.toast?.registerTitle,
+                    description: t?.auth?.owner?.toast?.registerDesc,
                 })
             }
             router.push("/dashboard/propietario")
-        } catch (error: any) {
+        } catch (err: unknown) {
+            const message =
+                (err as any)?.response?.data?.message ||
+                (err instanceof Error ? err.message : undefined) ||
+                t?.auth?.owner?.toast?.genericErrorDesc
+
             toast({
-                title: "Error",
-                description: error?.response?.data?.message || error?.message || "Hubo un problema. Intenta de nuevo.",
+                title: t?.common?.errorTitle,
+                description: message,
                 variant: "destructive",
             })
         } finally {
@@ -193,7 +198,11 @@ export default function LoginPropietario() {
                             )}
 
                             <Button type="submit" className="bg-primary hover:bg-primary/90 h-12 w-full text-lg" disabled={isLoading}>
-                                {isLoading ? "Cargando..." : isLogin ? t?.contact?.form?.loginButton : t?.contact?.form?.registerButton}
+                                {isLoading
+                                    ? t?.common?.loading
+                                    : isLogin
+                                      ? t?.contact?.form?.loginButton
+                                      : t?.contact?.form?.registerButton}
                             </Button>
                         </form>
 

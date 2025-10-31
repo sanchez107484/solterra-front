@@ -84,20 +84,20 @@ export default function NuevoTerreno() {
         if (currentStep === 1) {
             // Validación del paso 1: Información Básica
             if (!formData.titulo.trim()) {
-                errors.push("El nombre del terreno es obligatorio")
+                errors.push(t?.owner?.validation?.requiredName)
             }
             if (!formData.provincia.trim()) {
-                errors.push("La provincia es obligatoria")
+                errors.push(t?.owner?.validation?.requiredProvince)
             }
             if (!formData.municipio.trim()) {
-                errors.push("El municipio es obligatorio")
+                errors.push(t?.owner?.validation?.requiredMunicipio)
             }
             const superficie = parseFloat(formData.superficie)
             if (!formData.superficie || isNaN(superficie) || superficie <= 0) {
-                errors.push("La superficie debe ser mayor a 0 hectáreas")
+                errors.push(t?.owner?.validation?.superficiePositive)
             }
             if (!formData.tipoSuelo) {
-                errors.push("El tipo de suelo es obligatorio")
+                errors.push(t?.owner?.validation?.tipoSueloRequired)
             }
         } else if (currentStep === 2) {
             // Validación del paso 2: Detalles Técnicos (todos opcionales, pero validar formato si se llenan)
@@ -105,30 +105,30 @@ export default function NuevoTerreno() {
                 formData.latitud &&
                 (isNaN(parseFloat(formData.latitud)) || parseFloat(formData.latitud) < -90 || parseFloat(formData.latitud) > 90)
             ) {
-                errors.push("La latitud debe estar entre -90 y 90")
+                errors.push(t?.owner?.validation?.latRange)
             }
             if (
                 formData.longitud &&
                 (isNaN(parseFloat(formData.longitud)) || parseFloat(formData.longitud) < -180 || parseFloat(formData.longitud) > 180)
             ) {
-                errors.push("La longitud debe estar entre -180 y 180")
+                errors.push(t?.owner?.validation?.lngRange)
             }
             if (formData.pendiente && (isNaN(parseFloat(formData.pendiente)) || parseFloat(formData.pendiente) < 0)) {
-                errors.push("La pendiente debe ser un número válido mayor o igual a 0")
+                errors.push(t?.owner?.validation?.pendienteInvalid)
             }
         } else if (currentStep === 3) {
             // Validación del paso 3: Precio y Características
             if (!formData.disponibilidad) {
-                errors.push("El tipo de disponibilidad es obligatorio")
+                errors.push(t?.owner?.validation?.disponibilidadRequired)
             }
             if ((formData.disponibilidad === "VENTA" || formData.disponibilidad === "AMBOS") && formData.precioVenta) {
                 if (isNaN(parseFloat(formData.precioVenta)) || parseFloat(formData.precioVenta) <= 0) {
-                    errors.push("El precio de venta debe ser un número válido mayor a 0")
+                    errors.push(t?.owner?.validation?.precioVentaInvalid)
                 }
             }
             if ((formData.disponibilidad === "ARRENDAMIENTO" || formData.disponibilidad === "AMBOS") && formData.precioArrendamiento) {
                 if (isNaN(parseFloat(formData.precioArrendamiento)) || parseFloat(formData.precioArrendamiento) <= 0) {
-                    errors.push("El precio de arrendamiento debe ser un número válido mayor a 0")
+                    errors.push(t?.owner?.validation?.precioArrendamientoInvalid)
                 }
             }
         }
@@ -140,45 +140,45 @@ export default function NuevoTerreno() {
         const errors: string[] = []
 
         if (!formData.titulo.trim()) {
-            errors.push("El título del terreno es obligatorio")
+            errors.push(t?.owner?.validation?.requiredName)
         }
 
         if (!formData.municipio.trim()) {
-            errors.push("El municipio es obligatorio")
+            errors.push(t?.owner?.validation?.requiredMunicipio)
         }
 
         if (!formData.provincia.trim()) {
-            errors.push("La provincia es obligatoria")
+            errors.push(t?.owner?.validation?.requiredProvince)
         }
 
         const superficie = parseFloat(formData.superficie)
         if (!formData.superficie || isNaN(superficie) || superficie <= 0) {
-            errors.push("La superficie debe ser mayor a 0 hectáreas")
+            errors.push(t?.owner?.validation?.superficiePositive)
         }
 
         if (
             formData.latitud &&
             (isNaN(parseFloat(formData.latitud)) || parseFloat(formData.latitud) < -90 || parseFloat(formData.latitud) > 90)
         ) {
-            errors.push("La latitud debe estar entre -90 y 90")
+            errors.push(t?.owner?.validation?.latRange)
         }
 
         if (
             formData.longitud &&
             (isNaN(parseFloat(formData.longitud)) || parseFloat(formData.longitud) < -180 || parseFloat(formData.longitud) > 180)
         ) {
-            errors.push("La longitud debe estar entre -180 y 180")
+            errors.push(t?.owner?.validation?.lngRange)
         }
 
         if (formData.precioVenta && (isNaN(parseFloat(formData.precioVenta)) || parseFloat(formData.precioVenta) <= 0)) {
-            errors.push("El precio de venta debe ser un número válido mayor a 0")
+            errors.push(t?.owner?.validation?.precioVentaInvalid)
         }
 
         if (
             formData.precioArrendamiento &&
             (isNaN(parseFloat(formData.precioArrendamiento)) || parseFloat(formData.precioArrendamiento) <= 0)
         ) {
-            errors.push("El precio de arrendamiento debe ser un número válido mayor a 0")
+            errors.push(t?.owner?.validation?.precioArrendamientoInvalid)
         }
 
         return errors
@@ -246,8 +246,8 @@ export default function NuevoTerreno() {
         if (stepErrors.length > 0) {
             setValidationErrors(stepErrors)
             toast({
-                title: "Campos obligatorios",
-                description: "Por favor, completa todos los campos obligatorios antes de continuar",
+                title: t?.owner?.toast?.validationTitle,
+                description: t?.owner?.toast?.validationDesc,
                 variant: "destructive",
             })
             return
@@ -291,23 +291,11 @@ export default function NuevoTerreno() {
     }
 
     const getTipoSueloLabel = (tipo: TipoSuelo) => {
-        const labels = {
-            RUSTICO_COMUN: "Rústico Común",
-            RUSTICO_PROTECCION: "Rústico de Protección",
-            NO_URBANIZABLE: "No Urbanizable",
-            URBANIZABLE: "Urbanizable",
-        }
-        return labels[tipo] || tipo
+        return t?.owner?.newLand?.tipoSuelo?.labels?.[tipo] ?? tipo
     }
 
     const getTipoSueloDescription = (tipo: TipoSuelo) => {
-        const descriptions = {
-            RUSTICO_COMUN: "Suelo rústico de uso común",
-            RUSTICO_PROTECCION: "Suelo rústico con protección especial",
-            NO_URBANIZABLE: "Suelo no urbanizable, ideal para proyectos de gran escala",
-            URBANIZABLE: "Suelo urbanizable para desarrollos",
-        }
-        return descriptions[tipo] || ""
+        return t?.owner?.newLand?.tipoSuelo?.descriptions?.[tipo] ?? ""
     }
 
     const getDisponibilidadIcon = (disp: DisponibilidadTerreno) => {
@@ -328,10 +316,10 @@ export default function NuevoTerreno() {
     return (
         <>
             <DashboardHeader
-                title="Nuevo Terreno"
+                title={t?.owner?.newLand?.title}
                 breadcrumbs={[
-                    { label: t?.dashboard?.breadcrumbs?.dashboard || "Dashboard", href: "/dashboard/propietario" },
-                    { label: "Nuevo Terreno" },
+                    { label: t?.dashboard?.breadcrumbs?.dashboard, href: "/dashboard/propietario" },
+                    { label: t?.owner?.newLand?.title },
                 ]}
                 userType="propietario"
             />
@@ -375,9 +363,11 @@ export default function NuevoTerreno() {
                             </div>
                         </div>
                         <div className="grid grid-cols-3 gap-4 text-center text-sm font-medium">
-                            <div className={step >= 1 ? "text-primary" : "text-muted-foreground"}>Información Básica</div>
-                            <div className={step >= 2 ? "text-primary" : "text-muted-foreground"}>Detalles Técnicos</div>
-                            <div className={step >= 3 ? "text-primary" : "text-muted-foreground"}>Precio y Características</div>
+                            <div className={step >= 1 ? "text-primary" : "text-muted-foreground"}>{t?.owner?.newLand?.steps?.info}</div>
+                            <div className={step >= 2 ? "text-primary" : "text-muted-foreground"}>
+                                {t?.owner?.newLand?.steps?.technical}
+                            </div>
+                            <div className={step >= 3 ? "text-primary" : "text-muted-foreground"}>{t?.owner?.newLand?.steps?.price}</div>
                         </div>
                     </div>
 
@@ -389,7 +379,7 @@ export default function NuevoTerreno() {
                                     <div className="flex items-start gap-3">
                                         <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
                                         <div>
-                                            <p className="mb-2 font-semibold text-red-800">Por favor, corrige los siguientes errores:</p>
+                                            <p className="mb-2 font-semibold text-red-800">{t?.owner?.validation?.header}</p>
                                             <ul className="space-y-1 text-sm text-red-700">
                                                 {validationErrors.map((error, i) => (
                                                     <li key={i} className="flex items-center gap-2">
@@ -412,40 +402,40 @@ export default function NuevoTerreno() {
                                                 <MapPin className="text-primary h-12 w-12" />
                                             </div>
                                             <h2 className="from-primary to-primary/70 mb-3 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent">
-                                                Información Básica del Terreno
+                                                {t?.owner?.newLand?.sections?.infoTitle}
                                             </h2>
                                             <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-                                                Comencemos con la información esencial de tu terreno
+                                                {t?.owner?.newLand?.sections?.infoSubtitle}
                                             </p>
                                         </div>
 
                                         <div className="space-y-6">
                                             <div className="space-y-3">
                                                 <Label htmlFor="titulo" className="text-base font-semibold">
-                                                    Nombre del Terreno *
+                                                    {t?.owner?.newLand?.fields?.title} *
                                                 </Label>
                                                 <Input
                                                     id="titulo"
-                                                    placeholder="Ej: Finca La Esperanza - Badajoz"
+                                                    placeholder={t?.owner?.newLand?.placeholders?.titulo}
                                                     className="focus:border-primary h-14 border-2 text-lg transition-colors"
                                                     value={formData.titulo}
                                                     onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
                                                     required
                                                 />
-                                                <p className="text-muted-foreground text-sm">Dale un nombre identificativo a tu terreno</p>
+                                                <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.titleHint}</p>
                                             </div>
 
                                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                 <div className="space-y-3">
                                                     <Label htmlFor="provincia" className="text-base font-semibold">
-                                                        Provincia *
+                                                        {t?.owner?.newLand?.fields?.province} *
                                                     </Label>
                                                     <Select
                                                         value={formData.provincia}
                                                         onValueChange={(value) => setFormData({ ...formData, provincia: value })}
                                                     >
                                                         <SelectTrigger className="focus:border-primary h-14 border-2 text-lg">
-                                                            <SelectValue placeholder="Selecciona una provincia" />
+                                                            <SelectValue placeholder={t?.owner?.newLand?.placeholders?.provincia} />
                                                         </SelectTrigger>
                                                         <SelectContent>
                                                             {provincias.map((provincia) => (
@@ -459,11 +449,11 @@ export default function NuevoTerreno() {
 
                                                 <div className="space-y-3">
                                                     <Label htmlFor="municipio" className="text-base font-semibold">
-                                                        Municipio *
+                                                        {t?.owner?.newLand?.fields?.municipality} *
                                                     </Label>
                                                     <Input
                                                         id="municipio"
-                                                        placeholder="Ej: Mérida"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.municipio}
                                                         className="focus:border-primary h-14 border-2 text-lg transition-colors"
                                                         value={formData.municipio}
                                                         onChange={(e) => setFormData({ ...formData, municipio: e.target.value })}
@@ -475,13 +465,13 @@ export default function NuevoTerreno() {
                                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                 <div className="space-y-3">
                                                     <Label htmlFor="superficie" className="text-base font-semibold">
-                                                        Superficie (hectáreas) *
+                                                        {t?.owner?.newLand?.fields?.surface} *
                                                     </Label>
                                                     <Input
                                                         id="superficie"
                                                         type="number"
                                                         step="0.1"
-                                                        placeholder="Ej: 25.5"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.superficie}
                                                         className="focus:border-primary h-14 border-2 text-lg transition-colors"
                                                         value={formData.superficie}
                                                         onChange={(e) => setFormData({ ...formData, superficie: e.target.value })}
@@ -491,11 +481,11 @@ export default function NuevoTerreno() {
 
                                                 <div className="space-y-3">
                                                     <Label htmlFor="codigoPostal" className="text-base font-semibold">
-                                                        Código Postal
+                                                        {t?.owner?.newLand?.fields?.postalCode}
                                                     </Label>
                                                     <Input
                                                         id="codigoPostal"
-                                                        placeholder="Ej: 06800"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.codigoPostal}
                                                         className="focus:border-primary h-14 border-2 text-lg transition-colors"
                                                         value={formData.codigoPostal}
                                                         onChange={(e) => setFormData({ ...formData, codigoPostal: e.target.value })}
@@ -504,7 +494,7 @@ export default function NuevoTerreno() {
                                             </div>
 
                                             <div className="space-y-4">
-                                                <Label className="text-base font-semibold">Tipo de Suelo *</Label>
+                                                <Label className="text-base font-semibold">{t?.owner?.newLand?.fields?.soilType} *</Label>
                                                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                                     {Object.values(TipoSuelo).map((tipo) => (
                                                         <button
@@ -544,11 +534,11 @@ export default function NuevoTerreno() {
 
                                             <div className="space-y-3">
                                                 <Label htmlFor="direccion" className="text-base font-semibold">
-                                                    Dirección o Ubicación
+                                                    {t?.owner?.newLand?.fields?.address}
                                                 </Label>
                                                 <Input
                                                     id="direccion"
-                                                    placeholder="Ej: Carretera EX-209, Km 15"
+                                                    placeholder={t?.owner?.newLand?.placeholders?.direccion}
                                                     className="focus:border-primary h-14 border-2 text-lg transition-colors"
                                                     value={formData.direccion}
                                                     onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
@@ -557,11 +547,11 @@ export default function NuevoTerreno() {
 
                                             <div className="space-y-3">
                                                 <Label htmlFor="descripcion" className="text-base font-semibold">
-                                                    Descripción del Terreno
+                                                    {t?.owner?.newLand?.fields?.description}
                                                 </Label>
                                                 <Textarea
                                                     id="descripcion"
-                                                    placeholder="Describe las características principales, accesos, condiciones del terreno..."
+                                                    placeholder={t?.owner?.newLand?.placeholders?.descripcion}
                                                     className="focus:border-primary min-h-32 resize-none border-2 text-base transition-colors"
                                                     value={formData.descripcion}
                                                     onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
@@ -574,7 +564,7 @@ export default function NuevoTerreno() {
                                             onClick={nextStep}
                                             className="bg-primary hover:bg-primary/90 h-14 w-full text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-xl"
                                         >
-                                            Continuar
+                                            {t?.common?.continue}
                                             <ChevronRight className="ml-2 h-5 w-5" />
                                         </Button>
                                     </div>
@@ -588,10 +578,10 @@ export default function NuevoTerreno() {
                                                 <Mountain className="text-primary h-12 w-12" />
                                             </div>
                                             <h2 className="from-primary to-primary/70 mb-3 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent">
-                                                Detalles Técnicos y Ubicación
+                                                {t?.owner?.newLand?.sections?.technicalTitle}
                                             </h2>
                                             <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-                                                Información técnica y geográfica que ayudará a los promotores a evaluar tu terreno
+                                                {t?.owner?.newLand?.sections?.technicalSubtitle}
                                             </p>
                                         </div>
 
@@ -599,18 +589,18 @@ export default function NuevoTerreno() {
                                             <div className="space-y-4">
                                                 <Label className="flex items-center gap-2 text-base font-semibold">
                                                     <MapPin className="h-5 w-5" />
-                                                    Coordenadas GPS (Opcional)
+                                                    {t?.owner?.newLand?.sections?.coordinatesTitle}
                                                 </Label>
                                                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                                     <div className="space-y-2">
                                                         <Label htmlFor="latitud" className="text-muted-foreground text-sm">
-                                                            Latitud
+                                                            {t?.owner?.newLand?.fields?.latitude}
                                                         </Label>
                                                         <Input
                                                             id="latitud"
                                                             type="number"
                                                             step="any"
-                                                            placeholder="Ej: 38.9167"
+                                                            placeholder={t?.owner?.newLand?.placeholders?.latitud}
                                                             className="focus:border-primary h-12 border-2 text-lg transition-colors"
                                                             value={formData.latitud}
                                                             onChange={(e) => setFormData({ ...formData, latitud: e.target.value })}
@@ -618,28 +608,26 @@ export default function NuevoTerreno() {
                                                     </div>
                                                     <div className="space-y-2">
                                                         <Label htmlFor="longitud" className="text-muted-foreground text-sm">
-                                                            Longitud
+                                                            {t?.owner?.newLand?.fields?.longitude}
                                                         </Label>
                                                         <Input
                                                             id="longitud"
                                                             type="number"
                                                             step="any"
-                                                            placeholder="Ej: -6.3333"
+                                                            placeholder={t?.owner?.newLand?.placeholders?.longitud}
                                                             className="focus:border-primary h-12 border-2 text-lg transition-colors"
                                                             value={formData.longitud}
                                                             onChange={(e) => setFormData({ ...formData, longitud: e.target.value })}
                                                         />
                                                     </div>
                                                 </div>
-                                                <p className="text-muted-foreground text-sm">
-                                                    Las coordenadas ayudan a ubicar exactamente tu terreno y calcular distancias
-                                                </p>
+                                                <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.coordinates}</p>
                                             </div>
 
                                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                 <div className="space-y-3">
                                                     <Label htmlFor="orientacion" className="text-base font-semibold">
-                                                        Orientación Principal
+                                                        {t?.owner?.newLand?.fields?.orientation}
                                                     </Label>
                                                     <Select
                                                         value={formData.orientacion}
@@ -648,30 +636,38 @@ export default function NuevoTerreno() {
                                                         }
                                                     >
                                                         <SelectTrigger className="focus:border-primary h-12 border-2">
-                                                            <SelectValue placeholder="Selecciona orientación" />
+                                                            <SelectValue placeholder={t?.owner?.newLand?.placeholders?.orientacion} />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="SUR">Sur</SelectItem>
-                                                            <SelectItem value="NORTE">Norte</SelectItem>
-                                                            <SelectItem value="ESTE">Este</SelectItem>
-                                                            <SelectItem value="OESTE">Oeste</SelectItem>
-                                                            <SelectItem value="SURESTE">Sureste</SelectItem>
-                                                            <SelectItem value="SUROESTE">Suroeste</SelectItem>
-                                                            <SelectItem value="NORESTE">Noreste</SelectItem>
-                                                            <SelectItem value="NOROESTE">Noroeste</SelectItem>
+                                                            <SelectItem value="SUR">{t?.owner?.newLand?.orientations?.SUR}</SelectItem>
+                                                            <SelectItem value="NORTE">{t?.owner?.newLand?.orientations?.NORTE}</SelectItem>
+                                                            <SelectItem value="ESTE">{t?.owner?.newLand?.orientations?.ESTE}</SelectItem>
+                                                            <SelectItem value="OESTE">{t?.owner?.newLand?.orientations?.OESTE}</SelectItem>
+                                                            <SelectItem value="SURESTE">
+                                                                {t?.owner?.newLand?.orientations?.SURESTE}
+                                                            </SelectItem>
+                                                            <SelectItem value="SUROESTE">
+                                                                {t?.owner?.newLand?.orientations?.SUROESTE}
+                                                            </SelectItem>
+                                                            <SelectItem value="NORESTE">
+                                                                {t?.owner?.newLand?.orientations?.NORESTE}
+                                                            </SelectItem>
+                                                            <SelectItem value="NOROESTE">
+                                                                {t?.owner?.newLand?.orientations?.NOROESTE}
+                                                            </SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                 </div>
 
                                                 <div className="space-y-3">
                                                     <Label htmlFor="pendiente" className="text-base font-semibold">
-                                                        Pendiente (%)
+                                                        {t?.owner?.newLand?.fields?.slope}
                                                     </Label>
                                                     <Input
                                                         id="pendiente"
                                                         type="number"
                                                         step="0.1"
-                                                        placeholder="Ej: 5"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.pendiente}
                                                         className="focus:border-primary h-12 border-2 text-lg transition-colors"
                                                         value={formData.pendiente}
                                                         onChange={(e) => setFormData({ ...formData, pendiente: e.target.value })}
@@ -682,13 +678,13 @@ export default function NuevoTerreno() {
                                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                 <div className="space-y-3">
                                                     <Label htmlFor="distanciaRed" className="text-base font-semibold">
-                                                        Distancia a Red Eléctrica (km)
+                                                        {t?.owner?.newLand?.fields?.gridDistance}
                                                     </Label>
                                                     <Input
                                                         id="distanciaRed"
                                                         type="number"
                                                         step="0.1"
-                                                        placeholder="Ej: 2.5"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.distanciaRed}
                                                         className="focus:border-primary h-12 border-2 text-lg transition-colors"
                                                         value={formData.distanciaRed}
                                                         onChange={(e) => setFormData({ ...formData, distanciaRed: e.target.value })}
@@ -697,11 +693,11 @@ export default function NuevoTerreno() {
 
                                                 <div className="space-y-3">
                                                     <Label htmlFor="referenciaCatastral" className="text-base font-semibold">
-                                                        Referencia Catastral
+                                                        {t?.owner?.newLand?.fields?.cadastralRef}
                                                     </Label>
                                                     <Input
                                                         id="referenciaCatastral"
-                                                        placeholder="Ej: 06120A00100001"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.referenciaCatastral}
                                                         className="focus:border-primary h-12 border-2 text-lg transition-colors"
                                                         value={formData.referenciaCatastral}
                                                         onChange={(e) => setFormData({ ...formData, referenciaCatastral: e.target.value })}
@@ -712,13 +708,13 @@ export default function NuevoTerreno() {
                                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                 <div className="space-y-3">
                                                     <Label htmlFor="potencialSolar" className="text-base font-semibold">
-                                                        Potencial Solar (kWh/m²/año)
+                                                        {t?.owner?.newLand?.fields?.solarPotential}
                                                     </Label>
                                                     <Input
                                                         id="potencialSolar"
                                                         type="number"
                                                         step="0.1"
-                                                        placeholder="Ej: 1800"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.potencialSolar}
                                                         className="focus:border-primary h-12 border-2 text-lg transition-colors"
                                                         value={formData.potencialSolar}
                                                         onChange={(e) => setFormData({ ...formData, potencialSolar: e.target.value })}
@@ -727,13 +723,13 @@ export default function NuevoTerreno() {
 
                                                 <div className="space-y-3">
                                                     <Label htmlFor="potencialEolico" className="text-base font-semibold">
-                                                        Potencial Eólico (m/s promedio)
+                                                        {t?.owner?.newLand?.fields?.windPotential}
                                                     </Label>
                                                     <Input
                                                         id="potencialEolico"
                                                         type="number"
                                                         step="0.1"
-                                                        placeholder="Ej: 6.5"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.potencialEolico}
                                                         className="focus:border-primary h-12 border-2 text-lg transition-colors"
                                                         value={formData.potencialEolico}
                                                         onChange={(e) => setFormData({ ...formData, potencialEolico: e.target.value })}
@@ -747,7 +743,7 @@ export default function NuevoTerreno() {
                                                 </Label>
                                                 <Textarea
                                                     id="restriccionesAmbientales"
-                                                    placeholder="Ej: Zona LIC, ZEPA, limitaciones por fauna protegida..."
+                                                    placeholder={t?.owner?.newLand?.placeholders?.restriccionesAmbientales}
                                                     className="focus:border-primary min-h-24 resize-none border-2 text-base transition-colors"
                                                     value={formData.restriccionesAmbientales}
                                                     onChange={(e) => setFormData({ ...formData, restriccionesAmbientales: e.target.value })}
@@ -763,7 +759,7 @@ export default function NuevoTerreno() {
                                                     className="text-primary focus:ring-primary h-5 w-5 rounded border-gray-300 bg-gray-100 focus:ring-2"
                                                 />
                                                 <Label htmlFor="zonasProtegidas" className="text-base font-medium">
-                                                    El terreno está en zona protegida
+                                                    {t?.owner?.newLand?.protectedAreaLabel}
                                                 </Label>
                                             </div>
                                         </div>
@@ -776,14 +772,14 @@ export default function NuevoTerreno() {
                                                 className="hover:bg-primary/5 h-14 flex-1 border-2 text-lg font-semibold"
                                             >
                                                 <ArrowLeft className="mr-2 h-5 w-5" />
-                                                Atrás
+                                                {t?.common?.back}
                                             </Button>
                                             <Button
                                                 type="button"
                                                 onClick={nextStep}
                                                 className="bg-primary hover:bg-primary/90 h-14 flex-1 text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-xl"
                                             >
-                                                Continuar
+                                                {t?.common?.continue}
                                                 <ChevronRight className="ml-2 h-5 w-5" />
                                             </Button>
                                         </div>
@@ -798,10 +794,10 @@ export default function NuevoTerreno() {
                                                 <CheckCircle className="text-primary h-12 w-12" />
                                             </div>
                                             <h2 className="from-primary to-primary/70 mb-3 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent">
-                                                Disponibilidad y Precio
+                                                {t?.owner?.newLand?.sections?.priceTitle}
                                             </h2>
                                             <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-                                                Define cómo quieres poner tu terreno a disposición de los promotores
+                                                {t?.owner?.newLand?.sections?.priceSubtitle}
                                             </p>
                                         </div>
 
@@ -832,16 +828,10 @@ export default function NuevoTerreno() {
                                                                 </div>
                                                                 <div className="flex-1">
                                                                     <div className="mb-1 text-lg font-bold">
-                                                                        {disp === "VENTA" && "Venta"}
-                                                                        {disp === "ARRENDAMIENTO" && "Arrendamiento"}
-                                                                        {disp === "DERECHO_SUPERFICIE" && "Derecho de Superficie"}
-                                                                        {disp === "AMBOS" && "Venta y Arrendamiento"}
+                                                                        {t?.owner?.newLand?.availability?.labels?.[disp]}
                                                                     </div>
                                                                     <div className="text-muted-foreground text-sm">
-                                                                        {disp === "VENTA" && "Venta completa del terreno"}
-                                                                        {disp === "ARRENDAMIENTO" && "Alquiler del terreno por años"}
-                                                                        {disp === "DERECHO_SUPERFICIE" && "Cesión del derecho de uso"}
-                                                                        {disp === "AMBOS" && "Abierto a negociar ambas opciones"}
+                                                                        {t?.owner?.newLand?.availability?.descriptions?.[disp]}
                                                                     </div>
                                                                 </div>
                                                                 {formData.disponibilidad === disp && (
@@ -860,19 +850,17 @@ export default function NuevoTerreno() {
                                                         className="flex items-center gap-2 text-base font-semibold"
                                                     >
                                                         <Euro className="h-5 w-5" />
-                                                        Precio de Venta (€)
+                                                        {t?.owner?.newLand?.fields?.salePrice}
                                                     </Label>
                                                     <Input
                                                         id="precioVenta"
                                                         type="number"
-                                                        placeholder="Ej: 500000"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.precioVenta}
                                                         className="focus:border-primary h-14 border-2 text-lg transition-colors"
                                                         value={formData.precioVenta}
                                                         onChange={(e) => setFormData({ ...formData, precioVenta: e.target.value })}
                                                     />
-                                                    <p className="text-muted-foreground text-sm">
-                                                        Precio total por la venta completa del terreno
-                                                    </p>
+                                                    <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.priceSale}</p>
                                                 </div>
                                             )}
 
@@ -883,29 +871,27 @@ export default function NuevoTerreno() {
                                                         className="flex items-center gap-2 text-base font-semibold"
                                                     >
                                                         <Euro className="h-5 w-5" />
-                                                        Precio de Arrendamiento (€/año)
+                                                        {t?.owner?.newLand?.fields?.rentPrice}
                                                     </Label>
                                                     <Input
                                                         id="precioArrendamiento"
                                                         type="number"
-                                                        placeholder="Ej: 25000"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.precioArrendamiento}
                                                         className="focus:border-primary h-14 border-2 text-lg transition-colors"
                                                         value={formData.precioArrendamiento}
                                                         onChange={(e) => setFormData({ ...formData, precioArrendamiento: e.target.value })}
                                                     />
-                                                    <p className="text-muted-foreground text-sm">
-                                                        Precio anual por el arrendamiento del terreno
-                                                    </p>
+                                                    <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.priceRent}</p>
                                                 </div>
                                             )}
 
                                             <div className="space-y-3">
                                                 <Label htmlFor="servidumbres" className="text-base font-semibold">
-                                                    Servidumbres y Cargas
+                                                    {t?.owner?.newLand?.fields?.easements}
                                                 </Label>
                                                 <Textarea
                                                     id="servidumbres"
-                                                    placeholder="Ej: Servidumbre de paso, líneas eléctricas, cauces..."
+                                                    placeholder={t?.owner?.newLand?.placeholders?.servidumbres}
                                                     className="focus:border-primary min-h-24 resize-none border-2 text-base transition-colors"
                                                     value={formData.servidumbres}
                                                     onChange={(e) => setFormData({ ...formData, servidumbres: e.target.value })}
@@ -915,7 +901,7 @@ export default function NuevoTerreno() {
                                             <div className="from-primary/5 to-primary/10 border-primary/20 rounded-2xl border-2 bg-gradient-to-r p-8">
                                                 <h3 className="text-primary mb-4 flex items-center gap-2 text-xl font-bold">
                                                     <CheckCircle className="h-6 w-6" />
-                                                    ¿Qué pasa después?
+                                                    {t?.owner?.newLand?.nextSteps?.title}
                                                 </h3>
                                                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                                     <div className="space-y-3">
@@ -923,15 +909,13 @@ export default function NuevoTerreno() {
                                                             <Badge variant="default" className="mt-1">
                                                                 1
                                                             </Badge>
-                                                            <p className="text-sm">
-                                                                Tu terreno será revisado y verificado por nuestro equipo
-                                                            </p>
+                                                            <p className="text-sm">{t?.owner?.newLand?.nextSteps?.step1}</p>
                                                         </div>
                                                         <div className="flex items-start gap-3">
                                                             <Badge variant="default" className="mt-1">
                                                                 2
                                                             </Badge>
-                                                            <p className="text-sm">Se publicará en nuestra plataforma para promotores</p>
+                                                            <p className="text-sm">{t?.owner?.newLand?.nextSteps?.step2}</p>
                                                         </div>
                                                     </div>
                                                     <div className="space-y-3">
@@ -939,13 +923,13 @@ export default function NuevoTerreno() {
                                                             <Badge variant="default" className="mt-1">
                                                                 3
                                                             </Badge>
-                                                            <p className="text-sm">Recibirás notificaciones cuando haya interesados</p>
+                                                            <p className="text-sm">{t?.owner?.newLand?.nextSteps?.step3}</p>
                                                         </div>
                                                         <div className="flex items-start gap-3">
                                                             <Badge variant="default" className="mt-1">
                                                                 4
                                                             </Badge>
-                                                            <p className="text-sm">Podrás negociar directamente con los promotores</p>
+                                                            <p className="text-sm">{t?.owner?.newLand?.nextSteps?.step4}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -960,7 +944,7 @@ export default function NuevoTerreno() {
                                                 className="hover:bg-primary/5 h-14 flex-1 border-2 text-lg font-semibold"
                                             >
                                                 <ArrowLeft className="mr-2 h-5 w-5" />
-                                                Atrás
+                                                {t?.common?.back}
                                             </Button>
                                             <Button
                                                 type="submit"
@@ -970,12 +954,12 @@ export default function NuevoTerreno() {
                                                 {isLoading ? (
                                                     <>
                                                         <Loader2 className="h-5 w-5 animate-spin" />
-                                                        Creando Terreno...
+                                                        {t?.owner?.newLand?.buttons?.creating}
                                                     </>
                                                 ) : (
                                                     <>
                                                         <CheckCircle className="h-5 w-5" />
-                                                        Publicar Terreno
+                                                        {t?.owner?.newLand?.buttons?.publish}
                                                     </>
                                                 )}
                                             </Button>

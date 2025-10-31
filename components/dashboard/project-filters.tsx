@@ -25,6 +25,7 @@ interface ProjectFiltersProps {
         allProvinces: string
         allStatuses?: string
         clearFilters: string
+        moreFilters: string
         types: {
             solar: string
             eolico: string
@@ -85,7 +86,7 @@ export function ProjectFilters({
                             className="gap-2"
                         >
                             <Filter className="h-4 w-4" />
-                            Filtros
+                            {translations.moreFilters}
                             {hasActiveFilters && <span className="bg-primary flex h-2 w-2 rounded-full" />}
                         </Button>
 

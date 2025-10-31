@@ -87,49 +87,49 @@ export default function DashboardPropietario() {
 
     // Calcular estadísticas desde los datos reales (robusto frente a campos faltantes / distintas claves)
     const stats = {
-        terrenosActivos: terrenos.filter((t) => String(t?.estado ?? "").toUpperCase() === "ACTIVO").length,
-        totalInteresados: terrenos.reduce((sum, t) => sum + (Number((t as any).interesados) || 0), 0),
-        hectareasTotales: terrenos.reduce((sum, t) => sum + (Number((t as any).superficie ?? (t as any).hectareas) || 0), 0),
-        ingresosEstimados: terrenos.reduce((sum, t) => sum + (Number((t as any).superficie ?? (t as any).hectareas) || 0) * 2500, 0),
+        terrenosActivos: terrenos.filter((terrain) => String(terrain?.estado ?? "").toUpperCase() === "ACTIVO").length,
+        totalInteresados: terrenos.reduce((sum, terrain) => sum + (Number(terrain.interesados) || 0), 0),
+        hectareasTotales: terrenos.reduce((sum, terrain) => sum + (Number(terrain.superficie ?? terrain.hectareas) || 0), 0),
+        ingresosEstimados: terrenos.reduce((sum, terrain) => sum + (Number(terrain.superficie ?? terrain.hectareas) || 0) * 2500, 0),
     }
 
     const hasTerrenos = terrenos.length > 0
 
-    // Mapear los terrenos del backend al shape que espera la tabla del dashboard
-    const mappedTerrenos = terrenos.map((t) => {
-        const hectareas = Number((t as any).superficie ?? (t as any).hectareas) || 0
+        // Mapear los terrenos del backend al shape que espera la tabla del dashboard
+        const mappedTerrenos = terrenos.map((terrain) => {
+                const hectareas = Number(terrain.superficie ?? terrain.hectareas) || 0
 
-        const tipo = (t as any).tipo
-            ? String((t as any).tipo)
-            : t.tipoSuelo
-              ? // heurística simple: el frontend usa etiquetas legibles
-                t.tipoSuelo === "NO_URBANIZABLE"
-                  ? "Híbrido"
-                  : "Solar"
-              : "Otro"
+                const tipo = terrain.tipo
+                        ? String(terrain.tipo)
+                        : terrain.tipoSuelo
+                            ? // heurística simple: el frontend usa etiquetas legibles
+                                terrain.tipoSuelo === "NO_URBANIZABLE"
+                                    ? "Híbrido"
+                                    : "Solar"
+                            : "Otro"
 
-        const estadoRaw = String(t?.estado ?? "").toUpperCase()
-        const estado =
-            estadoRaw === "ACTIVO"
-                ? "Activo"
-                : estadoRaw === "PAUSADO"
-                  ? "Pausado"
-                  : estadoRaw === "PENDIENTE_REVISION"
-                    ? "En revisión"
-                    : estadoRaw === "RECHAZADO" || estadoRaw === "VENDIDO"
-                      ? "No disponible"
-                      : String(t?.estado ?? "")
+                const estadoRaw = String(terrain?.estado ?? "").toUpperCase()
+                const estado =
+                        estadoRaw === "ACTIVO"
+                                ? "Activo"
+                                : estadoRaw === "PAUSADO"
+                                    ? "Pausado"
+                                    : estadoRaw === "PENDIENTE_REVISION"
+                                        ? "En revisión"
+                                        : estadoRaw === "RECHAZADO" || estadoRaw === "VENDIDO"
+                                            ? "No disponible"
+                                            : String(terrain?.estado ?? "")
 
-        return {
-            id: t.id,
-            ubicacion: t.titulo || t.direccion || `${t.municipio}, ${t.provincia}`,
-            referencia: (t as any).referenciaCatastral ?? t.referenciaCatastral ?? t.id,
-            hectareas,
-            tipo: tipo as any,
-            estado: estado as any,
-            interesados: Number((t as any).interesados) || 0,
-        }
-    })
+                return {
+                        id: terrain.id,
+                        ubicacion: terrain.titulo || terrain.direccion || `${terrain.municipio}, ${terrain.provincia}`,
+                        referencia: terrain.referenciaCatastral ?? terrain.referenciaCatastral ?? terrain.id,
+                        hectareas,
+                        tipo: tipo as any,
+                        estado: estado as any,
+                        interesados: Number(terrain.interesados) || 0,
+                }
+        })
 
     return (
         <ProtectedRoute requiredRole="PROPIETARIO" redirectTo="/login/propietario">

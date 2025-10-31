@@ -18,7 +18,7 @@ export function Sidebar() {
             <Button
                 variant="ghost"
                 size="icon"
-                aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-label={isOpen ? t?.common?.closeMenu : t?.common?.openMenu}
                 className="fixed top-4 left-4 z-50 lg:hidden"
                 onClick={() => setIsOpen(!isOpen)}
             >
@@ -80,11 +80,11 @@ export function Sidebar() {
                         <LanguageSwitcher />
                         <Link href="/login/propietario" className="block">
                             <Button variant="outline" className="w-full bg-transparent">
-                                Iniciar sesión
+                                {t?.common?.login}
                             </Button>
                         </Link>
                         <Link href="/login/propietario" className="block">
-                            <Button className="bg-primary hover:bg-primary/90 w-full">Registrarse</Button>
+                            <Button className="bg-primary hover:bg-primary/90 w-full">{t?.common?.register}</Button>
                         </Link>
                     </div>
                 </div>
