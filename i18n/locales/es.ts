@@ -75,6 +75,7 @@ export const es = {
                 borrador: "Borrador",
                 pendienteRevision: "Pendiente de revisión",
             },
+            matchesLabel: "Coincidencias",
         },
         newLand: {
             title: "Nuevo Terreno",
@@ -343,6 +344,7 @@ export const es = {
         logout: "Cerrar Sesión",
         welcome: "Bienvenido",
         view: "Ver",
+        viewDetails: "Ver detalles",
         errorTitle: "Error",
         showPassword: "Mostrar contraseña",
         hidePassword: "Ocultar contraseña",
@@ -832,7 +834,11 @@ export const es = {
                     subtitle: "Explora proyectos de energía renovable y encuentra oportunidades para tus terrenos",
                     searchPlaceholder: "Buscar por nombre, descripción o ubicación...",
                     filters: {
-                        title: "Filtros",
+                        title: "Filtros de búsqueda",
+                        subtitle: "Refina tu búsqueda para encontrar proyectos específicos",
+                        projectTypeLabel: "Tipo de proyecto",
+                        provinceLabel: "Provincia",
+                        statusLabel: "Estado",
                         allTypes: "Todos los tipos",
                         allProvinces: "Todas las provincias",
                         allStatuses: "Todos los estados",

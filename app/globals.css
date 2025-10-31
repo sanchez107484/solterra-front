@@ -9,6 +9,11 @@
     --background: oklch(1 0 0); /* #FFFFFF - Blanco puro */
     --foreground: oklch(0.12 0.005 240); /* #111111 - Negro */
 
+    /* App background: tinte verde ultra-sutil para contraste con cards */
+    --app-bg: #f7faf5; /* blanco con ~2% tinte verde sostenible */
+    --app-surface: #ffffff; /* cards/modales - blanco puro */
+    --app-border: #e8f0e4; /* borde sutil verde muy claro */
+
     /* Primary: Verde principal */
     --primary: oklch(0.6 0.15 135); /* #59A52C */
     --primary-foreground: oklch(1 0 0); /* Blanco */
@@ -55,6 +60,12 @@
 .dark {
     --background: oklch(0.12 0.005 240); /* #111111 - Negro */
     --foreground: oklch(0.96 0.03 95); /* #f8f3d4 - Crema */
+
+    /* App background dark: negro con tinte verde oscuro */
+    --app-bg: #0d1410; /* negro con tinte verde sostenible */
+    --app-surface: #1a1f1c; /* cards oscuros con tinte verde */
+    --app-border: #1e2821; /* borde sutil verde oscuro */
+
     --primary: oklch(0.6 0.15 135); /* #59A52C - Verde principal */
     --primary-foreground: oklch(1 0 0); /* Blanco */
     /* Secondary in dark: use a darker amber for contrast */
@@ -86,6 +97,9 @@
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
+    --color-app-bg: var(--app-bg);
+    --color-app-surface: var(--app-surface);
+    --color-app-border: var(--app-border);
     --color-card: var(--card);
     --color-card-foreground: var(--card-foreground);
     --color-popover: var(--popover);
@@ -122,7 +136,8 @@
         @apply border-border outline-ring/50;
     }
     body {
-        @apply bg-background text-foreground;
+        background-color: var(--app-bg);
+        color: var(--foreground);
     }
 }
 
@@ -130,5 +145,11 @@
 @layer utilities {
     .bg-icon {
         background-color: var(--icon) !important;
+    }
+    .bg-app-surface {
+        background-color: var(--app-surface);
+    }
+    .border-app-border {
+        border-color: var(--app-border);
     }
 }

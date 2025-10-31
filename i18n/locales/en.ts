@@ -75,6 +75,7 @@ export const en = {
                 borrador: "Draft",
                 pendienteRevision: "Pending review",
             },
+            matchesLabel: "Matches",
         },
         newLand: {
             title: "New Land",
@@ -346,6 +347,7 @@ export const en = {
         logout: "Logout",
         welcome: "Welcome",
         view: "View",
+        viewDetails: "View details",
         errorTitle: "Error",
         showPassword: "Show password",
         hidePassword: "Hide password",
@@ -824,7 +826,11 @@ export const en = {
                     subtitle: "Explore renewable energy projects and find opportunities for your lands",
                     searchPlaceholder: "Search by name, description or location...",
                     filters: {
-                        title: "Filters",
+                        title: "Search Filters",
+                        subtitle: "Refine your search to find specific projects",
+                        projectTypeLabel: "Project type",
+                        provinceLabel: "Province",
+                        statusLabel: "Status",
                         allTypes: "All types",
                         allProvinces: "All provinces",
                         allStatuses: "All statuses",
@@ -875,6 +881,7 @@ export const en = {
                     sold: "Sold",
                     totalValue: "Total Value",
                 },
+                matchesLabel: "Matches",
                 states: {
                     active: "Active",
                     sold: "Sold",

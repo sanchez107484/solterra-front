@@ -26,6 +26,11 @@ interface ProjectFiltersProps {
         allStatuses?: string
         clearFilters: string
         moreFilters: string
+        filterTitle?: string
+        filterSubtitle?: string
+        projectTypeLabel?: string
+        provinceLabel?: string
+        statusLabel?: string
         types: {
             solar: string
             eolico: string
@@ -63,10 +68,15 @@ export function ProjectFilters({
         searchTerm || tipoFilter !== "TODOS" || provinciaFilter !== "TODOS" || (estadoFilter && estadoFilter !== "TODOS")
 
     return (
-        <Card className={`mb-6 ${className}`}>
-            <div className="p-6">
+        <Card className={`mb-6 overflow-hidden p-0 ${className}`}>
+            {/* Título de filtros */}
+            <div className="from-primary/5 via-accent/5 border-b bg-gradient-to-r to-transparent px-4 py-3">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{translations.filterTitle || "Filtros de búsqueda"}</h3>
+            </div>
+
+            <div className="mb-6 px-4">
                 {/* Barra de búsqueda principal */}
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                     <div className="relative max-w-md flex-1">
                         <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                         <Input
@@ -101,10 +111,10 @@ export function ProjectFilters({
 
                 {/* Filtros expandidos */}
                 {isExpanded && (
-                    <div className="mt-6 grid gap-4 border-t pt-6 sm:grid-cols-2 lg:grid-cols-3">
-                        <div className="space-y-2">
-                            <Label htmlFor="tipo-filter" className="text-sm font-medium">
-                                Tipo de proyecto
+                    <div className="mt-4 grid gap-3 border-t pt-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="space-y-1.5">
+                            <Label htmlFor="tipo-filter" className="text-xs font-medium">
+                                {translations.projectTypeLabel || "Tipo de proyecto"}
                             </Label>
                             <Select value={tipoFilter} onValueChange={onTipoChange}>
                                 <SelectTrigger id="tipo-filter">
@@ -120,9 +130,9 @@ export function ProjectFilters({
                             </Select>
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="provincia-filter" className="text-sm font-medium">
-                                Provincia
+                        <div className="space-y-1.5">
+                            <Label htmlFor="provincia-filter" className="text-xs font-medium">
+                                {translations.provinceLabel || "Provincia"}
                             </Label>
                             <Select value={provinciaFilter} onValueChange={onProvinciaChange}>
                                 <SelectTrigger id="provincia-filter">
@@ -140,9 +150,9 @@ export function ProjectFilters({
                         </div>
 
                         {showEstadoFilter && estadoFilter && onEstadoChange && translations.allStatuses && translations.statuses && (
-                            <div className="space-y-2">
-                                <Label htmlFor="estado-filter" className="text-sm font-medium">
-                                    Estado
+                            <div className="space-y-1.5">
+                                <Label htmlFor="estado-filter" className="text-xs font-medium">
+                                    {translations.statusLabel || "Estado"}
                                 </Label>
                                 <Select value={estadoFilter} onValueChange={onEstadoChange}>
                                     <SelectTrigger id="estado-filter">

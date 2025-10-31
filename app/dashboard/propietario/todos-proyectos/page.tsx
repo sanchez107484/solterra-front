@@ -91,7 +91,7 @@ const getStatusLabel = (estado: string, t: any) => {
     }
 }
 
-type SortField = "titulo" | "tipo" | "potenciaObjetivo" | "provincia" | "estado" | "creadoEn"
+type SortField = "titulo" | "tipo" | "potenciaObjetivo" | "provincia" | "estado" | "promotor" | "creadoEn"
 type SortOrder = "asc" | "desc"
 
 export default function TodosProyectosPage() {
@@ -151,6 +151,9 @@ export default function TodosProyectosPage() {
             if (sortField === "creadoEn") {
                 aValue = new Date(aValue).getTime()
                 bValue = new Date(bValue).getTime()
+            } else if (sortField === "promotor") {
+                aValue = a.promotor?.nombre || a.promotor?.email || ""
+                bValue = b.promotor?.nombre || b.promotor?.email || ""
             }
 
             if (aValue === null || aValue === undefined) return 1
@@ -226,6 +229,13 @@ export default function TodosProyectosPage() {
                         allStatuses: t?.dashboard?.owner?.projects?.allProjects?.filters?.allStatuses || "Todos los estados",
                         clearFilters: t?.dashboard?.owner?.projects?.allProjects?.filters?.clearFilters || "Limpiar filtros",
                         moreFilters: t?.dashboard?.owner?.projects?.allProjects?.filters?.moreFilters || "Más filtros",
+                        filterTitle: t?.dashboard?.owner?.projects?.allProjects?.filters?.title || "Filtros de búsqueda",
+                        filterSubtitle:
+                            t?.dashboard?.owner?.projects?.allProjects?.filters?.subtitle ||
+                            "Refina tu búsqueda para encontrar proyectos específicos",
+                        projectTypeLabel: t?.dashboard?.owner?.projects?.allProjects?.filters?.projectTypeLabel || "Tipo de proyecto",
+                        provinceLabel: t?.dashboard?.owner?.projects?.allProjects?.filters?.provinceLabel || "Provincia",
+                        statusLabel: t?.dashboard?.owner?.projects?.allProjects?.filters?.statusLabel || "Estado",
                         types: {
                             solar: t?.dashboard?.owner?.projects?.allProjects?.types?.solar || "Solar",
                             eolico: t?.dashboard?.owner?.projects?.allProjects?.types?.eolico || "Eólico",
@@ -258,53 +268,60 @@ export default function TodosProyectosPage() {
                         </div>
                     </Card>
                 ) : filteredAndSortedProyectos.length > 0 ? (
-                    <Card>
+                    <Card className="overflow-hidden p-0">
                         <div className="overflow-x-auto">
                             <Table>
                                 <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="min-w-[250px]">
+                                    <TableRow className="from-primary/5 via-accent/5 hover:from-primary/10 hover:via-accent/10 h-14 bg-gradient-to-r to-transparent">
+                                        <TableHead className="min-w-[250px] px-4">
                                             <div className="flex items-center gap-1">
                                                 {t?.dashboard?.owner?.projects?.allProjects?.table?.project || "Proyecto"}
                                                 <SortIcon field="titulo" />
                                             </div>
                                         </TableHead>
-                                        <TableHead>
+                                        <TableHead className="px-4">
                                             <div className="flex items-center gap-1">
                                                 {t?.dashboard?.owner?.projects?.allProjects?.table?.type || "Tipo"}
                                                 <SortIcon field="tipo" />
                                             </div>
                                         </TableHead>
-                                        <TableHead>
+                                        <TableHead className="px-4">
                                             <div className="flex items-center gap-1">
                                                 {t?.dashboard?.owner?.projects?.allProjects?.table?.power || "Potencia"}
                                                 <SortIcon field="potenciaObjetivo" />
                                             </div>
                                         </TableHead>
-                                        <TableHead>
+                                        <TableHead className="px-4">
                                             <div className="flex items-center gap-1">
                                                 {t?.dashboard?.owner?.projects?.allProjects?.table?.location || "Ubicación"}
                                                 <SortIcon field="provincia" />
                                             </div>
                                         </TableHead>
-                                        <TableHead>
+                                        <TableHead className="px-4">
                                             <div className="flex items-center gap-1">
                                                 {t?.dashboard?.owner?.projects?.allProjects?.table?.status || "Estado"}
                                                 <SortIcon field="estado" />
                                             </div>
                                         </TableHead>
-                                        <TableHead>{t?.dashboard?.owner?.projects?.allProjects?.table?.promoter || "Promotor"}</TableHead>
-                                        <TableHead className="text-right">
+                                        <TableHead className="px-4">
+                                            <div className="flex items-center gap-1">
+                                                {t?.dashboard?.owner?.projects?.allProjects?.table?.promoter || "Promotor"}
+                                                <SortIcon field="promotor" />
+                                            </div>
+                                        </TableHead>
+                                        <TableHead className="px-4 text-right">
                                             {t?.dashboard?.owner?.projects?.allProjects?.table?.actions || "Acciones"}
                                         </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {filteredAndSortedProyectos.map((proyecto: any) => (
-                                        <TableRow key={proyecto.id} className="hover:bg-muted/50">
-                                            <TableCell>
+                                        <TableRow key={proyecto.id} className="hover:bg-muted/50 h-20">
+                                            <TableCell className="px-4 py-4">
                                                 <div className="flex items-start gap-3">
-                                                    <div className="flex-shrink-0 pt-1">{getProjectTypeIcon(proyecto.tipo)}</div>
+                                                    <div className="from-primary/10 to-accent/10 flex-shrink-0 rounded-lg bg-gradient-to-br p-2">
+                                                        {getProjectTypeIcon(proyecto.tipo)}
+                                                    </div>
                                                     <div className="min-w-0">
                                                         <div className="text-foreground font-medium">{proyecto.titulo}</div>
                                                         {proyecto.descripcion && (
@@ -315,48 +332,55 @@ export default function TodosProyectosPage() {
                                                     </div>
                                                 </div>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="px-4 py-4">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-sm">{getProjectTypeLabel(proyecto.tipo, t)}</span>
+                                                    <span className="text-sm font-medium">{getProjectTypeLabel(proyecto.tipo, t)}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="px-4 py-4">
                                                 {proyecto.potenciaObjetivo ? (
-                                                    <div className="flex items-center gap-1 text-sm">
-                                                        <TrendingUp className="h-3 w-3 text-purple-500" />
-                                                        <span className="font-medium">{proyecto.potenciaObjetivo} MW</span>
+                                                    <div className="flex items-center gap-1.5 text-sm">
+                                                        <div className="rounded-full bg-purple-100 p-1 dark:bg-purple-900/30">
+                                                            <TrendingUp className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                                                        </div>
+                                                        <span className="font-medium">{proyecto.potenciaObjetivo}</span>
+                                                        <span className="text-muted-foreground">MW</span>
                                                     </div>
                                                 ) : (
                                                     <span className="text-muted-foreground text-sm">-</span>
                                                 )}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="px-4 py-4">
                                                 {proyecto.provincia ? (
-                                                    <div className="flex items-center gap-1 text-sm">
-                                                        <MapPin className="h-3 w-3 text-red-500" />
-                                                        <span>{proyecto.provincia}</span>
+                                                    <div className="flex items-center gap-1.5 text-sm">
+                                                        <div className="rounded-full bg-red-100 p-1 dark:bg-red-900/30">
+                                                            <MapPin className="h-3 w-3 text-red-600 dark:text-red-400" />
+                                                        </div>
+                                                        <span className="font-medium">{proyecto.provincia}</span>
                                                     </div>
                                                 ) : (
                                                     <span className="text-muted-foreground text-sm">-</span>
                                                 )}
                                             </TableCell>
-                                            <TableCell>
-                                                <Badge className={getStatusColor(proyecto.estado)}>
+                                            <TableCell className="px-4 py-4">
+                                                <Badge className={`${getStatusColor(proyecto.estado)}`}>
                                                     {getStatusLabel(proyecto.estado, t)}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="px-4 py-4">
                                                 <div className="flex items-center gap-2 text-sm">
-                                                    <Briefcase className="h-3 w-3 text-blue-500" />
-                                                    <span className="truncate">
+                                                    <div className="rounded-full bg-blue-100 p-1 dark:bg-blue-900/30">
+                                                        <Briefcase className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                                                    </div>
+                                                    <span className="truncate font-medium">
                                                         {proyecto.promotor?.nombre || proyecto.promotor?.email || "-"}
                                                     </span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-right">
+                                            <TableCell className="px-4 py-4 text-right">
                                                 <Link href={`/dashboard/propietario/proyectos/${proyecto.id}`}>
-                                                    <Button variant="outline" size="sm" className="gap-2">
-                                                        <Eye className="h-3 w-3" />
+                                                    <Button variant="default" size="sm" className="gap-2">
+                                                        <Eye className="h-3.5 w-3.5" />
                                                         {t?.dashboard?.owner?.projects?.viewDetails || "Ver detalles"}
                                                     </Button>
                                                 </Link>
