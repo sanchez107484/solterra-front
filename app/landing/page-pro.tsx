@@ -3,7 +3,6 @@
 import { FAQSection } from "@/components/landing/faq-section"
 import { HeroSection } from "@/components/landing/hero-section"
 import { SeccionBeneficios } from "@/components/landing/seccion-beneficios"
-import { SeccionComoFunciona } from "@/components/landing/seccion-como-funciona"
 import { SeccionComoFuncionaSplit } from "@/components/landing/seccion-como-funciona-split"
 import { StatsSection } from "@/components/landing/stats-section"
 import StandardLayout from "@/components/layouts/StandardLayout"
@@ -15,7 +14,7 @@ export default function LandingPage() {
             <StatsSection />
             <SeccionBeneficios />
             <SeccionComoFuncionaSplit showCTA={true} compactMode={false} />
-            <SeccionComoFunciona showCTA={true} compactMode={false} />
+            {/* <SeccionComoFunciona showCTA={true} compactMode={false} /> */}
             {/* <SeccionComoFunciona /> */}
             {/* <TestimonialsSection /> */}
             <FAQSection />

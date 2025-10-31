@@ -1,5 +1,6 @@
 "use client"
 
+import { BadgePill } from "@/components/ui/badge-pill"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FileText, Handshake, Search, UserPlus } from "lucide-react"
@@ -12,148 +13,147 @@ interface SplitProps {
 }
 
 export function SeccionComoFuncionaSplit({ showCTA = true, compactMode = false }: SplitProps) {
-    const sectionPadding = compactMode ? "py-8" : "py-16"
-    const titleSize = compactMode ? "text-2xl" : "text-3xl"
-    const subtitleSize = compactMode ? "text-base" : "text-lg"
+    const sectionPadding = compactMode ? "py-12" : "py-20"
+    const titleSize = compactMode ? "text-3xl" : "text-4xl md:text-5xl"
+    const subtitleSize = compactMode ? "text-base" : "text-xl"
     const { t } = useTranslations()
 
+    const iconMap = [UserPlus, FileText, Search, Handshake]
+
     const propietarios = [
-        {
-            icon: UserPlus,
-            step: "PASO 1",
-            title: "Regístrate gratis",
-            description: "Crea tu cuenta como propietario en menos de 2 minutos. Sin costes ni compromisos.",
-        },
-        {
-            icon: FileText,
-            step: "PASO 2",
-            title: "Lista tu terreno",
-            description: "Añade información sobre tu propiedad: ubicación, superficie, características.",
-        },
-        {
-            icon: Search,
-            step: "PASO 3",
-            title: "Recibe propuestas",
-            description: "Los promotores interesados contactarán contigo. Compara ofertas y elige la mejor opción.",
-        },
-        {
-            icon: Handshake,
-            step: "PASO 4",
-            title: "Cierra el acuerdo",
-            description: "Firma el contrato y comienza a generar ingresos pasivos durante 20-25 años.",
-        },
+        t.howItWorks?.howItWorksSplit?.landowners?.step1,
+        t.howItWorks?.howItWorksSplit?.landowners?.step2,
+        t.howItWorks?.howItWorksSplit?.landowners?.step3,
+        t.howItWorks?.howItWorksSplit?.landowners?.step4,
     ]
 
     const promotores = [
-        {
-            icon: UserPlus,
-            step: "PASO 1",
-            title: "Regístrate como promotor",
-            description: "Crea tu perfil empresarial y accede a nuestra base de datos de terrenos disponibles.",
-        },
-        {
-            icon: FileText,
-            step: "PASO 2",
-            title: "Define tu proyecto",
-            description: "Especifica tipo de energía, capacidad, ubicación preferida y requisitos técnicos.",
-        },
-        {
-            icon: Search,
-            step: "PASO 3",
-            title: "Recibe matches",
-            description: "Nuestro algoritmo te mostrará terrenos compatibles con tu proyecto. Analiza y compara opciones.",
-        },
-        {
-            icon: Handshake,
-            step: "PASO 4",
-            title: "Contacta y negocia",
-            description: "Comunícate directamente con propietarios y cierra acuerdos de forma ágil y transparente.",
-        },
+        t.howItWorks?.howItWorksSplit?.developers?.step1,
+        t.howItWorks?.howItWorksSplit?.developers?.step2,
+        t.howItWorks?.howItWorksSplit?.developers?.step3,
+        t.howItWorks?.howItWorksSplit?.developers?.step4,
     ]
 
     return (
-        <section className={`bg-background px-4 ${sectionPadding}`}>
-            <div className="container mx-auto max-w-6xl">
-                <div className="mb-12 text-center">
-                    <h2 className={`mb-4 ${titleSize} font-bold`}>{t.howItWorks?.title}</h2>
-                    <p className={`text-muted-foreground mx-auto max-w-2xl ${subtitleSize}`}>{t.howItWorks?.quick?.subtitle}</p>
+        <section className={`from-background via-muted/20 to-background bg-gradient-to-b px-4 ${sectionPadding}`}>
+            <div className="container mx-auto max-w-7xl">
+                {/* Header */}
+                <div className="mb-16 text-center">
+                    <h2 className={`mb-6 font-bold tracking-tight ${titleSize}`}>{t.howItWorks?.title}</h2>
+                    <p className={`text-muted-foreground mx-auto max-w-3xl ${subtitleSize}`}>{t.howItWorks?.quick?.subtitle}</p>
                 </div>
 
-                <div className="grid gap-8 md:grid-cols-2">
+                {/* Two Column Grid */}
+                <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
                     {/* Izquierda: Propietarios */}
-                    <div>
-                        <div className="mb-6 flex items-center gap-3">
-                            <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-3 py-1 font-semibold">
-                                {t.howItWorks?.landowners?.title}
-                            </div>
+                    {/* Izquierda: Propietarios */}
+                    <div className="space-y-8">
+                        {/* Badge */}
+                        <div className="flex items-center justify-center lg:justify-start">
+                            <BadgePill variant="primary">{t.howItWorks?.landowners?.title}</BadgePill>
                         </div>
 
+                        {/* Steps */}
                         <div className="space-y-6">
-                            {propietarios.map((p, i) => {
-                                const Icon = p.icon
+                            {propietarios.map((step, i) => {
+                                const Icon = iconMap[i]
+                                if (!step) return null
                                 return (
-                                    <Card key={i} className="border-2 p-6 transition-shadow hover:shadow-lg">
-                                        <div className="flex items-start gap-4">
-                                            <div className="bg-primary/10 shrink-0 rounded-lg p-3">
-                                                <Icon className="text-primary h-6 w-6" />
+                                    <Card
+                                        key={i}
+                                        className="group bg-card hover:border-primary/50 relative overflow-hidden border-2 p-6 transition-all duration-300 hover:shadow-xl"
+                                    >
+                                        {/* Gradient Background on Hover */}
+                                        <div className="from-primary/5 absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                                        <div className="relative flex items-start gap-5">
+                                            {/* Icon */}
+                                            <div className="from-primary/10 to-primary/5 ring-primary/10 flex-shrink-0 rounded-xl bg-gradient-to-br p-4 ring-1 transition-transform duration-300 group-hover:scale-110">
+                                                <Icon className="text-primary h-7 w-7" />
                                             </div>
-                                            <div>
-                                                <div className="text-primary mb-1 text-sm font-semibold">{p.step}</div>
-                                                <h4 className="mb-2 text-lg font-semibold">{p.title}</h4>
-                                                <p className="text-muted-foreground text-sm">{p.description}</p>
+
+                                            {/* Content */}
+                                            <div className="flex-1 space-y-2">
+                                                <div className="bg-primary/10 text-primary mb-2 inline-block rounded-md px-3 py-1 text-xs font-bold">
+                                                    {step.step}
+                                                </div>
+                                                <h4 className="text-foreground text-xl font-bold">{step.title}</h4>
+                                                <p className="text-muted-foreground leading-relaxed">{step.description}</p>
                                             </div>
                                         </div>
                                     </Card>
                                 )
                             })}
-
-                            {showCTA && (
-                                <div className="mt-4 text-center">
-                                    <Link href="/login/propietario">
-                                        <Button className="bg-primary hover:bg-primary/90 h-12 px-6">{t.cta?.landowner}</Button>
-                                    </Link>
-                                </div>
-                            )}
                         </div>
+
+                        {/* CTA Button */}
+                        {showCTA && (
+                            <div className="flex justify-center pt-4 lg:justify-start">
+                                <Link href="/login/propietario" className="w-full sm:w-auto">
+                                    <Button
+                                        size="lg"
+                                        className="from-primary to-primary/90 h-14 w-full bg-gradient-to-r px-8 text-base font-semibold shadow-lg transition-all hover:scale-105 hover:shadow-xl sm:w-auto"
+                                    >
+                                        {t.cta?.landowner}
+                                    </Button>
+                                </Link>
+                            </div>
+                        )}
                     </div>
 
                     {/* Derecha: Promotores */}
-                    <div>
-                        <div className="mb-6 flex items-center justify-end gap-3 md:justify-start">
-                            <div className="bg-secondary/10 text-secondary inline-flex items-center gap-2 rounded-full px-3 py-1 font-semibold">
-                                {t.howItWorks?.developers?.title}
-                            </div>
+                    <div className="space-y-8">
+                        {/* Badge */}
+                        <div className="flex items-center justify-center lg:justify-start">
+                            <BadgePill variant="secondary">{t.howItWorks?.developers?.title}</BadgePill>
                         </div>
 
+                        {/* Steps */}
                         <div className="space-y-6">
-                            {promotores.map((p, i) => {
-                                const Icon = p.icon
+                            {promotores.map((step, i) => {
+                                const Icon = iconMap[i]
+                                if (!step) return null
                                 return (
-                                    <Card key={i} className="border-2 p-6 transition-shadow hover:shadow-lg">
-                                        <div className="flex items-start gap-4">
-                                            <div className="bg-secondary/10 shrink-0 rounded-lg p-3">
-                                                <Icon className="text-secondary h-6 w-6" />
+                                    <Card
+                                        key={i}
+                                        className="group bg-card hover:border-secondary/50 relative overflow-hidden border-2 p-6 transition-all duration-300 hover:shadow-xl"
+                                    >
+                                        {/* Gradient Background on Hover */}
+                                        <div className="from-secondary/5 absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                                        <div className="relative flex items-start gap-5">
+                                            {/* Icon */}
+                                            <div className="from-secondary/10 to-secondary/5 ring-secondary/10 flex-shrink-0 rounded-xl bg-gradient-to-br p-4 ring-1 transition-transform duration-300 group-hover:scale-110">
+                                                <Icon className="text-secondary h-7 w-7" />
                                             </div>
-                                            <div>
-                                                <div className="text-secondary mb-1 text-sm font-semibold">{p.step}</div>
-                                                <h4 className="mb-2 text-lg font-semibold">{p.title}</h4>
-                                                <p className="text-muted-foreground text-sm">{p.description}</p>
+
+                                            {/* Content */}
+                                            <div className="flex-1 space-y-2">
+                                                <div className="bg-secondary/10 text-secondary mb-2 inline-block rounded-md px-3 py-1 text-xs font-bold">
+                                                    {step.step}
+                                                </div>
+                                                <h4 className="text-foreground text-xl font-bold">{step.title}</h4>
+                                                <p className="text-muted-foreground leading-relaxed">{step.description}</p>
                                             </div>
                                         </div>
                                     </Card>
                                 )
                             })}
-
-                            {showCTA && (
-                                <div className="mt-4 text-center md:text-right">
-                                    <Link href="/login/promotor">
-                                        <Button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground h-12 px-6">
-                                            {t.cta?.developer}
-                                        </Button>
-                                    </Link>
-                                </div>
-                            )}
                         </div>
+
+                        {/* CTA Button */}
+                        {showCTA && (
+                            <div className="flex justify-center pt-4 lg:justify-start">
+                                <Link href="/login/promotor" className="w-full sm:w-auto">
+                                    <Button
+                                        size="lg"
+                                        className="from-secondary to-secondary/90 h-14 w-full bg-gradient-to-r px-8 text-base font-semibold shadow-lg transition-all hover:scale-105 hover:shadow-xl sm:w-auto"
+                                    >
+                                        {t.cta?.developer}
+                                    </Button>
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

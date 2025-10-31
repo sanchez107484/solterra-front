@@ -1,5 +1,6 @@
 "use client"
 
+import { BadgePill } from "@/components/ui/badge-pill"
 import { Card } from "@/components/ui/card"
 import { useTranslations } from "@/i18n/i18nContext"
 import { Calendar, Euro, MapPin, TrendingUp } from "lucide-react"
@@ -120,9 +121,11 @@ export function StatsSection() {
         <section className="from-background to-muted/30 bg-gradient-to-b py-20 md:py-32">
             <div className="container mx-auto px-4">
                 <div className="mb-16 text-center">
-                    <div className="bg-primary/10 border-primary/20 mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-2">
-                        <TrendingUp className="text-primary h-4 w-4" />
-                        <span className="text-primary text-sm font-semibold">{t.stats?.impactLabel}</span>
+                    <div className="mb-4">
+                        <BadgePill variant="primary">
+                            <TrendingUp className="h-4 w-4" />
+                            {t.stats?.impactLabel}
+                        </BadgePill>
                     </div>
 
                     <h2 className="mb-4 text-4xl font-bold md:text-5xl">

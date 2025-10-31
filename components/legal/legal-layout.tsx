@@ -50,7 +50,7 @@ export function LegalLayout({ children, title, lastUpdated, icon = "legal" }: Le
                 <div className="mx-auto max-w-4xl">
                     {/* Logo de Solterra */}
                     <div className="bg-card mb-8 flex items-center gap-3 rounded-lg border p-4">
-                        <Image src="/solterra-logo.svg" alt="Solterra Advisory" width={40} height={40} className="flex-shrink-0" />
+                        <Image src="/solterra-logo2.svg" alt="Solterra Advisory" width={40} height={40} className="flex-shrink-0" />
                         <div>
                             <p className="font-semibold text-gray-900 dark:text-white">Solterra Advisory S.L.</p>
                             <p className="text-muted-foreground text-sm">Plataforma de conexión para proyectos de energía renovable</p>

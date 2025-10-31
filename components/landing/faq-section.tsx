@@ -67,7 +67,7 @@ export function FAQSection() {
     const filteredFaqs = activeCategory === "all" ? faqs : faqs.filter((faq) => faq.category === activeCategory)
 
     return (
-        <section className="py-20 md:py-32">
+        <section className="pt-20 md:pt-32">
             <div className="container mx-auto px-4">
                 <div className="mb-16 text-center">
                     <div className="bg-secondary/10 border-secondary/20 mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-2">
@@ -153,7 +153,6 @@ export function FAQSection() {
 
                 {/* Contact CTA */}
                 <div className="mt-16 text-center">
-                    <p className="text-muted-foreground mb-4">{t.faq?.contactCta}</p>
                     <a
                         href={`mailto:${t.faq?.email}`}
                         className="text-primary inline-flex items-center gap-2 font-semibold hover:underline"
