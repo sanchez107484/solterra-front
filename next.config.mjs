@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import path from 'path'
+
 const nextConfig = {
     // En producción, NO ignorar errores de ESLint y TypeScript
     eslint: {
@@ -60,3 +62,15 @@ const nextConfig = {
 }
 
 export default nextConfig
+
+// Ensure webpack resolves '@' to project root — helpful for Linux builds on Vercel
+// This makes imports like '@/components/ui/button' reliably resolve regardless of
+// case-sensitivity or environment differences.
+nextConfig.webpack = function (config) {
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+        ...(config.resolve.alias || {}),
+        '@': path.resolve(process.cwd()),
+    }
+    return config
+}
