@@ -57,7 +57,7 @@ export function HeroSection() {
                             <div className="from-primary/20 via-secondary/20 to-accent/20 absolute inset-0 animate-pulse rounded-full bg-gradient-to-br blur-2xl" />
                             <Image
                                 src="/solterra-logo-grande.png"
-                                alt="Solterra Advisory"
+                                alt="Solterra Advisory - Plataforma líder de conexión entre terrenos rurales y proyectos de energía renovable solar y eólica en España"
                                 width={400}
                                 height={400}
                                 className="relative drop-shadow-2xl"

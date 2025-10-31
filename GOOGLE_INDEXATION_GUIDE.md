@@ -3,6 +3,7 @@
 ## 📋 Resumen de Acciones Completadas
 
 ### ✅ 1. Archivos SEO Creados
+
 - **`app/sitemap.ts`**: Sitemap dinámico con todas las páginas públicas
 - **`app/robots.ts`**: Archivo robots.txt que permite indexación y excluye dashboard/api
 - **`components/seo/structured-data.tsx`**: JSON-LD Schema.org (ya existente)
@@ -17,37 +18,43 @@
 Una vez que Vercel despliegue los cambios (2-3 minutos), verifica:
 
 1. **Sitemap XML:**
-   ```
-   https://www.solterradvisory.com/sitemap.xml
-   ```
-   Deberías ver un XML con todas las URLs de tu sitio.
+
+    ```
+    https://www.solterradvisory.com/sitemap.xml
+    ```
+
+    Deberías ver un XML con todas las URLs de tu sitio.
 
 2. **Robots.txt:**
-   ```
-   https://www.solterradvisory.com/robots.txt
-   ```
-   Deberías ver las directivas que permiten indexación y el sitemap.
+    ```
+    https://www.solterradvisory.com/robots.txt
+    ```
+    Deberías ver las directivas que permiten indexación y el sitemap.
 
 ---
 
 ### **Paso 2: Registrar en Google Search Console** (5-10 minutos)
 
 #### A) Acceder a Search Console
+
 1. Ve a: https://search.google.com/search-console
 2. Inicia sesión con tu cuenta de Google (usa una cuenta corporativa si es posible)
 
 #### B) Añadir Propiedad
+
 1. Click en **"Añadir propiedad"**
 2. Selecciona **"Prefijo de URL"**: `https://www.solterradvisory.com`
 3. Click en **"Continuar"**
 
 #### C) Verificar Propiedad (Método HTML Tag - Recomendado)
+
 Google te dará varias opciones. **Método recomendado: Meta Tag HTML**
 
 1. Google te mostrará un código como:
-   ```html
-   <meta name="google-site-verification" content="XXXXXXXXXXXXXX" />
-   ```
+
+    ```html
+    <meta name="google-site-verification" content="XXXXXXXXXXXXXX" />
+    ```
 
 2. **Dime ese código** y yo lo añadiré al `<head>` de tu `app/layout.tsx`
 
@@ -74,22 +81,23 @@ Google indexará automáticamente, pero puedes acelerarlo:
 
 1. En Search Console → **"Inspección de URLs"** (arriba)
 2. Introduce cada URL clave y solicita indexación:
-   - `https://www.solterradvisory.com/`
-   - `https://www.solterradvisory.com/nosotros`
-   - `https://www.solterradvisory.com/contacto`
-   - `https://www.solterradvisory.com/login/propietario`
-   - `https://www.solterradvisory.com/login/promotor`
+    - `https://www.solterradvisory.com/`
+    - `https://www.solterradvisory.com/nosotros`
+    - `https://www.solterradvisory.com/contacto`
+    - `https://www.solterradvisory.com/login/propietario`
+    - `https://www.solterradvisory.com/login/promotor`
 
 3. Para cada una:
-   - Click en **"Solicitar indexación"**
-   - Espera 1-2 minutos (Google comprobará la URL)
-   - Confirma
+    - Click en **"Solicitar indexación"**
+    - Espera 1-2 minutos (Google comprobará la URL)
+    - Confirma
 
 ---
 
 ### **Paso 5: Configurar Google Analytics 4 (Opcional pero Recomendado)** (10 minutos)
 
 #### A) Crear Propiedad en Google Analytics
+
 1. Ve a: https://analytics.google.com
 2. **Admin** (icono engranaje abajo-izquierda) → **"Crear propiedad"**
 3. Nombre: `Solterra Advisory`
@@ -98,6 +106,7 @@ Google indexará automáticamente, pero puedes acelerarlo:
 6. Click en **"Siguiente"** → Configura sector (Real Estate / Tecnología)
 
 #### B) Obtener ID de Medición
+
 1. Tras crear la propiedad, ve a **"Flujos de datos"**
 2. Click en **"Añadir flujo" → "Web"**
 3. URL: `https://www.solterradvisory.com`
@@ -106,14 +115,16 @@ Google indexará automáticamente, pero puedes acelerarlo:
 6. **Copia el "ID de medición"** (formato: `G-XXXXXXXXXX`)
 
 #### C) Añadir ID a Vercel
+
 1. Ve a Vercel → Tu proyecto → **Settings → Environment Variables**
 2. Añade:
-   - **Key:** `NEXT_PUBLIC_GA_ID`
-   - **Value:** `G-XXXXXXXXXX` (el ID que copiaste)
-   - **Environments:** Production, Preview, Development
+    - **Key:** `NEXT_PUBLIC_GA_ID`
+    - **Value:** `G-XXXXXXXXXX` (el ID que copiaste)
+    - **Environments:** Production, Preview, Development
 3. Guarda y redeploy
 
 #### D) Integrar en el Código (Yo lo hago)
+
 **Dime el ID de GA4** y yo añadiré el script de tracking a tu sitio.
 
 ---
@@ -138,12 +149,14 @@ Verificación de elementos críticos:
 ## 📊 Monitoreo y Seguimiento (Después de 3-7 Días)
 
 ### En Google Search Console:
+
 1. **Rendimiento:** Clicks, impresiones, CTR, posición media
 2. **Cobertura:** Páginas indexadas vs. excluidas
 3. **Mejoras:** Core Web Vitals, usabilidad móvil
 4. **Enlaces:** Backlinks internos y externos
 
 ### KPIs a Monitorizar:
+
 - **Páginas indexadas:** Objetivo: 8-10 páginas en 7 días
 - **Posición media:** Keywords objetivo (energía renovable, terrenos solares, etc.)
 - **CTR:** Objetivo: > 2% en los primeros 30 días
@@ -154,19 +167,24 @@ Verificación de elementos críticos:
 ## 🎯 Optimizaciones Adicionales (Futuras)
 
 ### A) Contenido (Blog/Noticias)
+
 Crear sección de blog con artículos sobre:
+
 - Energía renovable en España
 - Rentabilidad de terrenos fotovoltaicos
 - PNIEC y objetivos 2030
 - Guías para propietarios y promotores
 
 ### B) Link Building
+
 - Directorios de empresas: Google My Business, Yelp, LinkedIn Company
 - Asociaciones del sector: UNEF, APPA Renovables
 - Prensa especializada: colaboraciones/menciones
 
 ### C) Local SEO
+
 Si tenéis oficina física:
+
 - Google My Business (Google Maps)
 - Schema LocalBusiness
 - NAP consistency (Name, Address, Phone)
@@ -193,15 +211,19 @@ Marca cuando completes cada paso:
 ## 🆘 Problemas Comunes y Soluciones
 
 ### Problema: "URL no indexada"
+
 **Solución:** Espera 7-14 días. Google puede tardar. Solicita indexación manual.
 
 ### Problema: "Sitemap no se puede leer"
+
 **Solución:** Verifica que `sitemap.xml` devuelve XML válido (no HTML con error).
 
 ### Problema: "Página excluida por robots.txt"
+
 **Solución:** Revisa `robots.txt` y asegura que no bloqueé URLs públicas.
 
 ### Problema: "Contenido duplicado"
+
 **Solución:** Asegura canonical URLs correctos (ya implementados).
 
 ---
@@ -209,6 +231,7 @@ Marca cuando completes cada paso:
 ## 📞 Siguiente Acción
 
 **Dime:**
+
 1. ¿Has verificado que `sitemap.xml` y `robots.txt` funcionan en producción?
 2. ¿Tienes el código de verificación de Google Search Console? (Te lo añado al sitio)
 3. ¿Quieres configurar Google Analytics 4? (Dame el ID de medición)
