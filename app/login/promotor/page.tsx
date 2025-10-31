@@ -38,8 +38,8 @@ export default function LoginPromotor() {
             if (isLogin) {
                 await login({ email: formData.email, password: formData.password })
                 toast({
-                    title: "¡Bienvenido!",
-                    description: "Has iniciado sesión correctamente",
+                    title: t?.auth?.promoter?.toast?.welcomeTitle,
+                    description: t?.auth?.promoter?.toast?.welcomeDesc,
                 })
             } else {
                 await register({
@@ -49,15 +49,20 @@ export default function LoginPromotor() {
                     rol: "PROMOTOR",
                 })
                 toast({
-                    title: "¡Cuenta creada!",
-                    description: "Tu cuenta ha sido creada exitosamente",
+                    title: t?.auth?.promoter?.toast?.registerTitle,
+                    description: t?.auth?.promoter?.toast?.registerDesc,
                 })
             }
             router.push("/dashboard/promotor")
-        } catch (error: any) {
+        } catch (err: unknown) {
+            const message =
+                (err as any)?.response?.data?.message ||
+                (err instanceof Error ? err.message : undefined) ||
+                t?.auth?.promoter?.toast?.genericErrorDesc
+
             toast({
-                title: "Error",
-                description: error?.response?.data?.message || error?.message || "Hubo un problema. Intenta de nuevo.",
+                title: t?.common?.errorTitle,
+                description: message,
                 variant: "destructive",
             })
         } finally {
@@ -182,8 +187,8 @@ export default function LoginPromotor() {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                                        title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                        aria-label={showPassword ? t?.common?.hidePassword : t?.common?.showPassword}
+                                        title={showPassword ? t?.common?.hidePassword : t?.common?.showPassword}
                                         className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
                                     >
                                         {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -204,7 +209,11 @@ export default function LoginPromotor() {
                             )}
 
                             <Button type="submit" className="bg-secondary hover:bg-secondary/90 h-12 w-full text-lg" disabled={isLoading}>
-                                {isLoading ? "Cargando..." : isLogin ? t?.contact?.form?.loginButton : t?.contact?.form?.registerButton}
+                                {isLoading
+                                    ? t?.common?.loading
+                                    : isLogin
+                                      ? t?.contact?.form?.loginButton
+                                      : t?.contact?.form?.registerButton}
                             </Button>
                         </form>
 

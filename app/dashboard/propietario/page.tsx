@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { useTerrenos } from "@/hooks/useTerrenos"
 import { useTranslations } from "@/i18n/i18nContext"
-import { Calendar, ChevronLeft, ChevronRight, Grid3x3, MapPin, MoveHorizontal, Plus, TrendingUp } from "lucide-react"
+import { BookCheck, ChevronLeft, ChevronRight, Euro, Grid3x3, MapPin, MoveHorizontal, Plus, TrendingUp } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 
@@ -89,8 +89,8 @@ export default function DashboardPropietario() {
                             matches: Array.isArray(terreno.matches)
                                 ? terreno.matches.map((m: any) => ({
                                       id: m.proyecto?.id || m.proyectoId || "",
-                                      titulo: m.proyecto?.titulo || "Proyecto sin título",
-                                      tipo: m.proyecto?.tipo || "N/A",
+                                      titulo: m.proyecto?.titulo || (t?.common?.untitledProject ?? ""),
+                                      tipo: m.proyecto?.tipo || (t?.common?.na ?? ""),
                                       potenciaObjetivo: m.proyecto?.potenciaObjetivo,
                                       provincia: m.proyecto?.provincia,
                                       compatibilidad: m.scoreTotal || 0,
@@ -162,20 +162,26 @@ export default function DashboardPropietario() {
     const stats = {
         terrenosActivos: terrenos.filter((t) => String(t?.estado ?? "").toUpperCase() === "ACTIVO").length,
         totalMatches: terrenosConMatches.reduce((sum, t) => sum + t.matchCount, 0),
-        hectareasTotales: terrenos.reduce((sum, t) => sum + (Number((t as any).superficie ?? (t as any).hectareas) || 0), 0),
-        ingresosEstimados: terrenos.reduce((sum, t) => sum + (Number((t as any).superficie ?? (t as any).hectareas) || 0) * 2500, 0),
+        hectareasTotales: terrenos.reduce(
+            (sum, terrain) => sum + (Number((terrain as any).superficie ?? (terrain as any).hectareas) || 0),
+            0
+        ),
+        ingresosEstimados: terrenos.reduce(
+            (sum, terrain) => sum + (Number((terrain as any).superficie ?? (terrain as any).hectareas) || 0) * 2500,
+            0
+        ),
     }
 
     return (
         <>
             <DashboardHeader
-                title={t?.dashboard?.owner?.title || "Dashboard Propietario"}
-                breadcrumbs={[{ label: t?.dashboard?.breadcrumbs?.dashboard || "Dashboard" }]}
+                title={t?.dashboard?.owner?.title}
+                breadcrumbs={[{ label: t?.dashboard?.breadcrumbs?.dashboard }]}
                 actions={
                     <Link href="/dashboard/propietario/nuevo-terreno">
                         <Button className="gap-2">
                             <Plus className="h-4 w-4" />
-                            {t?.dashboard?.owner?.addLand || "Añadir Terreno"}
+                            {t?.dashboard?.owner?.addLand}
                         </Button>
                     </Link>
                 }
@@ -187,9 +193,7 @@ export default function DashboardPropietario() {
                     <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
                         <div className="flex flex-col items-center gap-4">
                             <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
-                            <p className="text-muted-foreground text-sm">
-                                {t?.dashboard?.owner?.main?.loading || "Cargando tus terrenos..."}
-                            </p>
+                            <p className="text-muted-foreground text-sm">{t?.dashboard?.owner?.main?.loading}</p>
                         </div>
                     </div>
                 ) : !hasTerrenos ? (
@@ -199,36 +203,39 @@ export default function DashboardPropietario() {
                                 <EmptyMedia>
                                     <MapPin className="h-12 w-12" />
                                 </EmptyMedia>
-                                <EmptyTitle>{t?.dashboard?.empty?.owner?.title || "No tienes terrenos registrados"}</EmptyTitle>
-                                <EmptyDescription>
-                                    {t?.dashboard?.empty?.owner?.description ||
-                                        "Añade tu primer terreno y empieza a recibir propuestas de promotores"}
-                                </EmptyDescription>
+                                <EmptyTitle>{t?.dashboard?.empty?.owner?.title}</EmptyTitle>
+                                <EmptyDescription>{t?.dashboard?.empty?.owner?.description}</EmptyDescription>
                             </EmptyHeader>
                             <EmptyContent>
                                 <Link href="/dashboard/propietario/nuevo-terreno">
                                     <Button size="lg" className="gap-2">
                                         <Plus className="h-5 w-5" />
-                                        {t?.dashboard?.empty?.owner?.addLand || "Añadir Terreno"}
+                                        {t?.dashboard?.empty?.owner?.addLand}
                                     </Button>
                                 </Link>
                                 <div className="mt-8 grid grid-cols-3 gap-6 border-t pt-6">
                                     <div className="text-center">
-                                        <div className="text-primary text-2xl font-bold">€2,500</div>
+                                        <div className="text-primary text-2xl font-bold">
+                                            {t?.dashboard?.empty?.owner?.metrics?.avgIncomeValue}
+                                        </div>
                                         <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.owner?.metrics?.avgIncomeLabel || "Ingreso medio/ha/año"}
+                                            {t?.dashboard?.empty?.owner?.metrics?.avgIncomeLabel}
                                         </div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-primary text-2xl font-bold">25 años</div>
+                                        <div className="text-primary text-2xl font-bold">
+                                            {t?.dashboard?.empty?.owner?.metrics?.contractDurationValue}
+                                        </div>
                                         <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.owner?.metrics?.contractDurationLabel || "Duración contratos"}
+                                            {t?.dashboard?.empty?.owner?.metrics?.contractDurationLabel}
                                         </div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-primary text-2xl font-bold">98%</div>
+                                        <div className="text-primary text-2xl font-bold">
+                                            {t?.dashboard?.empty?.owner?.metrics?.successRateValue}
+                                        </div>
                                         <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.owner?.metrics?.successRateLabel || "Tasa de éxito"}
+                                            {t?.dashboard?.empty?.owner?.metrics?.successRateLabel}
                                         </div>
                                     </div>
                                 </div>
@@ -243,10 +250,12 @@ export default function DashboardPropietario() {
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.owner?.stats?.activeLands || "Terrenos activos"}
+                                            {t?.dashboard?.owner?.stats?.activeLands}
                                         </p>
                                         <p className="mt-2 text-3xl font-bold">{stats.terrenosActivos}</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">de {total} totales</p>
+                                        <p className="text-muted-foreground mt-1 text-xs">
+                                            {t?.dashboard?.owner?.stats?.totalActiveLands?.replace("{total}", String(total))}
+                                        </p>
                                     </div>
                                     <div className="bg-primary/10 rounded-full p-3">
                                         <MapPin className="text-primary h-6 w-6" />
@@ -257,12 +266,14 @@ export default function DashboardPropietario() {
                             <Card className="p-6 transition-all hover:shadow-md">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="text-muted-foreground text-sm font-medium">Matches disponibles</p>
+                                        <p className="text-muted-foreground text-sm font-medium">
+                                            {t?.dashboard?.owner?.stats?.matchesLabel}
+                                        </p>
                                         <p className="mt-2 text-3xl font-bold">{stats.totalMatches}</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">proyectos compatibles</p>
+                                        <p className="text-muted-foreground mt-1 text-xs">{t?.dashboard?.owner?.stats?.matchesSubtitle}</p>
                                     </div>
-                                    <div className="rounded-full bg-green-100 p-3">
-                                        <TrendingUp className="h-6 w-6 text-green-600" />
+                                    <div className="bg-secondary/10 rounded-full p-3">
+                                        <TrendingUp className="text-secondary h-6 w-6" />
                                     </div>
                                 </div>
                             </Card>
@@ -271,13 +282,15 @@ export default function DashboardPropietario() {
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.owner?.stats?.totalHectares || "Hectáreas totales"}
+                                            {t?.dashboard?.owner?.stats?.totalHectares}
                                         </p>
                                         <p className="mt-2 text-3xl font-bold">{stats.hectareasTotales.toFixed(1)}</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">en {terrenos.length} ubicaciones</p>
+                                        <p className="text-muted-foreground mt-1 text-xs">
+                                            {t?.dashboard?.owner?.stats?.multipleLocations?.replace("{count}", String(terrenos.length))}
+                                        </p>
                                     </div>
-                                    <div className="rounded-full bg-blue-100 p-3">
-                                        <MapPin className="h-6 w-6 text-blue-600" />
+                                    <div className="bg-primary/10 rounded-full p-3">
+                                        <BookCheck className="text-primary h-6 w-6" />
                                     </div>
                                 </div>
                             </Card>
@@ -286,15 +299,13 @@ export default function DashboardPropietario() {
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.owner?.stats?.estimatedIncome || "Ingresos estimados"}
+                                            {t?.dashboard?.owner?.stats?.estimatedIncome}
                                         </p>
                                         <p className="mt-2 text-3xl font-bold">€{(stats.ingresosEstimados / 1000).toFixed(0)}K</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">
-                                            {t?.dashboard?.owner?.stats?.perYear || "por año"}
-                                        </p>
+                                        <p className="text-muted-foreground mt-1 text-xs">{t?.dashboard?.owner?.stats?.perYear}</p>
                                     </div>
-                                    <div className="rounded-full bg-amber-100 p-3">
-                                        <Calendar className="h-6 w-6 text-amber-600" />
+                                    <div className="bg-secondary/10 rounded-full p-3">
+                                        <Euro className="text-secondary h-6 w-6" />
                                     </div>
                                 </div>
                             </Card>
@@ -304,10 +315,8 @@ export default function DashboardPropietario() {
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <h2 className="text-2xl font-bold">{t?.dashboard?.owner?.main?.selectLand || "Tus Terrenos"}</h2>
-                                    <p className="text-muted-foreground mt-1 text-sm">
-                                        Selecciona un terreno para ver sus proyectos compatibles
-                                    </p>
+                                    <h2 className="text-2xl font-bold">{t?.dashboard?.owner?.main?.selectLand}</h2>
+                                    <p className="text-muted-foreground mt-1 text-sm">{t?.dashboard?.owner?.main?.selectLandDesc}</p>
                                 </div>
                                 <div className="flex gap-2">
                                     <Button
@@ -317,7 +326,7 @@ export default function DashboardPropietario() {
                                         className="gap-2"
                                     >
                                         <MoveHorizontal className="h-4 w-4" />
-                                        {t?.dashboard?.owner?.main?.viewModes?.horizontal || "Horizontal"}
+                                        {t?.dashboard?.owner?.main?.viewModes?.horizontal}
                                     </Button>
                                     <Button
                                         variant={viewMode === "grid" ? "default" : "outline"}
@@ -326,7 +335,7 @@ export default function DashboardPropietario() {
                                         className="gap-2"
                                     >
                                         <Grid3x3 className="h-4 w-4" />
-                                        {t?.dashboard?.owner?.main?.viewModes?.grid || "Cuadrícula"}
+                                        {t?.dashboard?.owner?.main?.viewModes?.grid}
                                     </Button>
                                 </div>
                             </div>
@@ -403,35 +412,30 @@ export default function DashboardPropietario() {
                             <div className="space-y-4">
                                 <div>
                                     <h2 className="text-2xl font-bold">
-                                        {(t?.dashboard?.owner?.main?.matchesFor || "Proyectos Compatibles").replace("{land}", "")}
+                                        {t?.dashboard?.owner?.main?.matchesFor?.replace("{land}", selectedTerreno?.titulo ?? "")}
                                     </h2>
                                     <p className="text-muted-foreground mt-1 text-sm">
-                                        {(t?.dashboard?.owner?.main?.matchesFound || "{count} proyectos encontrados para {land}")
-                                            .replace("{count}", selectedTerreno.matchCount.toString())
-                                            .replace("{land}", selectedTerreno.titulo)}
+                                        {t?.dashboard?.owner?.main?.matchesFound
+                                            ?.replace("{count}", selectedTerreno?.matchCount?.toString() ?? "")
+                                            ?.replace("{land}", selectedTerreno?.titulo ?? "")}
                                     </p>
                                 </div>
 
-                                {selectedTerreno.matches.length === 0 ? (
+                                {(selectedTerreno?.matches?.length ?? 0) === 0 ? (
                                     <Card className="p-12">
                                         <Empty>
                                             <EmptyHeader>
                                                 <EmptyMedia>
                                                     <TrendingUp className="h-12 w-12" />
                                                 </EmptyMedia>
-                                                <EmptyTitle>
-                                                    {t?.dashboard?.owner?.main?.noMatches || "No hay matches disponibles"}
-                                                </EmptyTitle>
-                                                <EmptyDescription>
-                                                    {t?.dashboard?.owner?.main?.noMatchesDesc ||
-                                                        "Aún no hay proyectos compatibles con este terreno. Los promotores están revisando tu terreno constantemente."}
-                                                </EmptyDescription>
+                                                <EmptyTitle>{t?.dashboard?.owner?.main?.noMatches}</EmptyTitle>
+                                                <EmptyDescription>{t?.dashboard?.owner?.main?.noMatchesDesc}</EmptyDescription>
                                             </EmptyHeader>
                                         </Empty>
                                     </Card>
                                 ) : (
                                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                        {selectedTerreno.matches.map((match) => (
+                                        {selectedTerreno?.matches?.map((match) => (
                                             <Card
                                                 key={match.id}
                                                 className="cursor-pointer p-6 transition-all hover:-translate-y-1 hover:shadow-lg"
@@ -439,9 +443,11 @@ export default function DashboardPropietario() {
                                                 <div className="space-y-4">
                                                     <div className="flex items-start justify-between gap-2">
                                                         <div className="min-w-0 flex-1">
-                                                            <h3 className="mb-1 line-clamp-2 text-base font-semibold">{match.titulo}</h3>
+                                                            <h3 className="mb-1 line-clamp-2 text-base font-semibold">
+                                                                {match.titulo || t?.common?.untitledProject}
+                                                            </h3>
                                                             <p className="text-muted-foreground text-xs">
-                                                                {match.tipo?.replace(/_/g, " ")}
+                                                                {match.tipo ? match.tipo.replace(/_/g, " ") : t?.common?.na}
                                                             </p>
                                                         </div>
                                                         <div
@@ -454,10 +460,10 @@ export default function DashboardPropietario() {
                                                             }`}
                                                         >
                                                             {match.estado === "ACEPTADO"
-                                                                ? t?.dashboard?.owner?.main?.matches?.active || "Activo"
+                                                                ? t?.dashboard?.owner?.main?.matches?.active
                                                                 : match.estado === "RECHAZADO"
-                                                                  ? t?.dashboard?.owner?.main?.matches?.rejected || "Rechazado"
-                                                                  : t?.dashboard?.owner?.main?.matches?.pending || "Pendiente"}
+                                                                  ? t?.dashboard?.owner?.main?.matches?.rejected
+                                                                  : t?.dashboard?.owner?.main?.matches?.pending}
                                                         </div>
                                                     </div>
 
@@ -465,7 +471,7 @@ export default function DashboardPropietario() {
                                                         {match.potenciaObjetivo && (
                                                             <div className="flex items-center justify-between text-sm">
                                                                 <span className="text-muted-foreground">
-                                                                    {t?.dashboard?.owner?.main?.matches?.power || "Potencia:"}
+                                                                    {t?.dashboard?.owner?.main?.matches?.power}
                                                                 </span>
                                                                 <span className="font-semibold">{match.potenciaObjetivo} MW</span>
                                                             </div>
@@ -473,7 +479,7 @@ export default function DashboardPropietario() {
                                                         {match.provincia && (
                                                             <div className="flex items-center justify-between text-sm">
                                                                 <span className="text-muted-foreground">
-                                                                    {t?.dashboard?.owner?.main?.matches?.location || "Ubicación:"}
+                                                                    {t?.dashboard?.owner?.main?.matches?.location}
                                                                 </span>
                                                                 <span className="font-semibold">{match.provincia}</span>
                                                             </div>
@@ -481,7 +487,7 @@ export default function DashboardPropietario() {
                                                         <div className="space-y-2">
                                                             <div className="flex items-center justify-between text-sm">
                                                                 <span className="text-muted-foreground">
-                                                                    {t?.dashboard?.owner?.main?.matches?.compatibility || "Compatibilidad:"}
+                                                                    {t?.dashboard?.owner?.main?.matches?.compatibility}
                                                                 </span>
                                                                 <span className="text-primary font-bold">{match.compatibilidad}%</span>
                                                             </div>
@@ -502,7 +508,7 @@ export default function DashboardPropietario() {
 
                                                     <Link href={`/dashboard/propietario/proyectos/${match.id}`}>
                                                         <Button className="w-full" size="sm">
-                                                            {t?.dashboard?.owner?.main?.matches?.viewProject || "Ver proyecto"}
+                                                            {t?.dashboard?.owner?.main?.matches?.viewProject}
                                                         </Button>
                                                     </Link>
                                                 </div>

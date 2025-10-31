@@ -117,11 +117,11 @@ export default function TerrenoDetallePage() {
     return (
         <>
             <DashboardHeader
-                title={terreno?.titulo || "Detalle del Terreno"}
+                title={terreno?.titulo || t?.dashboard?.owner?.terrenos?.terrain?.title}
                 breadcrumbs={[
-                    { label: t?.dashboard?.breadcrumbs?.dashboard || "Dashboard", href: "/dashboard/propietario" },
-                    { label: "Mis terrenos", href: "/dashboard/propietario/mis-terrenos" },
-                    { label: terreno?.titulo || "Detalle" },
+                    { label: t?.dashboard?.breadcrumbs?.dashboard, href: "/dashboard/propietario" },
+                    { label: t?.dashboard?.owner?.terrenos?.title, href: "/dashboard/propietario/mis-terrenos" },
+                    { label: terreno?.titulo || t?.dashboard?.breadcrumbs?.landDetail },
                 ]}
                 userType="propietario"
             />
@@ -131,7 +131,7 @@ export default function TerrenoDetallePage() {
                     <div className="flex min-h-[50vh] items-center justify-center">
                         <div className="flex flex-col items-center gap-4">
                             <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
-                            <p className="text-muted-foreground text-sm">Cargando terreno...</p>
+                            <p className="text-muted-foreground text-sm">{t?.dashboard?.owner?.terrenos?.terrain?.loading}</p>
                         </div>
                     </div>
                 ) : terreno ? (
@@ -150,7 +150,7 @@ export default function TerrenoDetallePage() {
                                     <Link href={`/dashboard/propietario/mis-terrenos/${terrenoId}/editar`}>
                                         <Button variant="outline" className="gap-2">
                                             <Pencil className="h-4 w-4" />
-                                            Editar
+                                            {t?.dashboard?.owner?.table?.edit}
                                         </Button>
                                     </Link>
                                 </div>
@@ -161,7 +161,9 @@ export default function TerrenoDetallePage() {
                                     <div className="flex items-center gap-2 rounded-lg bg-white/60 px-4 py-3 dark:bg-gray-800/60">
                                         <MapPin className="h-5 w-5 text-red-500" />
                                         <div>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Ubicación</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                {t?.dashboard?.owner?.terrenos?.terrain?.labels?.location}
+                                            </p>
                                             <p className="font-semibold">
                                                 {terreno.municipio}, {terreno.provincia}
                                             </p>
@@ -171,7 +173,9 @@ export default function TerrenoDetallePage() {
                                     <div className="flex items-center gap-2 rounded-lg bg-white/60 px-4 py-3 dark:bg-gray-800/60">
                                         <Ruler className="h-5 w-5 text-purple-500" />
                                         <div>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Superficie</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                {t?.dashboard?.owner?.terrenos?.terrain?.labels?.surface}
+                                            </p>
                                             <p className="font-semibold">{terreno.superficie || 0} ha</p>
                                         </div>
                                     </div>
@@ -179,8 +183,10 @@ export default function TerrenoDetallePage() {
                                     <div className="flex items-center gap-2 rounded-lg bg-white/60 px-4 py-3 dark:bg-gray-800/60">
                                         <MapPin className="h-5 w-5 text-blue-500" />
                                         <div>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Tipo de suelo</p>
-                                            <p className="font-semibold">{terreno.tipoSuelo || "No especificado"}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                {t?.dashboard?.owner?.terrenos?.terrain?.labels?.soilType}
+                                            </p>
+                                            <p className="font-semibold">{terreno.tipoSuelo || t?.common?.none}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -191,9 +197,9 @@ export default function TerrenoDetallePage() {
                         <div>
                             <div className="mb-4 flex items-center justify-between">
                                 <div>
-                                    <h2 className="text-xl font-bold">Proyectos compatibles</h2>
+                                    <h2 className="text-xl font-bold">{t?.dashboard?.owner?.terrenos?.terrain?.compatibleTitle}</h2>
                                     <p className="text-muted-foreground text-sm">
-                                        {matches.length} proyectos encontrados que pueden encajar con tu terreno
+                                        {t?.dashboard?.owner?.terrenos?.terrain?.matchesFound?.replace("{count}", String(matches.length))}
                                     </p>
                                 </div>
                             </div>
@@ -204,10 +210,10 @@ export default function TerrenoDetallePage() {
                     <Card className="p-12">
                         <div className="text-center">
                             <MapPin className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                            <h3 className="mb-2 text-lg font-semibold">Terreno no encontrado</h3>
-                            <p className="text-muted-foreground text-sm">No se pudo cargar la información del terreno.</p>
+                            <h3 className="mb-2 text-lg font-semibold">{t?.dashboard?.owner?.terrenos?.terrain?.notFound?.title}</h3>
+                            <p className="text-muted-foreground text-sm">{t?.dashboard?.owner?.terrenos?.terrain?.notFound?.desc}</p>
                             <Link href="/dashboard/propietario">
-                                <Button className="mt-4">Volver al dashboard</Button>
+                                <Button className="mt-4">{t?.common?.backToDashboard}</Button>
                             </Link>
                         </div>
                     </Card>

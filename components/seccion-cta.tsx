@@ -17,7 +17,7 @@ export function SeccionCTA() {
                     <div className="relative mx-auto max-w-3xl text-center">
                         <div className="bg-accent/30 mb-6 inline-flex rounded-full px-6 py-2">
                             <Sparkles className="text-accent-foreground mr-2 h-5 w-5" />
-                            <span className="text-accent-foreground font-semibold">Únete a la revolución energética</span>
+                            <span className="text-accent-foreground font-semibold">{t?.seccionCta?.join}</span>
                         </div>
 
                         <h2 className="text-foreground mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">{t.cta?.title}</h2>

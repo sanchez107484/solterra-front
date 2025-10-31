@@ -22,10 +22,10 @@ export function LanguageSwitcher() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => handleLocaleChange("es")} className={locale === "es" ? "font-bold" : ""}>
-                    Español
+                    {t?.common?.languages?.es}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleLocaleChange("en")} className={locale === "en" ? "font-bold" : ""}>
-                    English
+                    {t?.common?.languages?.en}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

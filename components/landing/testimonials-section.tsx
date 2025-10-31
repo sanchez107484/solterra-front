@@ -15,41 +15,9 @@ interface Testimonial {
     result: string
 }
 
-const testimonials: Testimonial[] = [
-    {
-        name: "Juan García",
-        role: "Propietario",
-        company: "Finca Los Olivos",
-        location: "Badajoz, Extremadura",
-        image: "/placeholder-user-1.jpg",
-        rating: 5,
-        text: "Gracias a Solterra conseguí arrendar mis 15 hectáreas a un promotor serio. El proceso fue transparente y ahora tengo ingresos fijos durante 25 años sin preocuparme del mantenimiento.",
-        result: "€37,500/año en ingresos pasivos",
-    },
-    {
-        name: "María Rodríguez",
-        role: "Directora de Desarrollo",
-        company: "Energías Renovables SL",
-        location: "Valladolid, Castilla y León",
-        image: "/placeholder-user-2.jpg",
-        rating: 5,
-        text: "La plataforma nos ahorró 6 meses de prospección. Encontramos 3 terrenos ideales para nuestros proyectos solares en menos de un mes. El sistema de matching es muy preciso.",
-        result: "60 MW en desarrollo en 3 meses",
-    },
-    {
-        name: "Carlos Martínez",
-        role: "Presidente",
-        company: "Cooperativa Agraria Navarra",
-        location: "Tudela, Navarra",
-        image: "/placeholder-user-3.jpg",
-        rating: 5,
-        text: "Representamos a 45 socios con terrenos. Solterra nos ayudó a negociar contratos justos y a entender todas las implicaciones legales. Ahora todos están generando ingresos adicionales.",
-        result: "120 hectáreas optimizadas",
-    },
-]
-
 export function TestimonialsSection() {
     const { t } = useTranslations()
+    const testimonials: Testimonial[] = t?.testimonials?.items ?? []
     return (
         <section className="bg-muted/30 py-20 md:py-32">
             <div className="container mx-auto px-4">

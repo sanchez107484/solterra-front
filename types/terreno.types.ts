@@ -81,6 +81,9 @@ export interface Terreno {
     creadoEn: string
     actualizadoEn: string
     eliminadoEn?: string | null
+    // Match info (puede ser añadido por backend cuando el usuario es propietario)
+    matchCount?: number | null
+    matches?: any[] | null
 }
 
 export interface CreateTerrenoDTO {

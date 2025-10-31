@@ -87,11 +87,11 @@ export default function ProyectoDetallePropietarioPage() {
     return (
         <>
             <DashboardHeader
-                title={proyecto?.titulo || "Detalle del Proyecto"}
+                title={proyecto?.titulo || t?.dashboard?.breadcrumbs?.projectDetail}
                 breadcrumbs={[
                     { label: t?.dashboard?.breadcrumbs?.dashboard || "Dashboard", href: "/dashboard/propietario" },
-                    { label: "Proyectos", href: "/dashboard/propietario/todos-proyectos" },
-                    { label: proyecto?.titulo || "Detalle" },
+                    { label: t?.dashboard?.breadcrumbs?.projects || "Proyectos", href: "/dashboard/propietario/todos-proyectos" },
+                    { label: proyecto?.titulo || t?.dashboard?.breadcrumbs?.projectDetail },
                 ]}
                 userType="propietario"
             />
@@ -101,7 +101,7 @@ export default function ProyectoDetallePropietarioPage() {
                     <div className="flex min-h-[50vh] items-center justify-center">
                         <div className="flex flex-col items-center gap-4">
                             <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
-                            <p className="text-muted-foreground text-sm">Cargando proyecto...</p>
+                            <p className="text-muted-foreground text-sm">{t?.owner?.projects?.loading}</p>
                         </div>
                     </div>
                 ) : proyecto ? (
@@ -118,7 +118,7 @@ export default function ProyectoDetallePropietarioPage() {
                                     </div>
                                     <Button className="gap-2">
                                         <MessageCircle className="h-4 w-4" />
-                                        Contactar promotor
+                                        {t?.owner?.projects?.contactPromoter}
                                     </Button>
                                 </div>
 
@@ -129,7 +129,9 @@ export default function ProyectoDetallePropietarioPage() {
                                         <div className="flex items-center gap-2 rounded-lg bg-white/60 px-4 py-3 dark:bg-gray-800/60">
                                             <TrendingUp className="h-5 w-5 text-purple-500" />
                                             <div>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">Potencia</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    {t?.owner?.projects?.labels?.potencia}
+                                                </p>
                                                 <p className="font-semibold">{proyecto.potenciaObjetivo} MW</p>
                                             </div>
                                         </div>
@@ -139,7 +141,9 @@ export default function ProyectoDetallePropietarioPage() {
                                         <div className="flex items-center gap-2 rounded-lg bg-white/60 px-4 py-3 dark:bg-gray-800/60">
                                             <MapPin className="h-5 w-5 text-red-500" />
                                             <div>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">Ubicación</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    {t?.owner?.projects?.labels?.ubicacion}
+                                                </p>
                                                 <p className="font-semibold">{proyecto.provincia}</p>
                                             </div>
                                         </div>
@@ -149,7 +153,9 @@ export default function ProyectoDetallePropietarioPage() {
                                         <div className="flex items-center gap-2 rounded-lg bg-white/60 px-4 py-3 dark:bg-gray-800/60">
                                             <Calendar className="h-5 w-5 text-blue-500" />
                                             <div>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">Inicio</p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    {t?.owner?.projects?.labels?.inicio}
+                                                </p>
                                                 <p className="font-semibold">
                                                     {new Date(proyecto.fechaInicio).toLocaleDateString("es-ES")}
                                                 </p>
@@ -162,17 +168,17 @@ export default function ProyectoDetallePropietarioPage() {
 
                         <Card>
                             <div className="border-b p-6">
-                                <h2 className="text-xl font-bold">Detalles técnicos</h2>
+                                <h2 className="text-xl font-bold">{t?.owner?.projects?.detailsTitle}</h2>
                             </div>
                             <div className="p-6">
                                 <dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                     <div>
-                                        <dt className="text-sm font-medium text-gray-500">Tipo de proyecto</dt>
-                                        <dd className="mt-1 text-sm text-gray-900 dark:text-white">{proyecto.tipo || "No especificado"}</dd>
+                                        <dt className="text-sm font-medium text-gray-500">{t?.owner?.projects?.dt?.type}</dt>
+                                        <dd className="mt-1 text-sm text-gray-900 dark:text-white">{proyecto.tipo || t?.common?.na}</dd>
                                     </div>
                                     {proyecto.presupuesto && (
                                         <div>
-                                            <dt className="text-sm font-medium text-gray-500">Presupuesto estimado</dt>
+                                            <dt className="text-sm font-medium text-gray-500">{t?.owner?.projects?.dt?.budget}</dt>
                                             <dd className="mt-1 text-sm font-semibold text-green-600">
                                                 €{proyecto.presupuesto.toLocaleString()}
                                             </dd>
@@ -180,7 +186,7 @@ export default function ProyectoDetallePropietarioPage() {
                                     )}
                                     {proyecto.superficieRequerida && (
                                         <div>
-                                            <dt className="text-sm font-medium text-gray-500">Superficie requerida</dt>
+                                            <dt className="text-sm font-medium text-gray-500">{t?.owner?.projects?.dt?.surfaceRequired}</dt>
                                             <dd className="mt-1 text-sm text-gray-900 dark:text-white">
                                                 {proyecto.superficieRequerida} ha
                                             </dd>
@@ -188,7 +194,7 @@ export default function ProyectoDetallePropietarioPage() {
                                     )}
                                     {proyecto.plazoEjecucion && (
                                         <div>
-                                            <dt className="text-sm font-medium text-gray-500">Plazo de ejecución</dt>
+                                            <dt className="text-sm font-medium text-gray-500">{t?.owner?.projects?.dt?.timing}</dt>
                                             <dd className="mt-1 text-sm text-gray-900 dark:text-white">{proyecto.plazoEjecucion} meses</dd>
                                         </div>
                                     )}
@@ -198,13 +204,11 @@ export default function ProyectoDetallePropietarioPage() {
 
                         <Card className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
                             <div className="p-6">
-                                <h3 className="mb-2 text-lg font-bold">¿Interesado en este proyecto?</h3>
-                                <p className="text-muted-foreground mb-4 text-sm">
-                                    Ponte en contacto con el promotor para conocer más detalles y evaluar la compatibilidad con tus terrenos
-                                </p>
+                                <h3 className="mb-2 text-lg font-bold">{t?.owner?.projects?.interestedTitle}</h3>
+                                <p className="text-muted-foreground mb-4 text-sm">{t?.owner?.projects?.interestedDesc}</p>
                                 <Button size="lg" className="gap-2">
                                     <MessageCircle className="h-5 w-5" />
-                                    Enviar mensaje
+                                    {t?.owner?.projects?.sendMessage}
                                 </Button>
                             </div>
                         </Card>
@@ -213,10 +217,10 @@ export default function ProyectoDetallePropietarioPage() {
                     <Card className="p-12">
                         <div className="text-center">
                             <Briefcase className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                            <h3 className="mb-2 text-lg font-semibold">Proyecto no encontrado</h3>
-                            <p className="text-muted-foreground text-sm">No se pudo cargar la información del proyecto.</p>
+                            <h3 className="mb-2 text-lg font-semibold">{t?.owner?.projects?.notFound?.title}</h3>
+                            <p className="text-muted-foreground text-sm">{t?.owner?.projects?.notFound?.desc}</p>
                             <Link href="/dashboard/propietario/todos-proyectos">
-                                <Button className="mt-4">Ver todos los proyectos</Button>
+                                <Button className="mt-4">{t?.owner?.projects?.viewAll}</Button>
                             </Link>
                         </div>
                     </Card>
