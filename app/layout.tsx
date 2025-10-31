@@ -1,3 +1,4 @@
+import { CookieBanner } from "@/components/cookie-banner"
 import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { I18nProvider } from "@/i18n/i18nContext"
@@ -43,6 +44,7 @@ export default function RootLayout({
                             <Analytics />
                         </Suspense>
                         <Toaster />
+                        <CookieBanner />
                     </I18nProvider>
                 </AuthProvider>
             </body>

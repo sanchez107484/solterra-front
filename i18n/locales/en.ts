@@ -397,6 +397,8 @@ export const en = {
         privacy: "Privacy",
         terms: "Terms",
         rights: "All rights reserved",
+        navigation: "Navigation",
+        compliance: "Platform compliant with GDPR and PNIEC 2023-2030",
     },
     faq: {
         title: "FAQ",

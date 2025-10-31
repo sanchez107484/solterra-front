@@ -399,6 +399,8 @@ export const es = {
         privacy: "Privacidad",
         terms: "Términos",
         rights: "Todos los derechos reservados",
+        navigation: "Navegación",
+        compliance: "Plataforma conforme con RGPD y PNIEC 2023-2030",
     },
     faq: {
         title: "Preguntas Frecuentes",
