@@ -15,17 +15,17 @@ export function LanguageSwitcher() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="sidebar-hover" className="w-full justify-start gap-3">
                     <Globe className="h-5 w-5" />
-                    <span className="sr-only">{t.cambiarIdioma}</span>
+                    <span>{t?.sidebar?.navigation?.language || "Idioma"}</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => handleLocaleChange("es")} className={locale === "es" ? "font-bold" : ""}>
-                    {t?.common?.languages?.es}
+                    🇪🇸 {t?.common?.languages?.es || "Español"}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleLocaleChange("en")} className={locale === "en" ? "font-bold" : ""}>
-                    {t?.common?.languages?.en}
+                    🇬🇧 {t?.common?.languages?.en || "English"}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

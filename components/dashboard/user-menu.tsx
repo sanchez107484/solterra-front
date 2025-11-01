@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/contexts/AuthContext"
 import { useTranslations } from "@/i18n/i18nContext"
-import { ChevronDown, LogOut, Settings, User } from "lucide-react"
+import { ChevronDown, Globe, Home, LogOut, Settings, User } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 interface UserMenuProps {
@@ -21,7 +21,7 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ userType }: UserMenuProps) {
-    const { t } = useTranslations()
+    const { t, locale, setLocale } = useTranslations()
     const router = useRouter()
     const { auth, logout } = useAuth()
     const user = auth.user
@@ -83,13 +83,18 @@ export function UserMenu({ userType }: UserMenuProps) {
         }
     }
 
+    // Color de fondo del avatar según rol
+    const getAvatarFallbackColor = (rol?: string) => {
+        return rol === "PROPIETARIO" ? "bg-primary hover:bg-primary/90" : "bg-secondary hover:bg-secondary/90"
+    }
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800">
                     <Avatar className="h-9 w-9">
                         <AvatarImage src={getAvatarUrl(user?.avatar)} alt={user?.nombre || user?.email} />
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                        <AvatarFallback className={`font-semibold text-white ${getAvatarFallbackColor(user?.rol)}`}>
                             {getInitials(user?.nombre, user?.email)}
                         </AvatarFallback>
                     </Avatar>
@@ -108,6 +113,13 @@ export function UserMenu({ userType }: UserMenuProps) {
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+
+                {/* Volver al Home */}
+                <DropdownMenuItem onClick={() => router.push("/")} className="cursor-pointer">
+                    <Home className="mr-2 h-4 w-4" />
+                    <span>Volver al inicio</span>
+                </DropdownMenuItem>
+
                 <DropdownMenuItem onClick={() => router.push("/perfil")} className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     <span>{t?.common?.myProfile}</span>
@@ -116,6 +128,35 @@ export function UserMenu({ userType }: UserMenuProps) {
                     <Settings className="mr-2 h-4 w-4" />
                     <span>{t?.common?.settings}</span>
                 </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                {/* Cambio de idioma */}
+                <div className="px-2 py-1.5">
+                    <p className="text-muted-foreground mb-2 flex items-center gap-2 text-xs font-medium">
+                        <Globe className="h-3 w-3" />
+                        Idioma
+                    </p>
+                    <div className="flex gap-2">
+                        <Button
+                            variant={locale === "es" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setLocale("es")}
+                            className="flex-1 text-xs"
+                        >
+                            🇪🇸 ES
+                        </Button>
+                        <Button
+                            variant={locale === "en" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setLocale("en")}
+                            className="flex-1 text-xs"
+                        >
+                            🇬🇧 EN
+                        </Button>
+                    </div>
+                </div>
+
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />

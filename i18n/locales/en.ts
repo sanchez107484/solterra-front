@@ -515,6 +515,20 @@ export const en = {
     sidebar: {
         login: "Log in",
         signup: "Sign up",
+        navigation: {
+            dashboard: "Dashboard",
+            myLands: "My Lands",
+            allProjects: "All Projects",
+            addLand: "Add Land",
+            myProjects: "My Projects",
+            newProject: "New Project",
+            allLands: "All Lands",
+            backToHome: "Back to Home",
+            myProfile: "My Profile",
+            configuration: "Settings",
+            language: "Language",
+            logout: "Log Out",
+        },
     },
     contact: {
         hero: {

@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     // Ya establecimos el usuario del cache arriba
                     return
                 }
-                // Si no hay cache y falla la API, limpiar todo
+                // Si no hay cache y falla la API, limpiar todo (sin loguear error, es comportamiento esperado)
                 authService.removeToken()
                 if (typeof window !== "undefined") {
                     localStorage.removeItem("user")

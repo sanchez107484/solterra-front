@@ -2,15 +2,20 @@
 
 import { LanguageSwitcher } from "@/components/language-switcher"
 import Logo from "@/components/logo"
+import { SidebarUserMenu } from "@/components/sidebar-user-menu"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/contexts/AuthContext"
 import { Home, Info, Mail, Menu, X } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { useTranslations } from "../i18n/i18nContext"
 
 export function Sidebar() {
     const [isOpen, setIsOpen] = useState(false)
     const { t } = useTranslations()
+    const { auth } = useAuth()
+    const pathname = usePathname()
 
     return (
         <>
@@ -45,8 +50,8 @@ export function Sidebar() {
                     <nav className="flex-1 space-y-2 p-4">
                         <Link href="/">
                             <Button
-                                variant="ghost"
-                                className="text-sidebar-foreground hover:bg-sidebar-accent w-full justify-start gap-3"
+                                variant={pathname === "/" ? "sidebar-active" : "sidebar-hover"}
+                                className="w-full justify-start gap-3"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <Home className="h-5 w-5" />
@@ -55,8 +60,8 @@ export function Sidebar() {
                         </Link>
                         <Link href="/nosotros">
                             <Button
-                                variant="ghost"
-                                className="text-sidebar-foreground hover:bg-sidebar-accent w-full justify-start gap-3"
+                                variant={pathname === "/nosotros" ? "sidebar-active" : "sidebar-hover"}
+                                className="w-full justify-start gap-3"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <Info className="h-5 w-5" />
@@ -65,8 +70,8 @@ export function Sidebar() {
                         </Link>
                         <Link href="/contacto">
                             <Button
-                                variant="ghost"
-                                className="text-sidebar-foreground hover:bg-sidebar-accent w-full justify-start gap-3"
+                                variant={pathname === "/contacto" ? "sidebar-active" : "sidebar-hover"}
+                                className="w-full justify-start gap-3"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <Mail className="h-5 w-5" />
@@ -76,16 +81,29 @@ export function Sidebar() {
                     </nav>
 
                     {/* Bottom actions */}
-                    <div className="border-sidebar-border space-y-3 border-t p-4">
-                        <LanguageSwitcher />
-                        <Link href="/login/propietario" className="block">
-                            <Button variant="outline" className="w-full bg-transparent">
-                                {t?.common?.login}
-                            </Button>
-                        </Link>
-                        <Link href="/login/propietario" className="block">
-                            <Button className="bg-primary hover:bg-primary/90 w-full">{t?.common?.register}</Button>
-                        </Link>
+                    <div className="border-sidebar-border space-y-2 border-t p-4">
+                        {auth.isAuthenticated && auth.user ? (
+                            // Usuario autenticado: mostrar UserMenu
+                            <SidebarUserMenu />
+                        ) : (
+                            // Usuario no autenticado: mostrar botones de login/registro
+                            <>
+                                <LanguageSwitcher />
+                                <Link href="/login/propietario" className="block">
+                                    <Button
+                                        variant="sidebar-hover"
+                                        className="border-primary/20 bg-background hover:border-primary/40 hover:bg-primary/5 w-full justify-center gap-2 border"
+                                    >
+                                        <span>{t?.common?.login}</span>
+                                    </Button>
+                                </Link>
+                                <Link href="/login/propietario" className="block">
+                                    <Button className="from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 w-full justify-center gap-2 bg-gradient-to-r shadow-md transition-all duration-200 hover:shadow-lg">
+                                        <span>{t?.common?.register}</span>
+                                    </Button>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </aside>

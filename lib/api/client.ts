@@ -87,14 +87,25 @@ api.interceptors.response.use(
             details: error.response?.data?.details,
         }
 
-        // Logging de errores en desarrollo
+        // Logging de errores en desarrollo (solo errores importantes)
         if (process.env.NODE_ENV === "development") {
-            console.error("API Error:", {
-                url: error.config?.url,
-                method: error.config?.method,
-                status: error.response?.status,
-                data: error.response?.data,
-            })
+            const status = error.response?.status
+            const url = error.config?.url || ""
+
+            // No loguear errores esperados:
+            // - 401/403 en general (autenticación)
+            // - Cualquier error en /profile (intento de carga automática)
+            const isAuthError = status === 401 || status === 403
+            const isProfileCheck = url.includes("/profile")
+
+            if (!isAuthError && !isProfileCheck) {
+                console.error("API Error:", {
+                    url: error.config?.url,
+                    method: error.config?.method,
+                    status: error.response?.status,
+                    data: error.response?.data,
+                })
+            }
         }
 
         return Promise.reject(apiError)

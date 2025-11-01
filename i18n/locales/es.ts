@@ -518,6 +518,20 @@ export const es = {
     sidebar: {
         login: "Iniciar sesión",
         signup: "Registrarse",
+        navigation: {
+            dashboard: "Dashboard",
+            myLands: "Mis Terrenos",
+            allProjects: "Todos los Proyectos",
+            addLand: "Añadir Terreno",
+            myProjects: "Mis Proyectos",
+            newProject: "Nuevo Proyecto",
+            allLands: "Todos Terrenos",
+            backToHome: "Volver al inicio",
+            myProfile: "Mi Perfil",
+            configuration: "Configuración",
+            language: "Idioma",
+            logout: "Cerrar Sesión",
+        },
     },
     contact: {
         hero: {
