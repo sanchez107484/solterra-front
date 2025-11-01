@@ -22,8 +22,8 @@
     --secondary: #d19a12; /* amarillo ámbar profesional */
     --secondary-foreground: #0b1b2b; /* texto oscuro sobre amarillo */
 
-    /* Accent: Verde brillante */
-    --accent: oklch(0.73 0.18 135); /* #6fca3a */
+    /* Accent: Verde equilibrado */
+    --accent: oklch(0.67 0.13 135); /* Verde intermedio profesional */
     --accent-foreground: oklch(0.12 0.005 240); /* #111111 */
 
     --card: oklch(1 0 0); /* Blanco para tarjetas */
@@ -47,8 +47,8 @@
     --sidebar-primary-foreground: oklch(1 0 0);
     --sidebar-accent: #d19a12;
     --sidebar-accent-foreground: #ffffff;
-    /* Accent (verde brillante para estados): */
-    --accent: #6fd24a;
+    /* Accent (verde equilibrado profesional): */
+    --accent: #6fbb4a;
     --accent-foreground: #0b1b2b;
     /* Foreground and border adjustments for better contrast */
     --foreground: #0b1b2b;
@@ -71,7 +71,7 @@
     /* Secondary in dark: use a darker amber for contrast */
     --secondary: #9a6400; /* darker amber for dark mode */
     --secondary-foreground: #ffffff; /* white text on dark amber */
-    --accent: oklch(0.73 0.18 135); /* #6fca3a - Verde brillante */
+    --accent: oklch(0.67 0.13 135); /* Verde intermedio profesional */
     --accent-foreground: oklch(0.12 0.005 240); /* #111111 */
     --card: oklch(0.17 0.005 240); /* #2a2a2a - Gris oscuro */
     --card-foreground: oklch(0.96 0.03 95);
