@@ -614,6 +614,8 @@ export const es = {
             emailPlaceholder: "tu@email.com",
             phoneLabel: "Teléfono (opcional)",
             phonePlaceholder: "+34 600 000 000",
+            companyLabel: "Empresa",
+            companyPlaceholder: "Nombre de tu empresa",
             typeLabel: "Tipo de consulta",
             typeOptions: {
                 empty: "Selecciona una opción",
