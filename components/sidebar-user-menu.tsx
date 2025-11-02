@@ -65,7 +65,9 @@ export function SidebarUserMenu() {
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="hover:bg-accent h-auto w-full justify-start gap-3 px-3 py-2">
-                    <UserAvatar user={user} size="md" showBadge={true} />
+                    <div className="flex-shrink-0">
+                        <UserAvatar user={user} size="md" showBadge={true} />
+                    </div>
                     <div className="flex flex-1 flex-col items-start overflow-hidden text-left">
                         <span className="text-foreground truncate text-sm font-medium">{displayName}</span>
                         <span className="text-muted-foreground truncate text-xs">{userTypeLabel}</span>

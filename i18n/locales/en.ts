@@ -1111,6 +1111,29 @@ export const en = {
                     viewDetails: "View details",
                 },
             },
+            terrenos: {
+                allTerrains: {
+                    title: "Available Lands",
+                    subtitle: "Explore lands for renewable energy projects",
+                    filters: {
+                        title: "Search filters",
+                        subtitle: "Refine your search to find specific lands",
+                        search: "Search",
+                        searchPlaceholder: "Search land...",
+                        province: "Province",
+                        allProvinces: "All provinces",
+                        status: "Status",
+                        allStatuses: "All statuses",
+                        clearFilters: "Clear filters",
+                    },
+                    status: {
+                        activo: "Active",
+                        pendiente: "Pending Review",
+                        arrendado: "Leased",
+                        vendido: "Sold",
+                    },
+                },
+            },
         },
         owner: {
             dashboard: "Owner Dashboard",

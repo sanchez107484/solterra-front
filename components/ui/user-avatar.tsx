@@ -23,9 +23,7 @@ export function UserAvatar({ user, size = "md", showBadge = true, className }: U
         return name.substring(0, 2).toUpperCase()
     }
 
-    const initials = getInitials(user.nombre || user.email)
-
-    // Tamaños
+    const initials = getInitials(user.nombre || user.email) // Tamaños
     const sizeClasses = {
         sm: "h-8 w-8 text-xs",
         md: "h-10 w-10 text-sm",
@@ -33,13 +31,13 @@ export function UserAvatar({ user, size = "md", showBadge = true, className }: U
     }
 
     // Colores de fondo según rol (usando colores de tema primary/secondary)
-    const fallbackBgClass = user.rol === "PROPIETARIO" ? "bg-primary hover:bg-primary/90" : "bg-secondary hover:bg-secondary/90"
+    const fallbackBgClass = user.rol === "PROPIETARIO" ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"
 
     return (
         <div className="relative inline-block">
             <Avatar className={cn(sizeClasses[size], className)}>
                 <AvatarImage src={user.avatar || undefined} alt={`Avatar de ${user.nombre || user.email}`} />
-                <AvatarFallback className={cn("font-semibold text-white", fallbackBgClass)}>{initials}</AvatarFallback>
+                <AvatarFallback className={cn("font-bold", fallbackBgClass)}>{initials}</AvatarFallback>
             </Avatar>
 
             {/* Badge de tipo de usuario - sin icono */}

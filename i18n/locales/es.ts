@@ -1119,6 +1119,29 @@ export const es = {
                     viewDetails: "Ver detalles",
                 },
             },
+            terrenos: {
+                allTerrains: {
+                    title: "Terrenos Disponibles",
+                    subtitle: "Explora terrenos para proyectos de energía renovable",
+                    filters: {
+                        title: "Filtros de búsqueda",
+                        subtitle: "Refina tu búsqueda para encontrar terrenos específicos",
+                        search: "Buscar",
+                        searchPlaceholder: "Buscar terreno...",
+                        province: "Provincia",
+                        allProvinces: "Todas las provincias",
+                        status: "Estado",
+                        allStatuses: "Todos los estados",
+                        clearFilters: "Limpiar filtros",
+                    },
+                    status: {
+                        activo: "Activo",
+                        pendiente: "Pendiente Revisión",
+                        arrendado: "Arrendado",
+                        vendido: "Vendido",
+                    },
+                },
+            },
         },
         owner: {
             dashboard: "Panel de Propietario",
