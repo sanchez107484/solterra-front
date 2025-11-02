@@ -24,7 +24,8 @@ const buttonVariants = cva(
                     "bg-primary/20 text-primary border-l-4 border-primary hover:bg-primary/15 dark:bg-primary/20 dark:hover:bg-primary/25 font-semibold shadow-sm",
                 "sidebar-active-secondary":
                     "bg-secondary/20 text-secondary-foreground border-l-4 border-secondary hover:bg-secondary/15 dark:bg-secondary/20 dark:hover:bg-secondary/25 font-semibold shadow-sm",
-                "sidebar-hover": "hover:bg-accent/50 hover:text-accent-foreground dark:hover:bg-accent/30",
+                "sidebar-hover": "hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/15",
+                "sidebar-hover-secondary": "hover:bg-secondary/10 hover:text-secondary-foreground dark:hover:bg-secondary/15",
             },
             size: {
                 default: "h-9 px-4 py-2 has-[>svg]:px-3",

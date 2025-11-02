@@ -125,7 +125,9 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                                                         ? isPropietario
                                                             ? "sidebar-active"
                                                             : "sidebar-active-secondary"
-                                                        : "sidebar-hover"
+                                                        : isPropietario
+                                                          ? "sidebar-hover"
+                                                          : "sidebar-hover-secondary"
                                                 }
                                                 className={cn(
                                                     "w-full transition-all duration-200",
@@ -163,7 +165,9 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                                                 ? isPropietario
                                                     ? "sidebar-active"
                                                     : "sidebar-active-secondary"
-                                                : "sidebar-hover"
+                                                : isPropietario
+                                                  ? "sidebar-hover"
+                                                  : "sidebar-hover-secondary"
                                         }
                                         className={cn(
                                             "w-full transition-all duration-200",
@@ -194,7 +198,9 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                                                 ? isPropietario
                                                     ? "sidebar-active"
                                                     : "sidebar-active-secondary"
-                                                : "sidebar-hover"
+                                                : isPropietario
+                                                  ? "sidebar-hover"
+                                                  : "sidebar-hover-secondary"
                                         }
                                         className={cn(
                                             "w-full transition-all duration-200",
@@ -225,7 +231,9 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                                                 ? isPropietario
                                                     ? "sidebar-active"
                                                     : "sidebar-active-secondary"
-                                                : "sidebar-hover"
+                                                : isPropietario
+                                                  ? "sidebar-hover"
+                                                  : "sidebar-hover-secondary"
                                         }
                                         className={cn(
                                             "w-full transition-all duration-200",
@@ -252,7 +260,10 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                         {!isCollapsed ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="sidebar-hover" className="w-full justify-start gap-3 px-3">
+                                    <Button
+                                        variant={isPropietario ? "sidebar-hover" : "sidebar-hover-secondary"}
+                                        className="w-full justify-start gap-3 px-3"
+                                    >
                                         <Globe className="h-4 w-4 flex-shrink-0" />
                                         <span className="truncate">{t?.sidebar?.navigation?.language || "Idioma"}</span>
                                     </Button>
@@ -271,7 +282,10 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                                 <DropdownMenu>
                                     <TooltipTrigger asChild>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant="sidebar-hover" className="w-full justify-center px-2">
+                                            <Button
+                                                variant={isPropietario ? "sidebar-hover" : "sidebar-hover-secondary"}
+                                                className="w-full justify-center px-2"
+                                            >
                                                 <Globe className="h-4 w-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
@@ -298,7 +312,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                             <TooltipTrigger asChild>
                                 <Button
                                     onClick={handleLogout}
-                                    variant="sidebar-hover"
+                                    variant={isPropietario ? "sidebar-hover" : "sidebar-hover-secondary"}
                                     className={cn(
                                         "text-destructive hover:text-destructive w-full transition-all duration-200",
                                         isCollapsed ? "justify-center px-2" : "justify-start gap-3 px-3"

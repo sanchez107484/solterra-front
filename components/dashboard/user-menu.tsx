@@ -85,9 +85,9 @@ export function UserMenu({ userType }: UserMenuProps) {
     const getRoleBadgeColor = (rol: string) => {
         switch (rol?.toUpperCase()) {
             case "PROMOTOR":
-                return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                return "bg-secondary/20 text-secondary-foreground border border-secondary/30"
             case "PROPIETARIO":
-                return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                return "bg-primary/20 text-primary border border-primary/30"
             case "ADMIN":
                 return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
             default:
@@ -103,7 +103,10 @@ export function UserMenu({ userType }: UserMenuProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800">
+                <Button
+                    variant="ghost"
+                    className={`relative flex items-center gap-3 ${userType === "promotor" ? "hover:bg-secondary/10" : "hover:bg-primary/10"}`}
+                >
                     <Avatar className="h-9 w-9">
                         <AvatarImage src={getAvatarUrl(user?.avatar)} alt={user?.nombre || user?.email} />
                         <AvatarFallback className={`font-semibold text-white ${getAvatarFallbackColor(user?.rol)}`}>
@@ -151,7 +154,7 @@ export function UserMenu({ userType }: UserMenuProps) {
                     </p>
                     <div className="flex gap-2">
                         <Button
-                            variant={locale === "es" ? "default" : "outline"}
+                            variant={locale === "es" ? (userType === "promotor" ? "secondary" : "default") : "outline"}
                             size="sm"
                             onClick={() => setLocale("es")}
                             className="flex-1 text-xs"
@@ -159,7 +162,7 @@ export function UserMenu({ userType }: UserMenuProps) {
                             🇪🇸 ES
                         </Button>
                         <Button
-                            variant={locale === "en" ? "default" : "outline"}
+                            variant={locale === "en" ? (userType === "promotor" ? "secondary" : "default") : "outline"}
                             size="sm"
                             onClick={() => setLocale("en")}
                             className="flex-1 text-xs"

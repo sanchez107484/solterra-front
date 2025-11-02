@@ -98,12 +98,16 @@ api.interceptors.response.use(
             const isAuthError = status === 401 || status === 403
             const isProfileCheck = url.includes("/profile")
 
-            if (!isAuthError && !isProfileCheck) {
+            // Solo loguear si hay información real de error
+            const hasErrorInfo = url || status || error.response?.data || error.message
+
+            if (!isAuthError && !isProfileCheck && hasErrorInfo) {
                 console.error("API Error:", {
                     url: error.config?.url,
                     method: error.config?.method,
                     status: error.response?.status,
                     data: error.response?.data,
+                    message: error.message,
                 })
             }
         }
