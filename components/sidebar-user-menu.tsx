@@ -1,5 +1,6 @@
 "use client"
 
+import { LogoutConfirmationModal } from "@/components/modals/logout-confirmation-modal"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -27,12 +28,22 @@ export function SidebarUserMenu() {
     const { auth, logout } = useAuth()
     const user = auth.user
     const [open, setOpen] = useState(false)
+    const [showLogoutModal, setShowLogoutModal] = useState(false)
 
     if (!user) return null
 
     const handleLogout = async () => {
+        setShowLogoutModal(true)
+    }
+
+    const confirmLogout = async () => {
+        setShowLogoutModal(false)
         await logout()
         router.push("/")
+    }
+
+    const cancelLogout = () => {
+        setShowLogoutModal(false)
     }
 
     const handleGoToDashboard = () => {
@@ -129,6 +140,7 @@ export function SidebarUserMenu() {
                     <span>Cerrar sesión</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
+            <LogoutConfirmationModal open={showLogoutModal} onConfirm={confirmLogout} onCancel={cancelLogout} />
         </DropdownMenu>
     )
 }

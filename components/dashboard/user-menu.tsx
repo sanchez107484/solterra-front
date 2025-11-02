@@ -1,5 +1,6 @@
 "use client"
 
+import { LogoutConfirmationModal } from "@/components/modals/logout-confirmation-modal"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -15,6 +16,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useTranslations } from "@/i18n/i18nContext"
 import { ChevronDown, Globe, Home, LogOut, Settings, User } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 interface UserMenuProps {
     userType: "promotor" | "propietario"
@@ -25,9 +27,19 @@ export function UserMenu({ userType }: UserMenuProps) {
     const router = useRouter()
     const { auth, logout } = useAuth()
     const user = auth.user
+    const [showLogoutModal, setShowLogoutModal] = useState(false)
 
     const handleLogout = () => {
+        setShowLogoutModal(true)
+    }
+
+    const confirmLogout = () => {
+        setShowLogoutModal(false)
         logout()
+    }
+
+    const cancelLogout = () => {
+        setShowLogoutModal(false)
     }
 
     const getAvatarUrl = (avatarPath: string | null | undefined) => {
@@ -163,6 +175,7 @@ export function UserMenu({ userType }: UserMenuProps) {
                     <span>{t?.common?.logout}</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
+            <LogoutConfirmationModal open={showLogoutModal} onConfirm={confirmLogout} onCancel={cancelLogout} />
         </DropdownMenu>
     )
 }

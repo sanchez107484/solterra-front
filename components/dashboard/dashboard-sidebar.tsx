@@ -1,6 +1,7 @@
 "use client"
 
 import Logo from "@/components/logo"
+import { LogoutConfirmationModal } from "@/components/modals/logout-confirmation-modal"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
@@ -12,6 +13,7 @@ import { cn } from "@/lib/utils"
 import { Briefcase, ChevronLeft, ChevronRight, Globe, Home, LayoutDashboard, Leaf, LogOut, MapPin, Settings, User, Zap } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { useState } from "react"
 
 interface DashboardSidebarProps {
     userType: "propietario" | "promotor"
@@ -23,6 +25,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
     const { logout } = useAuth()
     const router = useRouter()
     const { isCollapsed, setIsCollapsed } = useSidebar()
+    const [showLogoutModal, setShowLogoutModal] = useState(false)
 
     const isPropietario = userType === "propietario"
     const Icon = isPropietario ? Leaf : Zap
@@ -52,8 +55,17 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
           ]
 
     const handleLogout = async () => {
+        setShowLogoutModal(true)
+    }
+
+    const confirmLogout = async () => {
+        setShowLogoutModal(false)
         await logout()
         router.push("/")
+    }
+
+    const cancelLogout = () => {
+        setShowLogoutModal(false)
     }
 
     return (
@@ -301,6 +313,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                     </TooltipProvider>
                 </div>
             </div>
+            <LogoutConfirmationModal open={showLogoutModal} onConfirm={confirmLogout} onCancel={cancelLogout} />
         </aside>
     )
 }
