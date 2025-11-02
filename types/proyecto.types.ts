@@ -38,6 +38,11 @@ export interface Proyecto {
     actualizadoEn?: string
 
     promotorId: string
+    promotor?: {
+        id: string
+        email: string
+        nombre: string | null
+    }
 }
 
 export interface CreateProyectoDTO {
