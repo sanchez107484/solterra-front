@@ -321,7 +321,9 @@ export default function ProyectoDetallePropietarioPage() {
                                         <div className="bg-primary/10 group-hover:bg-primary/20 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
                                             <Building2 className="text-primary h-5 w-5" />
                                         </div>
-                                        <h2 className="text-lg font-bold">{t?.owner?.projects?.detail?.sections?.technicalInfo || "Información Técnica"}</h2>
+                                        <h2 className="text-lg font-bold">
+                                            {t?.owner?.projects?.detail?.sections?.technicalInfo || "Información Técnica"}
+                                        </h2>
                                     </div>
                                     <div className="grid gap-4">
                                         <div className="space-y-1">
@@ -371,12 +373,16 @@ export default function ProyectoDetallePropietarioPage() {
                                         <div className="bg-secondary/10 group-hover:bg-secondary/20 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
                                             <MapPin className="text-secondary h-5 w-5" />
                                         </div>
-                                        <h2 className="text-lg font-bold">{t?.owner?.projects?.detail?.sections?.locationInfo || "Ubicación"}</h2>
+                                        <h2 className="text-lg font-bold">
+                                            {t?.owner?.projects?.detail?.sections?.locationInfo || "Ubicación"}
+                                        </h2>
                                     </div>
                                     {!proyecto.ubicacion && !proyecto.provincia && !proyecto.comunidad ? (
                                         <div className="text-muted-foreground py-4 text-center">
                                             <MapPin className="mx-auto mb-2 h-6 w-6 opacity-50" />
-                                            <p className="text-xs">{t?.owner?.projects?.detail?.fields?.noLocation || "No se ha especificado ubicación"}</p>
+                                            <p className="text-xs">
+                                                {t?.owner?.projects?.detail?.fields?.noLocation || "No se ha especificado ubicación"}
+                                            </p>
                                         </div>
                                     ) : (
                                         <div className="grid gap-4">
@@ -457,9 +463,12 @@ export default function ProyectoDetallePropietarioPage() {
                                     <MessageCircle className="text-primary h-6 w-6" />
                                 </div>
                                 <div>
-                                    <h3 className="mb-2 text-xl font-bold">{t?.owner?.projects?.detail?.cta?.finalTitle || "¿Tienes un terreno adecuado?"}</h3>
+                                    <h3 className="mb-2 text-xl font-bold">
+                                        {t?.owner?.projects?.detail?.cta?.finalTitle || "¿Tienes un terreno adecuado?"}
+                                    </h3>
                                     <p className="text-muted-foreground mx-auto max-w-xl text-sm">
-                                        {t?.owner?.projects?.detail?.cta?.finalDesc || "Si tienes un terreno que cumple con los requisitos, no dudes en contactar al promotor o registrar tu terreno en nuestra plataforma."}
+                                        {t?.owner?.projects?.detail?.cta?.finalDesc ||
+                                            "Si tienes un terreno que cumple con los requisitos, no dudes en contactar al promotor o registrar tu terreno en nuestra plataforma."}
                                     </p>
                                 </div>
                                 <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -484,8 +493,12 @@ export default function ProyectoDetallePropietarioPage() {
                                 <Briefcase className="text-muted-foreground h-12 w-12" />
                             </div>
                             <div>
-                                <h3 className="mb-2 text-xl font-semibold">{t?.owner?.projects?.detail?.notFound || "Proyecto no encontrado"}</h3>
-                                <p className="text-muted-foreground">{t?.owner?.projects?.detail?.notFoundDesc || "No se pudo cargar la información del proyecto"}</p>
+                                <h3 className="mb-2 text-xl font-semibold">
+                                    {t?.owner?.projects?.detail?.notFound || "Proyecto no encontrado"}
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    {t?.owner?.projects?.detail?.notFoundDesc || "No se pudo cargar la información del proyecto"}
+                                </p>
                             </div>
                             <Link href="/dashboard/propietario/todos-proyectos">
                                 <Button className="mt-4">{t?.owner?.projects?.detail?.viewAll || "Ver Todos los Proyectos"}</Button>
