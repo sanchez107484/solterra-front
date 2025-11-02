@@ -4,6 +4,7 @@ import type React from "react"
 import { useState } from "react"
 
 import StandardLayout from "@/components/layouts/StandardLayout"
+import ContactPageSEO from "@/components/seo/ContactPageSEO"
 import { PageHero } from "@/components/shared/page-hero"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -13,7 +14,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { useTranslations } from "@/i18n/i18nContext"
 import { Clock, Mail, Send } from "lucide-react"
-import Head from "next/head"
 
 export default function Contacto() {
     const { t } = useTranslations()
@@ -66,17 +66,7 @@ export default function Contacto() {
 
     return (
         <StandardLayout>
-            <Head>
-                <title>Contacto Solterra Advisory - Consultas sobre Terrenos y Proyectos de Energía Renovable Solar y Eólica</title>
-                <meta
-                    name="description"
-                    content="Contacta con Solterra Advisory para consultas sobre arrendamiento de terrenos para energía solar y eólica, proyectos renovables, matching entre propietarios y promotores en toda España. Respuesta en 24h."
-                />
-                <meta
-                    name="keywords"
-                    content="contacto solterra, consulta energía renovable, arrendamiento terrenos solares, proyectos eólicos españa, soporte plataforma renovable, contacto promotores"
-                />
-            </Head>
+            <ContactPageSEO />
 
             {/* Hero Section */}
             <PageHero title={t?.contact?.hero?.title || "Contacto"} subtitle={t?.contact?.hero?.subtitle || "Estamos aquí para ayudarte"} />
@@ -251,6 +241,88 @@ export default function Contacto() {
                             </Card>
                         </div>
                     </div>
+
+                    {/* Sección SEO con contenido rico */}
+                    {/* <div className="mt-16 rounded-2xl border-2 bg-white p-8 shadow-lg">
+                        <h2 className="mb-6 text-2xl font-bold">¿Por qué contactar con Solterra Advisory?</h2>
+
+                        <div className="grid gap-8 md:grid-cols-2">
+                            <div>
+                                <h3 className="text-primary mb-3 text-lg font-semibold">Para Propietarios de Terrenos</h3>
+                                <p className="text-muted-foreground mb-3 text-sm leading-relaxed">
+                                    Si eres propietario de terreno rural en España y quieres generar ingresos pasivos mediante el
+                                    arrendamiento para proyectos de energía solar fotovoltaica o eólica, contacta con nosotros. Te ayudamos
+                                    a:
+                                </p>
+                                <ul className="text-muted-foreground space-y-2 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-primary mt-1">•</span>
+                                        <span>Valorar el potencial de tu terreno para energía renovable</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-primary mt-1">•</span>
+                                        <span>Conectar con promotores verificados de proyectos solares y eólicos</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-primary mt-1">•</span>
+                                        <span>Negociar contratos de arrendamiento justos y rentables</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-primary mt-1">•</span>
+                                        <span>Entender el proceso completo de desarrollo de parques solares y eólicos</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 className="text-secondary mb-3 text-lg font-semibold">Para Promotores de Proyectos</h3>
+                                <p className="text-muted-foreground mb-3 text-sm leading-relaxed">
+                                    Si eres promotor o desarrollador de proyectos de energía renovable y buscas terrenos adecuados para
+                                    instalaciones solares fotovoltaicas, parques eólicos o plantas de energía limpia, contáctanos para:
+                                </p>
+                                <ul className="text-muted-foreground space-y-2 text-sm">
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-secondary mt-1">•</span>
+                                        <span>Acceder a nuestra base de datos de terrenos verificados en toda España</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-secondary mt-1">•</span>
+                                        <span>Filtrar terrenos por ubicación, superficie, orientación y acceso a red eléctrica</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-secondary mt-1">•</span>
+                                        <span>Contactar directamente con propietarios interesados en arrendar</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="text-secondary mt-1">•</span>
+                                        <span>Optimizar el tiempo de búsqueda y análisis de ubicaciones viables</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div className="from-primary/5 to-secondary/5 mt-8 rounded-xl bg-gradient-to-r p-6">
+                            <h3 className="mb-3 text-lg font-semibold">Nuestra Cobertura en España</h3>
+                            <p className="text-muted-foreground text-sm leading-relaxed">
+                                Solterra Advisory opera en toda España, conectando terrenos rurales con proyectos de energía renovable en
+                                Andalucía, Castilla y León, Castilla-La Mancha, Extremadura, Aragón, Comunidad Valenciana, Murcia, Galicia y
+                                todas las comunidades autónomas. Especializados en identificar ubicaciones óptimas para instalaciones
+                                solares fotovoltaicas y parques eólicos según irradiación solar, velocidad del viento, orografía del terreno
+                                y proximidad a subestaciones eléctricas.
+                            </p>
+                        </div>
+
+                        <div className="mt-6 text-center">
+                            <p className="text-muted-foreground text-sm">
+                                <strong className="text-foreground">Email:</strong>{" "}
+                                <a href="mailto:info@solterraadvisory.com" className="text-primary hover:underline">
+                                    info@solterraadvisory.com
+                                </a>{" "}
+                                | <strong className="text-foreground">Horario:</strong> Lunes a Viernes 9:00-18:00, Sábados 10:00-14:00 |{" "}
+                                <strong className="text-foreground">Tiempo de respuesta:</strong> Menos de 24 horas
+                            </p>
+                        </div>
+                    </div> */}
                 </div>
             </section>
         </StandardLayout>

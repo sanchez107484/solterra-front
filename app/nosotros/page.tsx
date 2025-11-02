@@ -198,35 +198,6 @@ export default function Nosotros() {
                     </div>
                 </div>
             </section>
-
-            {/* CTA Final */}
-            <section className="from-primary/10 via-secondary/10 to-accent/10 bg-gradient-to-br px-6 py-20">
-                <div className="container mx-auto max-w-4xl text-center">
-                    <div className="bg-background/80 rounded-2xl border-2 p-12 shadow-2xl backdrop-blur-sm">
-                        <h2 className="mb-4 text-4xl font-bold md:text-5xl">
-                            {t?.about?.values?.ctaTitle || "Únete a la revolución energética de España"}
-                        </h2>
-                        <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-xl">
-                            {t?.about?.values?.ctaSubtitle ||
-                                "Forma parte del cambio hacia un futuro más sostenible y rentable para propietarios y promotores"}
-                        </p>
-                        <div className="flex flex-wrap justify-center gap-4">
-                            <Link href="/login/propietario">
-                                <Button size="lg" className="gap-2">
-                                    <Leaf className="h-5 w-5" />
-                                    {t?.about?.values?.ctaOwner || "Soy propietario"}
-                                </Button>
-                            </Link>
-                            <Link href="/login/promotor">
-                                <Button size="lg" variant="outline" className="gap-2">
-                                    <Building2 className="h-5 w-5" />
-                                    {t?.about?.values?.ctaDeveloper || "Soy promotor"}
-                                </Button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </StandardLayout>
     )
 }
