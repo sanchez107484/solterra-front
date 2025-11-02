@@ -616,6 +616,8 @@ export const es = {
             phonePlaceholder: "+34 600 000 000",
             companyLabel: "Empresa",
             companyPlaceholder: "Nombre de tu empresa",
+            passwordLabel: "Contraseña",
+            passwordPlaceholder: "Mínimo 6 caracteres",
             typeLabel: "Tipo de consulta",
             typeOptions: {
                 empty: "Selecciona una opción",
@@ -632,6 +634,10 @@ export const es = {
             successDesc: "Hemos recibido tu mensaje. Te responderemos en menos de 24 horas.",
             error: "Error al enviar",
             errorDesc: "No se pudo enviar el mensaje. Por favor, intenta de nuevo o contáctanos por email.",
+            rememberMe: "Recordarme",
+            forgotPassword: "¿Olvidaste tu contraseña?",
+            loginButton: "Iniciar sesión",
+            registerButton: "Crear cuenta",
         },
         info: {
             title: "Otras formas de contacto",

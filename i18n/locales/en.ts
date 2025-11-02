@@ -613,6 +613,8 @@ export const en = {
             phonePlaceholder: "+34 600 000 000",
             companyLabel: "Company",
             companyPlaceholder: "Your company name",
+            passwordLabel: "Password",
+            passwordPlaceholder: "Minimum 6 characters",
             typeLabel: "Inquiry type",
             typeOptions: {
                 empty: "Select an option",
@@ -629,6 +631,10 @@ export const en = {
             successDesc: "We've received your message. We'll respond within 24 hours.",
             error: "Send error",
             errorDesc: "Could not send message. Please try again or contact us by email.",
+            rememberMe: "Remember me",
+            forgotPassword: "Forgot your password?",
+            loginButton: "Sign in",
+            registerButton: "Create account",
         },
         info: {
             title: "Other contact methods",
