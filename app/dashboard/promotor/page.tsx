@@ -1,344 +1,550 @@
 "use client"
 
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
-import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
-import { MatchCard } from "@/components/dashboard/match-card"
-import { ProjectSummaryCard } from "@/components/dashboard/project-summary-card"
-import ProtectedRoute from "@/components/protected-route"
+import { ProyectoCard } from "@/components/dashboard/proyecto-card"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
+import { useProyectos } from "@/hooks/useProyectos"
 import { useTranslations } from "@/i18n/i18nContext"
-import { ProyectoConMatches, TerrenoMatch } from "@/types/match.types"
-import { Briefcase, Calendar, MapPin, Plus, TrendingUp } from "lucide-react"
+import { Briefcase, ChevronLeft, ChevronRight, Euro, Grid3x3, MoveHorizontal, Plus, TrendingUp, Zap } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-import { useProyectos } from "../../../hooks/useProyectos"
+import { useEffect, useRef, useState } from "react"
+
+interface ProyectoConMatches {
+    id: string
+    titulo: string
+    tipo: string
+    potenciaObjetivo: number
+    provincia: string
+    estado: string
+    matchCount: number
+    matches: Array<{
+        id: string
+        titulo: string
+        municipio: string
+        provincia: string
+        superficie: number
+        compatibilidad: number
+        estado: string
+    }>
+}
 
 export default function DashboardPromotor() {
     const { t } = useTranslations()
     const [proyectosConMatches, setProyectosConMatches] = useState<ProyectoConMatches[]>([])
+    const [selectedProyectoId, setSelectedProyectoId] = useState<string | null>(null)
     const [isLoadingMatches, setIsLoadingMatches] = useState(false)
-    const [topMatchesGlobal, setTopMatchesGlobal] = useState<TerrenoMatch[]>([])
+    const [viewMode, setViewMode] = useState<"horizontal" | "grid">("horizontal")
+    const [canScrollLeft, setCanScrollLeft] = useState(false)
+    const [canScrollRight, setCanScrollRight] = useState(false)
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-    // Hook para cargar proyectos desde el backend
-    const { proyectos, isLoading: proyectosLoading, fetchMine } = useProyectos({ autoFetch: false })
+    const { proyectos, total, isLoading: proyectosLoading, fetchMine } = useProyectos({ autoFetch: false })
 
-    // Filtrar proyectos activos (no CANCELADO ni COMPLETADO)
-    const proyectosActivos =
-        proyectos?.filter((p: any) => p.estado?.toUpperCase() !== "CANCELADO" && p.estado?.toUpperCase() !== "COMPLETADO") || []
+    const hasProyectos = proyectos.length > 0
+    const selectedProyecto = proyectosConMatches.find((p) => p.id === selectedProyectoId)
 
-    const hasProyectos = proyectos?.length > 0
-    const hasProyectosActivos = proyectosActivos.length > 0
-    const isSingleProject = proyectosActivos.length === 1
-
-    // Cargar proyectos al montar
     useEffect(() => {
         fetchMine()
     }, [fetchMine])
 
-    // Cargar matches para cada proyecto activo
     useEffect(() => {
         const loadMatches = async () => {
-            if (!hasProyectosActivos) return
+            if (!hasProyectos || proyectos.length === 0) {
+                setProyectosConMatches([])
+                setSelectedProyectoId(null)
+                return
+            }
 
             setIsLoadingMatches(true)
             try {
                 const token = localStorage.getItem("auth_token")
-                if (!token) return
+                if (!token) {
+                    console.error("No authentication token found")
+                    setIsLoadingMatches(false)
+                    return
+                }
 
                 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"
 
-                // Cargar matches para cada proyecto
-                const matchesPromises = proyectosActivos.map(async (proyecto: any) => {
-                    const response = await fetch(`${API_URL}/proyectos/${proyecto.id}/matches`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "application/json",
-                        },
-                    })
-                    if (response.ok) {
-                        return await response.json()
-                    }
-                    return null
+                const resp = await fetch(`${API_URL}/proyectos/me-with-matches`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
                 })
 
-                const results = await Promise.all(matchesPromises)
-                const validResults = results.filter((r) => r !== null) as ProyectoConMatches[]
-                setProyectosConMatches(validResults)
+                if (!resp.ok) {
+                    throw new Error(`Failed to fetch projects: ${resp.status} ${resp.statusText}`)
+                }
 
-                // Extraer top 3 matches globales
-                const allMatches = validResults.flatMap((p) => p.matches)
-                const sorted = allMatches.sort((a, b) => b.compatibilidad - a.compatibilidad)
-                setTopMatchesGlobal(sorted.slice(0, 3))
+                const data = await resp.json()
+
+                // Mapear la respuesta del backend al formato esperado por el frontend
+                const results: ProyectoConMatches[] = Array.isArray(data)
+                    ? data.map((proyecto: any) => ({
+                          id: proyecto.id,
+                          titulo: proyecto.titulo || t?.common?.untitledProject || "Proyecto sin título",
+                          tipo: proyecto.tipo || "SOLAR_FOTOVOLTAICA",
+                          potenciaObjetivo: proyecto.potenciaObjetivo || 0,
+                          provincia: proyecto.provincia || "",
+                          estado: proyecto.estado || "BORRADOR",
+                          matchCount: proyecto.matchCount || 0,
+                          matches: Array.isArray(proyecto.matches)
+                              ? proyecto.matches.map((match: any) => ({
+                                    id: match.terreno?.id || match.terrenoId || "",
+                                    titulo:
+                                        match.terreno?.titulo ||
+                                        `${match.terreno?.municipio || ""}, ${match.terreno?.provincia || ""}`.trim() ||
+                                        "Terreno sin título",
+                                    municipio: match.terreno?.municipio || "",
+                                    provincia: match.terreno?.provincia || "",
+                                    superficie: match.terreno?.superficie || 0,
+                                    compatibilidad: Math.round(match.scoreTotal || 0),
+                                    estado: match.estado || "PENDIENTE",
+                                }))
+                              : [],
+                      }))
+                    : []
+
+                setProyectosConMatches(results)
+
+                // Seleccionar automáticamente el primer proyecto si no hay ninguno seleccionado
+                if (results.length > 0 && !selectedProyectoId) {
+                    setSelectedProyectoId(results[0].id)
+                }
             } catch (error) {
-                console.error("Error loading matches:", error)
+                console.error("Error loading projects with matches:", error)
+
+                // En caso de error, mostrar proyectos sin matches como fallback
+                const fallbackResults: ProyectoConMatches[] = proyectos.map((proyecto: any) => ({
+                    id: proyecto.id,
+                    titulo: proyecto.titulo || t?.common?.untitledProject || "Proyecto sin título",
+                    tipo: proyecto.tipo || "SOLAR_FOTOVOLTAICA",
+                    potenciaObjetivo: proyecto.potenciaObjetivo || 0,
+                    provincia: proyecto.provincia || "",
+                    estado: proyecto.estado || "BORRADOR",
+                    matchCount: 0,
+                    matches: [],
+                }))
+                setProyectosConMatches(fallbackResults)
             } finally {
                 setIsLoadingMatches(false)
             }
         }
 
         loadMatches()
-    }, [proyectosActivos.length, hasProyectosActivos])
+    }, [proyectos.length, hasProyectos, t])
 
-    // Calcular estadísticas desde los datos reales
+    // Función para verificar si se puede hacer scroll
+    const checkScroll = () => {
+        if (scrollContainerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
+            setCanScrollLeft(scrollLeft > 0)
+            setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10)
+        }
+    }
+
+    // Función para hacer scroll suave
+    const scroll = (direction: "left" | "right") => {
+        if (scrollContainerRef.current) {
+            const scrollAmount = 380 // ancho de la tarjeta + gap
+            const newScrollLeft =
+                direction === "left"
+                    ? scrollContainerRef.current.scrollLeft - scrollAmount
+                    : scrollContainerRef.current.scrollLeft + scrollAmount
+
+            scrollContainerRef.current.scrollTo({
+                left: newScrollLeft,
+                behavior: "smooth",
+            })
+        }
+    }
+
+    // Verificar scroll al montar y cuando cambia el contenido
+    useEffect(() => {
+        checkScroll()
+        const container = scrollContainerRef.current
+        if (container) {
+            container.addEventListener("scroll", checkScroll)
+            window.addEventListener("resize", checkScroll)
+            return () => {
+                container.removeEventListener("scroll", checkScroll)
+                window.removeEventListener("resize", checkScroll)
+            }
+        }
+    }, [proyectosConMatches, viewMode])
+
     const stats = {
-        proyectosActivos: proyectosActivos.length,
-        terrenosCompatibles: proyectosConMatches.reduce((sum, p) => sum + p.totalMatches, 0),
-        capacidadTotal: proyectos?.reduce((sum: number, p: any) => sum + (p.potenciaObjetivo || 0), 0) || 0,
-        inversionEstimada: proyectos?.reduce((sum: number, p: any) => sum + (p.presupuesto || 0), 0) || 0,
+        proyectosActivos: proyectos.filter((p: any) => String(p?.estado ?? "").toUpperCase() === "ACTIVO").length,
+        totalMatches: proyectosConMatches.reduce((sum: number, p: ProyectoConMatches) => sum + p.matchCount, 0),
+        potenciaTotal: proyectos.reduce((sum: number, p: any) => sum + (Number(p.potenciaObjetivo) || 0), 0),
+        inversionEstimada: proyectos.reduce((sum: number, p: any) => sum + (Number(p.presupuesto) || 0), 0),
     }
 
     return (
-        <ProtectedRoute requiredRole="PROMOTOR" redirectTo="/login/promotor">
-            <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-                <DashboardSidebar userType="promotor" />
-                <div className="flex-1">
-                    <DashboardHeader
-                        title={t?.dashboard?.promoter?.title || "Dashboard"}
-                        breadcrumbs={[{ label: t?.dashboard?.breadcrumbs?.dashboard || "Dashboard" }]}
-                        actions={
-                            <Link href="/dashboard/promotor/nuevo-proyecto">
-                                <Button className="gap-2">
-                                    <Plus className="h-4 w-4" />
-                                    {t?.dashboard?.promoter?.newProject}
-                                </Button>
-                            </Link>
-                        }
-                        userType="promotor"
-                    />
+        <>
+            <DashboardHeader
+                title={t?.dashboard?.promoter?.title}
+                breadcrumbs={[{ label: t?.dashboard?.breadcrumbs?.dashboard }]}
+                actions={
+                    <Link href="/dashboard/promotor/nuevo-proyecto">
+                        <Button className="bg-secondary hover:bg-secondary/90 gap-2">
+                            <Plus className="h-4 w-4" />
+                            {t?.sidebar?.promoter?.addProject}
+                        </Button>
+                    </Link>
+                }
+                userType="promotor"
+            />
 
-                    {/* Content */}
-                    <div className="p-6">
-                        {proyectosLoading || isLoadingMatches ? (
-                            <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
-                                <div className="flex flex-col items-center gap-4">
-                                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
-                                    <p className="text-muted-foreground text-sm">
-                                        {t?.dashboard?.promoter?.matches?.loading || "Cargando..."}
-                                    </p>
-                                </div>
-                            </div>
-                        ) : !hasProyectos ? (
-                            <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
-                                <Empty className="max-w-2xl">
-                                    <EmptyHeader>
-                                        <EmptyMedia>
-                                            <Briefcase className="h-12 w-12" />
-                                        </EmptyMedia>
-                                        <EmptyTitle>{t?.dashboard?.promoter?.emptyTitle}</EmptyTitle>
-                                        <EmptyDescription>{t?.dashboard?.promoter?.emptyDesc}</EmptyDescription>
-                                    </EmptyHeader>
-                                    <EmptyContent>
-                                        <Link href="/dashboard/promotor/nuevo-proyecto">
-                                            <Button size="lg" className="gap-2">
-                                                <Plus className="h-5 w-5" />
-                                                {t?.dashboard?.promoter?.emptyCta}
-                                            </Button>
-                                        </Link>
-                                        <div className="mt-8 grid grid-cols-3 gap-6 border-t pt-6">
-                                            <div className="text-center">
-                                                <div className="text-secondary-foreground text-2xl font-bold">500+</div>
-                                                <div className="text-muted-foreground text-xs">
-                                                    {t?.dashboard?.promoter?.stats?.available}
-                                                </div>
-                                            </div>
-                                            <div className="text-center">
-                                                <div className="text-secondary-foreground text-2xl font-bold">150MW</div>
-                                                <div className="text-muted-foreground text-xs">
-                                                    {t?.dashboard?.promoter?.stats?.capacity}
-                                                </div>
-                                            </div>
-                                            <div className="text-center">
-                                                <div className="text-secondary-foreground text-2xl font-bold">95%</div>
-                                                <div className="text-muted-foreground text-xs">{t?.dashboard?.promoter?.stats?.match}</div>
-                                            </div>
+            <div className="mx-auto max-w-[1600px] p-6">
+                {proyectosLoading ? (
+                    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-orange-600" />
+                            <p className="text-muted-foreground text-sm">{t?.dashboard?.promoter?.main?.loading}</p>
+                        </div>
+                    </div>
+                ) : !hasProyectos ? (
+                    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
+                        <Empty className="max-w-2xl">
+                            <EmptyHeader>
+                                <EmptyMedia>
+                                    <Briefcase className="h-12 w-12" />
+                                </EmptyMedia>
+                                <EmptyTitle>{t?.dashboard?.empty?.promoter?.title}</EmptyTitle>
+                                <EmptyDescription>{t?.dashboard?.empty?.promoter?.description}</EmptyDescription>
+                            </EmptyHeader>
+                            <EmptyContent>
+                                <Link href="/dashboard/promotor/nuevo-proyecto">
+                                    <Button size="lg" className="bg-secondary hover:bg-secondary/90 gap-2">
+                                        <Plus className="h-5 w-5" />
+                                        {t?.dashboard?.empty?.promoter?.addProject}
+                                    </Button>
+                                </Link>
+                                <div className="mt-8 grid grid-cols-3 gap-6 border-t pt-6">
+                                    <div className="text-center">
+                                        <div className="text-secondary text-2xl font-bold">
+                                            {t?.dashboard?.empty?.promoter?.metrics?.availableLandsValue}
                                         </div>
-                                    </EmptyContent>
-                                </Empty>
-                            </div>
-                        ) : isSingleProject ? (
-                            /* ===== VISTA: UN SOLO PROYECTO ACTIVO ===== */
-                            <div className="space-y-6">
-                                {/* Resumen del proyecto único */}
-                                <Card className="border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 dark:border-blue-800 dark:from-blue-900/20 dark:to-purple-900/20">
-                                    <div className="p-6">
-                                        <div className="mb-4 flex items-center justify-between">
-                                            <div>
-                                                <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                                    {t?.dashboard?.promoter?.matches?.singleProject}
-                                                </p>
-                                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                                    {proyectosActivos[0]?.titulo}
-                                                </h2>
-                                                <div className="mt-2 flex flex-wrap gap-3 text-sm text-gray-600 dark:text-gray-300">
-                                                    {proyectosActivos[0]?.potenciaObjetivo && (
-                                                        <span className="flex items-center gap-1">
-                                                            <TrendingUp className="h-4 w-4" />
-                                                            {proyectosActivos[0].potenciaObjetivo} MW
-                                                        </span>
-                                                    )}
-                                                    {proyectosActivos[0]?.provincia && (
-                                                        <span className="flex items-center gap-1">
-                                                            <MapPin className="h-4 w-4" />
-                                                            {proyectosActivos[0].provincia}
-                                                        </span>
-                                                    )}
-                                                    <span className="font-semibold text-blue-600">
-                                                        {proyectosConMatches[0]?.totalMatches || 0}{" "}
-                                                        {t?.dashboard?.promoter?.matches?.matchesFound?.split(" ")[1]}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <Link href={`/dashboard/promotor/proyectos/${proyectosActivos[0]?.id}`}>
-                                                <Button variant="outline">{t?.dashboard?.promoter?.matches?.projectDetails}</Button>
-                                            </Link>
+                                        <div className="text-muted-foreground text-xs">
+                                            {t?.dashboard?.empty?.promoter?.metrics?.availableLandsLabel}
                                         </div>
                                     </div>
-                                </Card>
-
-                                {/* Top 5 matches del proyecto único */}
-                                {proyectosConMatches[0]?.matches && proyectosConMatches[0].matches.length > 0 ? (
-                                    <>
-                                        <div>
-                                            <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                                                🌟 {t?.dashboard?.promoter?.matches?.topMatches}
-                                            </h3>
-                                            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                                {proyectosConMatches[0].matches.slice(0, 5).map((match) => (
-                                                    <MatchCard key={match.id} match={match} />
-                                                ))}
-                                            </div>
+                                    <div className="text-center">
+                                        <div className="text-secondary text-2xl font-bold">
+                                            {t?.dashboard?.empty?.promoter?.metrics?.avgMatchValue}
                                         </div>
-
-                                        {proyectosConMatches[0].totalMatches > 5 && (
-                                            <div className="flex justify-center">
-                                                <Link href={`/dashboard/promotor/proyectos/${proyectosActivos[0]?.id}`}>
-                                                    <Button size="lg" variant="outline">
-                                                        {t?.dashboard?.promoter?.matches?.viewAll?.replace(
-                                                            "matches",
-                                                            `${proyectosConMatches[0].totalMatches} matches`
-                                                        )}
-                                                    </Button>
-                                                </Link>
-                                            </div>
-                                        )}
-                                    </>
-                                ) : (
-                                    <Card className="p-12">
-                                        <div className="text-center">
-                                            <Briefcase className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                                            <h3 className="mb-2 text-lg font-semibold">{t?.dashboard?.promoter?.matches?.noMatches}</h3>
-                                            <p className="text-muted-foreground text-sm">
-                                                {t?.dashboard?.promoter?.matches?.noMatchesDesc}
-                                            </p>
+                                        <div className="text-muted-foreground text-xs">
+                                            {t?.dashboard?.empty?.promoter?.metrics?.avgMatchLabel}
                                         </div>
-                                    </Card>
-                                )}
-                            </div>
-                        ) : (
-                            /* ===== VISTA: MÚLTIPLES PROYECTOS ACTIVOS ===== */
-                            <div className="space-y-6">
-                                {/* Estadísticas generales */}
-                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                    <Card className="p-6">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="text-muted-foreground text-sm font-medium">
-                                                    {t?.dashboard?.promoter?.statsCard?.activeProjects}
-                                                </p>
-                                                <p className="text-3xl font-bold">{stats.proyectosActivos}</p>
-                                                <p className="text-muted-foreground mt-1 text-xs">de {proyectos?.length || 0} totales</p>
-                                            </div>
-                                            <div className="bg-secondary/10 rounded-full p-3">
-                                                <Briefcase className="text-secondary-foreground h-5 w-5" />
-                                            </div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-secondary text-2xl font-bold">
+                                            {t?.dashboard?.empty?.promoter?.metrics?.avgTimeValue}
                                         </div>
-                                    </Card>
-
-                                    <Card className="p-6">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="text-muted-foreground text-sm font-medium">
-                                                    {t?.dashboard?.promoter?.statsCard?.compatibleLands}
-                                                </p>
-                                                <p className="text-3xl font-bold">{stats.terrenosCompatibles}</p>
-                                                <p className="text-muted-foreground mt-1 text-xs">
-                                                    {t?.dashboard?.promoter?.statsCard?.availableNow}
-                                                </p>
-                                            </div>
-                                            <div className="bg-primary/10 rounded-full p-3">
-                                                <MapPin className="text-primary h-5 w-5" />
-                                            </div>
+                                        <div className="text-muted-foreground text-xs">
+                                            {t?.dashboard?.empty?.promoter?.metrics?.avgTimeLabel}
                                         </div>
-                                    </Card>
-
-                                    <Card className="p-6">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="text-muted-foreground text-sm font-medium">
-                                                    {t?.dashboard?.promoter?.statsCard?.totalCapacity}
-                                                </p>
-                                                <p className="text-3xl font-bold">{stats.capacidadTotal} MW</p>
-                                                <p className="text-muted-foreground mt-1 text-xs">
-                                                    {t?.dashboard?.promoter?.statsCard?.planned}
-                                                </p>
-                                            </div>
-                                            <div className="bg-accent/10 rounded-full p-3">
-                                                <TrendingUp className="text-accent h-5 w-5" />
-                                            </div>
-                                        </div>
-                                    </Card>
-
-                                    <Card className="p-6">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="text-muted-foreground text-sm font-medium">
-                                                    {t?.dashboard?.promoter?.statsCard?.estimatedInvestment}
-                                                </p>
-                                                <p className="text-3xl font-bold">€{(stats.inversionEstimada / 1000000).toFixed(0)}M</p>
-                                                <p className="text-muted-foreground mt-1 text-xs">
-                                                    {t?.dashboard?.promoter?.statsCard?.totalProjects}
-                                                </p>
-                                            </div>
-                                            <div className="bg-secondary/10 rounded-full p-3">
-                                                <Calendar className="text-secondary-foreground h-5 w-5" />
-                                            </div>
-                                        </div>
-                                    </Card>
-                                </div>
-
-                                {/* Resumen de proyectos con matches */}
-                                <div>
-                                    <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                                        📊 {t?.dashboard?.promoter?.matches?.multipleProjects}
-                                    </h3>
-                                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                        {proyectosConMatches.map((proyecto) => (
-                                            <ProjectSummaryCard key={proyecto.id} proyecto={proyecto} />
-                                        ))}
                                     </div>
                                 </div>
-
-                                {/* Top 3 matches globales (todos los proyectos) */}
-                                {topMatchesGlobal.length > 0 && (
+                            </EmptyContent>
+                        </Empty>
+                    </div>
+                ) : (
+                    <div className="space-y-8">
+                        {/* Stats Cards con mejor diseño */}
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            <Card className="p-6 transition-all hover:shadow-md">
+                                <div className="flex items-center justify-between">
                                     <div>
-                                        <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                                            🌟 {t?.dashboard?.promoter?.matches?.recentMatches} (
-                                            {t?.dashboard?.promoter?.matches?.allProjects})
-                                        </h3>
-                                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                            {topMatchesGlobal.map((match) => (
-                                                <MatchCard key={match.id} match={match} compact />
+                                        <p className="text-muted-foreground text-sm font-medium">
+                                            {t?.dashboard?.promoter?.stats?.activeProjects}
+                                        </p>
+                                        <p className="mt-2 text-3xl font-bold">{stats.proyectosActivos}</p>
+                                        <p className="text-muted-foreground mt-1 text-xs">
+                                            {t?.dashboard?.promoter?.stats?.totalActiveProjects?.replace("{total}", String(total))}
+                                        </p>
+                                    </div>
+                                    <div className="bg-secondary/10 rounded-full p-3">
+                                        <Briefcase className="text-secondary h-6 w-6" />
+                                    </div>
+                                </div>
+                            </Card>
+
+                            <Card className="p-6 transition-all hover:shadow-md">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-muted-foreground text-sm font-medium">
+                                            {t?.dashboard?.promoter?.stats?.matchesLabel}
+                                        </p>
+                                        <p className="mt-2 text-3xl font-bold">{stats.totalMatches}</p>
+                                        <p className="text-muted-foreground mt-1 text-xs">
+                                            {t?.dashboard?.promoter?.stats?.matchesSubtitle}
+                                        </p>
+                                    </div>
+                                    <div className="bg-secondary/10 rounded-full p-3">
+                                        <TrendingUp className="text-secondary h-6 w-6" />
+                                    </div>
+                                </div>
+                            </Card>
+
+                            <Card className="p-6 transition-all hover:shadow-md">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-muted-foreground text-sm font-medium">
+                                            {t?.dashboard?.promoter?.stats?.totalPower}
+                                        </p>
+                                        <p className="mt-2 text-3xl font-bold">{stats.potenciaTotal.toFixed(1)} MW</p>
+                                        <p className="text-muted-foreground mt-1 text-xs">
+                                            {t?.dashboard?.promoter?.stats?.multipleProjects?.replace("{count}", String(proyectos.length))}
+                                        </p>
+                                    </div>
+                                    <div className="bg-secondary/10 rounded-full p-3">
+                                        <Zap className="text-secondary h-6 w-6" />
+                                    </div>
+                                </div>
+                            </Card>
+
+                            <Card className="p-6 transition-all hover:shadow-md">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-muted-foreground text-sm font-medium">
+                                            {t?.dashboard?.promoter?.stats?.estimatedInvestment}
+                                        </p>
+                                        <p className="mt-2 text-3xl font-bold">€{(stats.inversionEstimada / 1000000).toFixed(1)}M</p>
+                                        <p className="text-muted-foreground mt-1 text-xs">{t?.dashboard?.promoter?.stats?.totalCapital}</p>
+                                    </div>
+                                    <div className="bg-secondary/10 rounded-full p-3">
+                                        <Euro className="text-secondary h-6 w-6" />
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
+
+                        {/* Sección de Proyectos */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h2 className="text-2xl font-bold">{t?.dashboard?.promoter?.main?.selectProject}</h2>
+                                    <p className="text-muted-foreground mt-1 text-sm">{t?.dashboard?.promoter?.main?.selectProjectDesc}</p>
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button
+                                        variant={viewMode === "horizontal" ? "default" : "outline"}
+                                        size="sm"
+                                        onClick={() => setViewMode("horizontal")}
+                                        className={`gap-2 ${viewMode === "horizontal" ? "bg-secondary hover:bg-secondary/90 text-white" : "border-secondary/20 text-secondary hover:bg-secondary/10"}`}
+                                    >
+                                        <MoveHorizontal className="h-4 w-4" />
+                                        {t?.dashboard?.promoter?.main?.viewModes?.horizontal}
+                                    </Button>
+                                    <Button
+                                        variant={viewMode === "grid" ? "default" : "outline"}
+                                        size="sm"
+                                        onClick={() => setViewMode("grid")}
+                                        className={`gap-2 ${viewMode === "grid" ? "bg-secondary hover:bg-secondary/90 text-white" : "border-secondary/20 text-secondary hover:bg-secondary/10"}`}
+                                    >
+                                        <Grid3x3 className="h-4 w-4" />
+                                        {t?.dashboard?.promoter?.main?.viewModes?.grid}
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {viewMode === "horizontal" ? (
+                                <div className="group relative">
+                                    {/* Botón scroll izquierda */}
+                                    {canScrollLeft && (
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="absolute top-1/2 left-0 z-20 h-10 w-10 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-gray-50"
+                                            onClick={() => scroll("left")}
+                                        >
+                                            <ChevronLeft className="h-5 w-5" />
+                                        </Button>
+                                    )}
+
+                                    {/* Botón scroll derecha */}
+                                    {canScrollRight && (
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="absolute top-1/2 right-0 z-20 h-10 w-10 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-gray-50"
+                                            onClick={() => scroll("right")}
+                                        >
+                                            <ChevronRight className="h-5 w-5" />
+                                        </Button>
+                                    )}
+
+                                    {/* Gradientes sutiles */}
+                                    {canScrollLeft && (
+                                        <div className="from-background pointer-events-none absolute top-0 left-0 z-10 h-full w-20 bg-gradient-to-r to-transparent" />
+                                    )}
+                                    {canScrollRight && (
+                                        <div className="from-background pointer-events-none absolute top-0 right-0 z-10 h-full w-20 bg-gradient-to-l to-transparent" />
+                                    )}
+
+                                    {/* Container con scroll */}
+                                    <div
+                                        ref={scrollContainerRef}
+                                        className="scrollbar-hide overflow-x-auto overflow-y-visible py-2"
+                                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                                    >
+                                        <div className="flex gap-4 px-1">
+                                            {proyectosConMatches.map((proyecto) => (
+                                                <div key={proyecto.id} className="w-[360px] flex-shrink-0">
+                                                    <ProyectoCard
+                                                        proyecto={proyecto}
+                                                        isSelected={selectedProyectoId === proyecto.id}
+                                                        onClick={() => setSelectedProyectoId(proyecto.id)}
+                                                    />
+                                                </div>
                                             ))}
                                         </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div
+                                    className="grid justify-items-center gap-4"
+                                    style={{ gridTemplateColumns: "repeat(auto-fill, 360px)" }}
+                                >
+                                    {proyectosConMatches.map((proyecto) => (
+                                        <div key={proyecto.id} className="w-[360px]">
+                                            <ProyectoCard
+                                                proyecto={proyecto}
+                                                isSelected={selectedProyectoId === proyecto.id}
+                                                onClick={() => setSelectedProyectoId(proyecto.id)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Sección de Matches - Terrenos compatibles */}
+                        {selectedProyecto && (
+                            <div className="space-y-4">
+                                <div>
+                                    <h2 className="text-2xl font-bold">
+                                        {t?.dashboard?.promoter?.main?.matchesFor?.replace("{project}", selectedProyecto?.titulo ?? "")}
+                                    </h2>
+                                    <p className="text-muted-foreground mt-1 text-sm">
+                                        {t?.dashboard?.promoter?.main?.matchesFound
+                                            ?.replace("{count}", selectedProyecto?.matchCount?.toString() ?? "")
+                                            ?.replace("{project}", selectedProyecto?.titulo ?? "")}
+                                    </p>
+                                </div>
+
+                                {(selectedProyecto?.matches?.length ?? 0) === 0 ? (
+                                    <Card className="p-12">
+                                        <Empty>
+                                            <EmptyHeader>
+                                                <EmptyMedia>
+                                                    <TrendingUp className="h-12 w-12" />
+                                                </EmptyMedia>
+                                                <EmptyTitle>{t?.dashboard?.promoter?.main?.noMatches}</EmptyTitle>
+                                                <EmptyDescription>{t?.dashboard?.promoter?.main?.noMatchesDesc}</EmptyDescription>
+                                            </EmptyHeader>
+                                        </Empty>
+                                    </Card>
+                                ) : (
+                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                        {selectedProyecto?.matches?.map((match) => (
+                                            <Card
+                                                key={match.id}
+                                                className="cursor-pointer p-6 transition-all hover:-translate-y-1 hover:shadow-lg"
+                                            >
+                                                <div className="space-y-4">
+                                                    <div className="flex items-start justify-between gap-2">
+                                                        <div className="min-w-0 flex-1">
+                                                            <h3 className="mb-1 line-clamp-2 text-base font-semibold">
+                                                                {match.titulo || "Terreno sin título"}
+                                                            </h3>
+                                                            <p className="text-muted-foreground text-xs">
+                                                                {match.municipio}, {match.provincia}
+                                                            </p>
+                                                        </div>
+                                                        <div
+                                                            className={`rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap ${
+                                                                match.estado === "ACEPTADO"
+                                                                    ? "bg-green-100 text-green-700"
+                                                                    : match.estado === "RECHAZADO"
+                                                                      ? "bg-red-100 text-red-700"
+                                                                      : "bg-yellow-100 text-yellow-700"
+                                                            }`}
+                                                        >
+                                                            {match.estado === "ACEPTADO"
+                                                                ? t?.dashboard?.promoter?.main?.matches?.active
+                                                                : match.estado === "RECHAZADO"
+                                                                  ? t?.dashboard?.promoter?.main?.matches?.rejected
+                                                                  : t?.dashboard?.promoter?.main?.matches?.pending}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-3">
+                                                        {match.superficie && (
+                                                            <div className="flex items-center justify-between text-sm">
+                                                                <span className="text-muted-foreground">
+                                                                    {t?.dashboard?.promoter?.main?.matches?.surface}
+                                                                </span>
+                                                                <span className="font-semibold">{match.superficie} ha</span>
+                                                            </div>
+                                                        )}
+                                                        {match.provincia && (
+                                                            <div className="flex items-center justify-between text-sm">
+                                                                <span className="text-muted-foreground">
+                                                                    {t?.dashboard?.promoter?.main?.matches?.location}
+                                                                </span>
+                                                                <span className="font-semibold">{match.provincia}</span>
+                                                            </div>
+                                                        )}
+                                                        <div className="space-y-2">
+                                                            <div className="flex items-center justify-between text-sm">
+                                                                <span className="text-muted-foreground">
+                                                                    {t?.dashboard?.promoter?.main?.matches?.compatibility}
+                                                                </span>
+                                                                <span className="text-secondary font-bold">{match.compatibilidad}%</span>
+                                                            </div>
+                                                            <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                                                                <div
+                                                                    className={`h-full transition-all ${
+                                                                        match.compatibilidad >= 80
+                                                                            ? "bg-green-500"
+                                                                            : match.compatibilidad >= 60
+                                                                              ? "bg-yellow-500"
+                                                                              : "bg-orange-500"
+                                                                    }`}
+                                                                    style={{ width: `${match.compatibilidad}%` }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <Link href={`/dashboard/promotor/terrenos/${match.id}`}>
+                                                        <Button className="bg-secondary hover:bg-secondary/90 w-full" size="sm">
+                                                            {t?.dashboard?.promoter?.main?.matches?.viewLand}
+                                                        </Button>
+                                                    </Link>
+                                                </div>
+                                            </Card>
+                                        ))}
                                     </div>
                                 )}
                             </div>
                         )}
                     </div>
-                </div>
+                )}
             </div>
-        </ProtectedRoute>
+
+            <style jsx global>{`
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
+        </>
     )
 }

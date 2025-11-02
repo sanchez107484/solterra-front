@@ -47,11 +47,15 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
               { href: "/dashboard/promotor", label: t?.sidebar?.navigation?.dashboard || "Dashboard", icon: LayoutDashboard },
               { href: "/dashboard/promotor/mis-proyectos", label: t?.sidebar?.navigation?.myProjects || "Mis Proyectos", icon: Briefcase },
               {
+                  href: "/dashboard/promotor/todos-terrenos",
+                  label: t?.sidebar?.navigation?.allLands || "Todos los Terrenos",
+                  icon: MapPin,
+              },
+              {
                   href: "/dashboard/promotor/nuevo-proyecto",
-                  label: t?.sidebar?.navigation?.newProject || "Nuevo Proyecto",
+                  label: t?.sidebar?.navigation?.addProject || "Añadir Proyecto",
                   icon: Briefcase,
               },
-              { href: "/dashboard/promotor/todos-terrenos", label: t?.sidebar?.navigation?.allLands || "Todos Terrenos", icon: MapPin },
           ]
 
     const handleLogout = async () => {
