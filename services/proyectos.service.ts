@@ -57,6 +57,14 @@ export const proyectosService = {
     },
 
     /**
+     * Obtener proyectos del usuario actual con matches (para promotores)
+     */
+    async getMineWithMatches(): Promise<any[]> {
+        const response = await api.get<any[]>(`${PROYECTOS_ENDPOINT}/me-with-matches`)
+        return response.data
+    },
+
+    /**
      * Cambiar estado de un proyecto
      */
     async updateStatus(id: string, estado: EstadoProyecto): Promise<Proyecto> {

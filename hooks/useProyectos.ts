@@ -172,6 +172,32 @@ export function useProyectos(options: Options = {}) {
         [service, withErrorHandling]
     )
 
+    const fetchMineWithMatches = useCallback(async () => {
+        setIsLoading(true)
+        setError(null)
+        try {
+            const proyectosConMatches = await service.getMineWithMatches()
+            console.log("Fetched proyectos with matches:", proyectosConMatches)
+            setProyectos(proyectosConMatches)
+            setPagination({
+                page: 1,
+                perPage: proyectosConMatches.length,
+                total: proyectosConMatches.length,
+                totalPages: 1,
+                hasNext: false,
+                hasPrev: false,
+            })
+            return proyectosConMatches
+        } catch (err: any) {
+            if (!withErrorHandling) {
+                setError(err?.message || "Error al cargar proyectos con matches")
+            }
+            throw err
+        } finally {
+            setIsLoading(false)
+        }
+    }, [service, withErrorHandling])
+
     useEffect(() => {
         if (autoFetch) void fetchProyectos()
     }, [autoFetch, fetchProyectos])
@@ -184,6 +210,7 @@ export function useProyectos(options: Options = {}) {
         error,
         fetchProyectos,
         fetchMine,
+        fetchMineWithMatches,
         createProyecto,
         updateProyecto,
         deleteProyecto,

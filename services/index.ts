@@ -46,6 +46,7 @@ export const proyectosServiceWithHandling = {
     getAll: withErrorHandling(proyectosService.getAll, "Error al cargar los proyectos"),
     getById: withErrorHandling(proyectosService.getById, "Error al cargar el proyecto"),
     getMine: withErrorHandling(proyectosService.getMine, "Error al cargar tus proyectos"),
+    getMineWithMatches: withErrorHandling(proyectosService.getMineWithMatches, "Error al cargar tus proyectos con matches"),
     getStats: withErrorHandling(proyectosService.getStats, "Error al cargar las estadísticas"),
     search: withErrorHandling(proyectosService.search, "Error al buscar proyectos"),
     getTipos: withErrorHandling(proyectosService.getTipos, "Error al cargar los tipos de proyecto"),
