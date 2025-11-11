@@ -2,6 +2,7 @@
 
 import type React from "react"
 
+import { StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -325,6 +326,19 @@ export default function NuevoTerreno() {
             />
             <div className="from-background via-primary/5 to-background min-h-screen bg-gradient-to-br">
                 <main className="container mx-auto max-w-4xl px-6 py-12">
+                    {/* Información útil para el usuario */}
+                    <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        <StatsCard icon={MapPin} title="Superficie Mínima" value="0.5" subtitle="hectáreas requeridas" variant="primary" />
+                        <StatsCard icon={Euro} title="Ingresos Típicos" value="€2,500" subtitle="por hectárea/año" variant="secondary" />
+                        <StatsCard icon={TreePine} title="Duración Contrato" value="25" subtitle="años promedio" variant="primary" />
+                        <StatsCard
+                            icon={Building}
+                            title="Paso Actual"
+                            value={`${step}/3`}
+                            subtitle="Progreso del formulario"
+                            variant="secondary"
+                        />
+                    </div>
                     {/* Progress indicator */}
                     <div className="mb-12">
                         <div className="relative mb-6">

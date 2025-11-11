@@ -1,5 +1,6 @@
 "use client"
 
+import { StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { ProjectFilters } from "@/components/dashboard/project-filters"
 import { Badge } from "@/components/ui/badge"
@@ -174,6 +175,12 @@ export default function TodosProyectosPage() {
 
     const provincias = Array.from(new Set(proyectosActivos.map((p: any) => p.provincia).filter(Boolean)))
 
+    // Cálculos estadísticos
+    const totalProyectos = proyectosActivos.length
+    const potenciaTotal = proyectosActivos.reduce((sum: number, proyecto: any) => sum + (proyecto.potenciaObjetivo || 0), 0)
+    const proyectosActivos_ = proyectosActivos.filter((p: any) => p.estado?.toUpperCase() === "ACTIVO").length
+    const totalProvincias = provincias.length
+
     const handleSort = (field: SortField) => {
         if (sortField === field) {
             setSortOrder(sortOrder === "asc" ? "desc" : "asc")
@@ -210,6 +217,38 @@ export default function TodosProyectosPage() {
             />
 
             <main className="p-6">
+                {/* Estadísticas generales */}
+                <div className="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <StatsCard
+                        icon={Briefcase}
+                        title="Total Proyectos"
+                        value={totalProyectos.toString()}
+                        subtitle="Disponibles en plataforma"
+                        variant="primary"
+                    />
+                    <StatsCard
+                        icon={Zap}
+                        title="Potencia Total"
+                        value={`${Math.round(potenciaTotal)}`}
+                        subtitle="MW en desarrollo"
+                        variant="secondary"
+                    />
+                    <StatsCard
+                        icon={MapPin}
+                        title="Provincias"
+                        value={totalProvincias.toString()}
+                        subtitle="Ubicaciones disponibles"
+                        variant="primary"
+                    />
+                    <StatsCard
+                        icon={TrendingUp}
+                        title="Mostrando"
+                        value={filteredAndSortedProyectos.length.toString()}
+                        subtitle="Proyectos filtrados"
+                        variant="secondary"
+                    />
+                </div>
+
                 <ProjectFilters
                     searchTerm={searchTerm}
                     onSearchChange={setSearchTerm}

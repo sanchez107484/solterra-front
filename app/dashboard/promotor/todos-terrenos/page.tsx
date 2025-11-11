@@ -1,5 +1,6 @@
 "use client"
 
+import { StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -61,6 +62,12 @@ export default function TodosTerrenosPage() {
 
     // El backend ya filtra por estado ACTIVO
     const terrenosActivos = terrenos || []
+
+    // Cálculos estadísticos
+    const totalTerrenos = terrenosActivos.length
+    const superficieTotal = terrenosActivos.reduce((sum: number, terreno: any) => sum + (terreno.superficie || 0), 0)
+    const terrenosDisponibles = terrenosActivos.filter((t: any) => t.estado?.toUpperCase() === "ACTIVO").length
+    const totalProvincias = [...new Set(terrenosActivos.map((t: any) => t.provincia).filter(Boolean))].length
 
     const filteredAndSortedTerrenos = useMemo(() => {
         let filtered = terrenosActivos
@@ -148,6 +155,38 @@ export default function TodosTerrenosPage() {
             />
 
             <main className="p-6">
+                {/* Estadísticas generales */}
+                <div className="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <StatsCard
+                        icon={Landmark}
+                        title="Total Terrenos"
+                        value={totalTerrenos.toString()}
+                        subtitle="Disponibles en plataforma"
+                        variant="secondary"
+                    />
+                    <StatsCard
+                        icon={Ruler}
+                        title="Superficie Total"
+                        value={Math.round(superficieTotal).toString()}
+                        subtitle="Hectáreas disponibles"
+                        variant="primary"
+                    />
+                    <StatsCard
+                        icon={MapPin}
+                        title="Provincias"
+                        value={totalProvincias.toString()}
+                        subtitle="Ubicaciones diferentes"
+                        variant="secondary"
+                    />
+                    <StatsCard
+                        icon={Eye}
+                        title="Mostrando"
+                        value={filteredAndSortedTerrenos.length.toString()}
+                        subtitle="Terrenos filtrados"
+                        variant="primary"
+                    />
+                </div>
+
                 {/* Filtros inline */}
                 <Card className="border-secondary/20 mb-6 p-0">
                     <div className="border-secondary/10 border-b p-4">

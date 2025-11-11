@@ -72,14 +72,14 @@ export function ProyectoCard({ proyecto, isSelected = false, onClick }: Proyecto
             <Link
                 href={`/dashboard/promotor/proyectos/${proyecto.id}`}
                 onClick={(e) => e.stopPropagation()}
-                className="absolute top-2 right-2 z-10"
+                className="absolute top-3 right-3 z-10"
             >
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
-                    className="h-7 w-7 rounded-full bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800"
+                    className="hover:bg-secondary border-secondary/20 hover:border-secondary dark:hover:bg-secondary dark:border-secondary/30 h-9 w-9 rounded-full border-2 bg-white shadow-md transition-all duration-200 hover:text-white hover:shadow-lg dark:bg-gray-900"
                 >
-                    <Eye className="h-3.5 w-3.5" />
+                    <Eye className="h-4 w-4" />
                 </Button>
             </Link>
 
@@ -94,18 +94,18 @@ export function ProyectoCard({ proyecto, isSelected = false, onClick }: Proyecto
 
                 {/* Tipo de proyecto */}
                 <div className="mb-3">
-                    <p className={`text-sm font-medium ${getTipoColor(proyecto.tipo)}`}>{getTipoLabel(proyecto.tipo)}</p>
+                    <p className={`text-sm font-medium`}>{getTipoLabel(proyecto.tipo)}</p>
                 </div>
 
                 {/* Info del proyecto */}
                 <div className="space-y-1.5">
                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                        <Zap className={`h-3.5 w-3.5 flex-shrink-0 ${getTipoColor(proyecto.tipo)}`} />
+                        <Zap className={`text-secondary dark:text-secondary h-3.5 w-3.5 flex-shrink-0`} />
                         <span>{proyecto.potenciaObjetivo.toLocaleString()} MW</span>
                     </div>
 
                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                        <MapPin className="text-secondary h-3.5 w-3.5 flex-shrink-0" />
+                        <MapPin className="text-primary h-3.5 w-3.5 flex-shrink-0" />
                         <span className="truncate">{proyecto.provincia}</span>
                     </div>
                 </div>

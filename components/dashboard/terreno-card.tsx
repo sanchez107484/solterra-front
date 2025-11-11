@@ -44,14 +44,14 @@ export function TerrenoCard({ terreno, isSelected = false, onClick }: TerrenoCar
             <Link
                 href={`/dashboard/propietario/mis-terrenos/${terreno.id}`}
                 onClick={(e) => e.stopPropagation()}
-                className="absolute top-2 right-2 z-10"
+                className="absolute top-3 right-3 z-10"
             >
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
-                    className="h-7 w-7 rounded-full bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800"
+                    className="hover:bg-primary border-primary/20 hover:border-primary dark:hover:bg-primary dark:border-primary/30 h-9 w-9 rounded-full border-2 bg-white shadow-md transition-all duration-200 hover:text-white hover:shadow-lg dark:bg-gray-900"
                 >
-                    <Eye className="h-3.5 w-3.5" />
+                    <Eye className="h-4 w-4" />
                 </Button>
             </Link>
 
@@ -80,11 +80,15 @@ export function TerrenoCard({ terreno, isSelected = false, onClick }: TerrenoCar
                 </div>
 
                 {/* Match counter */}
-                {terreno.matchCount !== undefined && (
-                    <div className="mt-3 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 p-2.5 dark:from-blue-900/20 dark:to-purple-900/20">
-                        <p className="text-center text-sm font-medium text-blue-600 dark:text-blue-400">
+                {terreno.matchCount !== undefined && terreno.matchCount > 0 ? (
+                    <div className="bg-primary/10 dark:bg-primary/20 mt-3 rounded-lg p-2.5">
+                        <p className="text-primary dark:text-primary text-center text-sm font-medium">
                             {terreno.matchCount} {terreno.matchCount === 1 ? "match disponible" : "matches disponibles"}
                         </p>
+                    </div>
+                ) : (
+                    <div className="mt-3 rounded-lg bg-gray-100 p-2.5 dark:bg-gray-800">
+                        <p className="text-center text-sm font-medium text-gray-500 dark:text-gray-400">Sin proyectos compatibles</p>
                     </div>
                 )}
             </div>

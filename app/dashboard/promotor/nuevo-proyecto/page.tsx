@@ -2,6 +2,7 @@
 
 import type React from "react"
 
+import { StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
 import ProtectedRoute from "@/components/protected-route"
@@ -280,6 +281,37 @@ export default function NuevoProyecto() {
 
                     <div className="from-background via-secondary/5 to-background bg-gradient-to-br">
                         <main className="container mx-auto max-w-4xl px-6 py-12">
+                            {/* Información útil para el usuario */}
+                            <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                <StatsCard
+                                    icon={ZapIcon}
+                                    title="Guía de Potencia"
+                                    value="1-50"
+                                    subtitle="MW recomendados"
+                                    variant="secondary"
+                                />
+                                <StatsCard
+                                    icon={Euro}
+                                    title="Inversión Típica"
+                                    value="0.8-1.2M"
+                                    subtitle="€ por MW instalado"
+                                    variant="primary"
+                                />
+                                <StatsCard
+                                    icon={Layers}
+                                    title="Superficie Típica"
+                                    value="2-3"
+                                    subtitle="ha por MW solar"
+                                    variant="secondary"
+                                />
+                                <StatsCard
+                                    icon={MapPin}
+                                    title="Paso Actual"
+                                    value={`${step}/3`}
+                                    subtitle="Progreso del formulario"
+                                    variant="primary"
+                                />
+                            </div>
                             {/* Progress indicator */}
                             <div className="mb-12">
                                 <div className="relative mb-6">

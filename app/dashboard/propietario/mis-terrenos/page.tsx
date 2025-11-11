@@ -1,5 +1,6 @@
 "use client"
 
+import { StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -111,61 +112,34 @@ export default function MisTerrenosPage() {
                 {/* Estadísticas */}
                 <div className="space-y-8">
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                        <Card className="p-6 transition-all hover:shadow-md">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">
-                                        {t?.dashboard?.owner?.terrenos?.stats?.total}
-                                    </p>
-                                    <p className="mt-2 text-3xl font-bold">{totalTerrenos}</p>
-                                </div>
-                                <div className="bg-primary/10 rounded-full p-3">
-                                    <MapPin className="text-primary h-6 w-6" />
-                                </div>
-                            </div>
-                        </Card>
-
-                        <Card className="p-6 transition-all hover:shadow-md">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">
-                                        {t?.dashboard?.owner?.terrenos?.stats?.active}
-                                    </p>
-                                    <p className="mt-2 text-3xl font-bold">{terrenosActivos}</p>
-                                </div>
-                                <div className="bg-secondary/10 rounded-full p-3">
-                                    <ShieldCheck className="text-secondary h-6 w-6" />
-                                </div>
-                            </div>
-                        </Card>
-
-                        <Card className="p-6 transition-all hover:shadow-md">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">
-                                        {t?.dashboard?.owner?.terrenos?.stats?.sold}
-                                    </p>
-                                    <p className="mt-2 text-3xl font-bold">{terrenosVendidos}</p>
-                                </div>
-                                <div className="bg-primary/10 rounded-full p-3">
-                                    <CheckCheck className="text-primary h-6 w-6" />
-                                </div>
-                            </div>
-                        </Card>
-
-                        <Card className="p-6 transition-all hover:shadow-md">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">
-                                        {t?.dashboard?.owner?.terrenos?.stats?.totalValue}
-                                    </p>
-                                    <p className="mt-2 text-3xl font-bold">{formatCurrency(valorTotal)}</p>
-                                </div>
-                                <div className="bg-secondary/10 rounded-full p-3">
-                                    <Euro className="text-secondary h-6 w-6" />
-                                </div>
-                            </div>
-                        </Card>
+                        <StatsCard
+                            icon={MapPin}
+                            title={t?.dashboard?.owner?.terrenos?.stats?.total || "Total Terrenos"}
+                            value={totalTerrenos.toString()}
+                            subtitle="Terrenos registrados"
+                            variant="primary"
+                        />
+                        <StatsCard
+                            icon={ShieldCheck}
+                            title={t?.dashboard?.owner?.terrenos?.stats?.active || "Terrenos Activos"}
+                            value={terrenosActivos.toString()}
+                            subtitle="Disponibles para proyectos"
+                            variant="secondary"
+                        />
+                        <StatsCard
+                            icon={CheckCheck}
+                            title={t?.dashboard?.owner?.terrenos?.stats?.sold || "Terrenos Vendidos"}
+                            value={terrenosVendidos.toString()}
+                            subtitle="Transacciones completadas"
+                            variant="primary"
+                        />
+                        <StatsCard
+                            icon={Euro}
+                            title={t?.dashboard?.owner?.terrenos?.stats?.totalValue || "Valor Total"}
+                            value={formatCurrency(valorTotal)}
+                            subtitle="Valoración estimada"
+                            variant="secondary"
+                        />
                     </div>
 
                     {/* Controles de filtros y vista */}

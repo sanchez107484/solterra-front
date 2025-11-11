@@ -1,10 +1,10 @@
 "use client"
 
+import { DashboardEmptyState, StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { useProyectos } from "@/hooks/useProyectos"
 import { useTranslations } from "@/i18n/i18nContext"
 import { Briefcase, Calendar, CheckCheck, Euro, Filter, Grid3x3, Layers, List, MapPin, Search, ShieldCheck, X, Zap } from "lucide-react"
@@ -114,61 +114,34 @@ export default function MisProyectosPage() {
                 {/* Estadísticas */}
                 <div className="space-y-8">
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                        <Card className="p-6 transition-all hover:shadow-md">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">
-                                        {t?.dashboard?.promoter?.proyectos?.stats?.total}
-                                    </p>
-                                    <p className="mt-2 text-3xl font-bold">{totalProyectos}</p>
-                                </div>
-                                <div className="bg-secondary/10 rounded-full p-3">
-                                    <Briefcase className="text-secondary h-6 w-6" />
-                                </div>
-                            </div>
-                        </Card>
-
-                        <Card className="p-6 transition-all hover:shadow-md">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">
-                                        {t?.dashboard?.promoter?.proyectos?.stats?.active}
-                                    </p>
-                                    <p className="mt-2 text-3xl font-bold">{proyectosActivos}</p>
-                                </div>
-                                <div className="bg-secondary/10 rounded-full p-3">
-                                    <ShieldCheck className="text-secondary h-6 w-6" />
-                                </div>
-                            </div>
-                        </Card>
-
-                        <Card className="p-6 transition-all hover:shadow-md">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">
-                                        {t?.dashboard?.promoter?.proyectos?.stats?.completed}
-                                    </p>
-                                    <p className="mt-2 text-3xl font-bold">{proyectosCompletados}</p>
-                                </div>
-                                <div className="bg-secondary/10 rounded-full p-3">
-                                    <CheckCheck className="text-secondary h-6 w-6" />
-                                </div>
-                            </div>
-                        </Card>
-
-                        <Card className="p-6 transition-all hover:shadow-md">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-muted-foreground text-sm font-medium">
-                                        {t?.dashboard?.promoter?.proyectos?.stats?.totalValue}
-                                    </p>
-                                    <p className="mt-2 text-3xl font-bold">{formatCurrency(presupuestoTotal)}</p>
-                                </div>
-                                <div className="bg-secondary/10 rounded-full p-3">
-                                    <Euro className="text-secondary h-6 w-6" />
-                                </div>
-                            </div>
-                        </Card>
+                        <StatsCard
+                            title={t?.dashboard?.promoter?.proyectos?.stats?.total || "Total Proyectos"}
+                            value={String(totalProyectos)}
+                            subtitle={t?.dashboard?.promoter?.proyectos?.stats?.totalDesc}
+                            icon={Briefcase}
+                            variant="secondary"
+                        />
+                        <StatsCard
+                            title={t?.dashboard?.promoter?.proyectos?.stats?.active || "Proyectos Activos"}
+                            value={String(proyectosActivos)}
+                            subtitle={t?.dashboard?.promoter?.proyectos?.stats?.activeDesc}
+                            icon={ShieldCheck}
+                            variant="primary"
+                        />
+                        <StatsCard
+                            title={t?.dashboard?.promoter?.proyectos?.stats?.completed || "Completados"}
+                            value={String(proyectosCompletados)}
+                            subtitle={t?.dashboard?.promoter?.proyectos?.stats?.completedDesc}
+                            icon={CheckCheck}
+                            variant="secondary"
+                        />
+                        <StatsCard
+                            title={t?.dashboard?.promoter?.proyectos?.stats?.totalValue || "Presupuesto Total"}
+                            value={formatCurrency(presupuestoTotal)}
+                            subtitle={t?.dashboard?.promoter?.proyectos?.stats?.totalValueDesc}
+                            icon={Euro}
+                            variant="primary"
+                        />
                     </div>
 
                     {/* Controles de filtros y vista */}
@@ -248,22 +221,17 @@ export default function MisProyectosPage() {
                             <p className="mt-2 text-gray-600">{t?.common?.loading}</p>
                         </div>
                     ) : !proyectos || proyectos.length === 0 ? (
-                        <Empty>
-                            <EmptyHeader>
-                                <EmptyMedia>
-                                    <Briefcase className="h-16 w-16 text-gray-400" />
-                                </EmptyMedia>
-                                <EmptyTitle>{t?.dashboard?.promoter?.proyectos?.empty?.title}</EmptyTitle>
-                                <EmptyDescription>{t?.dashboard?.promoter?.proyectos?.empty?.description}</EmptyDescription>
-                            </EmptyHeader>
-                            <EmptyContent>
-                                <Link href="/dashboard/promotor/nuevo-proyecto">
-                                    <Button className="bg-secondary hover:bg-secondary/90">
-                                        {t?.dashboard?.promoter?.proyectos?.empty?.cta}
-                                    </Button>
-                                </Link>
-                            </EmptyContent>
-                        </Empty>
+                        <DashboardEmptyState
+                            icon={Briefcase}
+                            title={t?.dashboard?.promoter?.proyectos?.empty?.title || "No tienes proyectos aún"}
+                            description={
+                                t?.dashboard?.promoter?.proyectos?.empty?.description ||
+                                "Crea tu primer proyecto para empezar a buscar terrenos compatibles"
+                            }
+                            ctaText={t?.dashboard?.promoter?.proyectos?.empty?.cta || "Crear primer proyecto"}
+                            ctaHref="/dashboard/promotor/nuevo-proyecto"
+                            variant="secondary"
+                        />
                     ) : proyectosFiltrados.length === 0 ? (
                         <div className="py-12 text-center">
                             <Filter className="mx-auto h-12 w-12 text-gray-400" />

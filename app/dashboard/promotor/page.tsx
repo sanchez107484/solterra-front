@@ -1,10 +1,12 @@
 "use client"
 
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
+import { DashboardEmptyState } from "@/components/dashboard/empty-state"
 import { ProyectoCard } from "@/components/dashboard/proyecto-card"
+import { StatsCard } from "@/components/dashboard/stats-card"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { useProyectos } from "@/hooks/useProyectos"
 import { useTranslations } from "@/i18n/i18nContext"
 import { Briefcase, ChevronLeft, ChevronRight, Euro, Grid3x3, MoveHorizontal, Plus, TrendingUp, Zap } from "lucide-react"
@@ -209,120 +211,63 @@ export default function DashboardPromotor() {
                         </div>
                     </div>
                 ) : !hasProyectos ? (
-                    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
-                        <Empty className="max-w-2xl">
-                            <EmptyHeader>
-                                <EmptyMedia>
-                                    <Briefcase className="h-12 w-12" />
-                                </EmptyMedia>
-                                <EmptyTitle>{t?.dashboard?.empty?.promoter?.title}</EmptyTitle>
-                                <EmptyDescription>{t?.dashboard?.empty?.promoter?.description}</EmptyDescription>
-                            </EmptyHeader>
-                            <EmptyContent>
-                                <Link href="/dashboard/promotor/nuevo-proyecto">
-                                    <Button size="lg" className="bg-secondary hover:bg-secondary/90 gap-2">
-                                        <Plus className="h-5 w-5" />
-                                        {t?.dashboard?.empty?.promoter?.addProject}
-                                    </Button>
-                                </Link>
-                                <div className="mt-8 grid grid-cols-3 gap-6 border-t pt-6">
-                                    <div className="text-center">
-                                        <div className="text-secondary text-2xl font-bold">
-                                            {t?.dashboard?.empty?.promoter?.metrics?.availableLandsValue}
-                                        </div>
-                                        <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.promoter?.metrics?.availableLandsLabel}
-                                        </div>
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="text-secondary text-2xl font-bold">
-                                            {t?.dashboard?.empty?.promoter?.metrics?.avgMatchValue}
-                                        </div>
-                                        <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.promoter?.metrics?.avgMatchLabel}
-                                        </div>
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="text-secondary text-2xl font-bold">
-                                            {t?.dashboard?.empty?.promoter?.metrics?.avgTimeValue}
-                                        </div>
-                                        <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.promoter?.metrics?.avgTimeLabel}
-                                        </div>
-                                    </div>
-                                </div>
-                            </EmptyContent>
-                        </Empty>
-                    </div>
+                    <DashboardEmptyState
+                        icon={Briefcase}
+                        title={t?.dashboard?.empty?.promoter?.title || "No tienes proyectos aún"}
+                        description={
+                            t?.dashboard?.empty?.promoter?.description ||
+                            "Crea tu primer proyecto para empezar a buscar terrenos compatibles"
+                        }
+                        ctaText={t?.dashboard?.empty?.promoter?.addProject || "Añadir proyecto"}
+                        ctaHref="/dashboard/promotor/nuevo-proyecto"
+                        variant="secondary"
+                        metrics={[
+                            {
+                                value: t?.dashboard?.empty?.promoter?.metrics?.availableLandsValue || "500+",
+                                label: t?.dashboard?.empty?.promoter?.metrics?.availableLandsLabel || "Terrenos disponibles",
+                            },
+                            {
+                                value: t?.dashboard?.empty?.promoter?.metrics?.avgMatchValue || "73%",
+                                label: t?.dashboard?.empty?.promoter?.metrics?.avgMatchLabel || "Tasa de matches",
+                            },
+                            {
+                                value: t?.dashboard?.empty?.promoter?.metrics?.avgTimeValue || "6 meses",
+                                label: t?.dashboard?.empty?.promoter?.metrics?.avgTimeLabel || "Tiempo promedio",
+                            },
+                        ]}
+                    />
                 ) : (
                     <div className="space-y-8">
-                        {/* Stats Cards con mejor diseño */}
+                        {/* Stats Cards */}
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                            <Card className="p-6 transition-all hover:shadow-md">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.promoter?.stats?.activeProjects}
-                                        </p>
-                                        <p className="mt-2 text-3xl font-bold">{stats.proyectosActivos}</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">
-                                            {t?.dashboard?.promoter?.stats?.totalActiveProjects?.replace("{total}", String(total))}
-                                        </p>
-                                    </div>
-                                    <div className="bg-secondary/10 rounded-full p-3">
-                                        <Briefcase className="text-secondary h-6 w-6" />
-                                    </div>
-                                </div>
-                            </Card>
-
-                            <Card className="p-6 transition-all hover:shadow-md">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.promoter?.stats?.matchesLabel}
-                                        </p>
-                                        <p className="mt-2 text-3xl font-bold">{stats.totalMatches}</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">
-                                            {t?.dashboard?.promoter?.stats?.matchesSubtitle}
-                                        </p>
-                                    </div>
-                                    <div className="bg-secondary/10 rounded-full p-3">
-                                        <TrendingUp className="text-secondary h-6 w-6" />
-                                    </div>
-                                </div>
-                            </Card>
-
-                            <Card className="p-6 transition-all hover:shadow-md">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.promoter?.stats?.totalPower}
-                                        </p>
-                                        <p className="mt-2 text-3xl font-bold">{stats.potenciaTotal.toFixed(1)} MW</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">
-                                            {t?.dashboard?.promoter?.stats?.multipleProjects?.replace("{count}", String(proyectos.length))}
-                                        </p>
-                                    </div>
-                                    <div className="bg-secondary/10 rounded-full p-3">
-                                        <Zap className="text-secondary h-6 w-6" />
-                                    </div>
-                                </div>
-                            </Card>
-
-                            <Card className="p-6 transition-all hover:shadow-md">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.promoter?.stats?.estimatedInvestment}
-                                        </p>
-                                        <p className="mt-2 text-3xl font-bold">€{(stats.inversionEstimada / 1000000).toFixed(1)}M</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">{t?.dashboard?.promoter?.stats?.totalCapital}</p>
-                                    </div>
-                                    <div className="bg-secondary/10 rounded-full p-3">
-                                        <Euro className="text-secondary h-6 w-6" />
-                                    </div>
-                                </div>
-                            </Card>
+                            <StatsCard
+                                title={t?.dashboard?.promoter?.stats?.activeProjects || "Proyectos Activos"}
+                                value={String(stats.proyectosActivos)}
+                                subtitle={t?.dashboard?.promoter?.stats?.totalActiveProjects?.replace("{total}", String(total))}
+                                icon={Briefcase}
+                                variant="secondary"
+                            />
+                            <StatsCard
+                                title={t?.dashboard?.promoter?.stats?.matchesLabel || "Matches"}
+                                value={String(stats.totalMatches)}
+                                subtitle={t?.dashboard?.promoter?.stats?.matchesSubtitle}
+                                icon={TrendingUp}
+                                variant="primary"
+                            />
+                            <StatsCard
+                                title={t?.dashboard?.promoter?.stats?.totalPower || "Potencia Total"}
+                                value={`${stats.potenciaTotal.toFixed(1)} MW`}
+                                subtitle={t?.dashboard?.promoter?.stats?.multipleProjects?.replace("{count}", String(proyectos.length))}
+                                icon={Zap}
+                                variant="secondary"
+                            />
+                            <StatsCard
+                                title={t?.dashboard?.promoter?.stats?.estimatedInvestment || "Inversión Estimada"}
+                                value={`€${(stats.inversionEstimada / 1000000).toFixed(1)}M`}
+                                subtitle={t?.dashboard?.promoter?.stats?.totalCapital}
+                                icon={Euro}
+                                variant="primary"
+                            />
                         </div>
 
                         {/* Sección de Proyectos */}
@@ -337,7 +282,7 @@ export default function DashboardPromotor() {
                                         variant={viewMode === "horizontal" ? "default" : "outline"}
                                         size="sm"
                                         onClick={() => setViewMode("horizontal")}
-                                        className={`gap-2 ${viewMode === "horizontal" ? "bg-secondary hover:bg-secondary/90 text-white" : "border-secondary/20 text-secondary hover:bg-secondary/10"}`}
+                                        className={`gap-2 ${viewMode === "horizontal" ? "bg-secondary hover:bg-secondary/90 text-white" : "border-secondary/20 hover:bg-secondary/10"}`}
                                     >
                                         <MoveHorizontal className="h-4 w-4" />
                                         {t?.dashboard?.promoter?.main?.viewModes?.horizontal}
@@ -346,7 +291,7 @@ export default function DashboardPromotor() {
                                         variant={viewMode === "grid" ? "default" : "outline"}
                                         size="sm"
                                         onClick={() => setViewMode("grid")}
-                                        className={`gap-2 ${viewMode === "grid" ? "bg-secondary hover:bg-secondary/90 text-white" : "border-secondary/20 text-secondary hover:bg-secondary/10"}`}
+                                        className={`gap-2 ${viewMode === "grid" ? "bg-secondary hover:bg-secondary/90 text-white" : "border-secondary/20 hover:bg-secondary/10"}`}
                                     >
                                         <Grid3x3 className="h-4 w-4" />
                                         {t?.dashboard?.promoter?.main?.viewModes?.grid}

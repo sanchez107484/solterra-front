@@ -1,10 +1,12 @@
 "use client"
 
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
+import { DashboardEmptyState } from "@/components/dashboard/empty-state"
+import { StatsCard } from "@/components/dashboard/stats-card"
 import { TerrenoCard } from "@/components/dashboard/terreno-card"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { useTerrenos } from "@/hooks/useTerrenos"
 import { useTranslations } from "@/i18n/i18nContext"
 import { BookCheck, ChevronLeft, ChevronRight, Euro, Grid3x3, MapPin, MoveHorizontal, Plus, TrendingUp } from "lucide-react"
@@ -197,118 +199,62 @@ export default function DashboardPropietario() {
                         </div>
                     </div>
                 ) : !hasTerrenos ? (
-                    <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
-                        <Empty className="max-w-2xl">
-                            <EmptyHeader>
-                                <EmptyMedia>
-                                    <MapPin className="h-12 w-12" />
-                                </EmptyMedia>
-                                <EmptyTitle>{t?.dashboard?.empty?.owner?.title}</EmptyTitle>
-                                <EmptyDescription>{t?.dashboard?.empty?.owner?.description}</EmptyDescription>
-                            </EmptyHeader>
-                            <EmptyContent>
-                                <Link href="/dashboard/propietario/nuevo-terreno">
-                                    <Button size="lg" className="gap-2">
-                                        <Plus className="h-5 w-5" />
-                                        {t?.dashboard?.empty?.owner?.addLand}
-                                    </Button>
-                                </Link>
-                                <div className="mt-8 grid grid-cols-3 gap-6 border-t pt-6">
-                                    <div className="text-center">
-                                        <div className="text-primary text-2xl font-bold">
-                                            {t?.dashboard?.empty?.owner?.metrics?.avgIncomeValue}
-                                        </div>
-                                        <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.owner?.metrics?.avgIncomeLabel}
-                                        </div>
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="text-primary text-2xl font-bold">
-                                            {t?.dashboard?.empty?.owner?.metrics?.contractDurationValue}
-                                        </div>
-                                        <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.owner?.metrics?.contractDurationLabel}
-                                        </div>
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="text-primary text-2xl font-bold">
-                                            {t?.dashboard?.empty?.owner?.metrics?.successRateValue}
-                                        </div>
-                                        <div className="text-muted-foreground text-xs">
-                                            {t?.dashboard?.empty?.owner?.metrics?.successRateLabel}
-                                        </div>
-                                    </div>
-                                </div>
-                            </EmptyContent>
-                        </Empty>
-                    </div>
+                    <DashboardEmptyState
+                        icon={MapPin}
+                        title={t?.dashboard?.empty?.owner?.title || "No tienes terrenos aún"}
+                        description={
+                            t?.dashboard?.empty?.owner?.description || "Añade tu primer terreno para empezar a buscar proyectos compatibles"
+                        }
+                        ctaText={t?.dashboard?.empty?.owner?.addLand || "Añadir terreno"}
+                        ctaHref="/dashboard/propietario/nuevo-terreno"
+                        variant="primary"
+                        metrics={[
+                            {
+                                value: t?.dashboard?.empty?.owner?.metrics?.avgIncomeValue || "€2,500/ha",
+                                label: t?.dashboard?.empty?.owner?.metrics?.avgIncomeLabel || "Ingresos promedio",
+                            },
+                            {
+                                value: t?.dashboard?.empty?.owner?.metrics?.contractDurationValue || "25 años",
+                                label: t?.dashboard?.empty?.owner?.metrics?.contractDurationLabel || "Duración contrato",
+                            },
+                            {
+                                value: t?.dashboard?.empty?.owner?.metrics?.successRateValue || "89%",
+                                label: t?.dashboard?.empty?.owner?.metrics?.successRateLabel || "Tasa de éxito",
+                            },
+                        ]}
+                    />
                 ) : (
                     <div className="space-y-8">
-                        {/* Stats Cards con mejor diseño */}
+                        {/* Stats Cards */}
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                            <Card className="p-6 transition-all hover:shadow-md">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.owner?.stats?.activeLands}
-                                        </p>
-                                        <p className="mt-2 text-3xl font-bold">{stats.terrenosActivos}</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">
-                                            {t?.dashboard?.owner?.stats?.totalActiveLands?.replace("{total}", String(total))}
-                                        </p>
-                                    </div>
-                                    <div className="bg-primary/10 rounded-full p-3">
-                                        <MapPin className="text-primary h-6 w-6" />
-                                    </div>
-                                </div>
-                            </Card>
-
-                            <Card className="p-6 transition-all hover:shadow-md">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.owner?.stats?.matchesLabel}
-                                        </p>
-                                        <p className="mt-2 text-3xl font-bold">{stats.totalMatches}</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">{t?.dashboard?.owner?.stats?.matchesSubtitle}</p>
-                                    </div>
-                                    <div className="bg-secondary/10 rounded-full p-3">
-                                        <TrendingUp className="text-secondary h-6 w-6" />
-                                    </div>
-                                </div>
-                            </Card>
-
-                            <Card className="p-6 transition-all hover:shadow-md">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.owner?.stats?.totalHectares}
-                                        </p>
-                                        <p className="mt-2 text-3xl font-bold">{stats.hectareasTotales.toFixed(1)}</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">
-                                            {t?.dashboard?.owner?.stats?.multipleLocations?.replace("{count}", String(terrenos.length))}
-                                        </p>
-                                    </div>
-                                    <div className="bg-primary/10 rounded-full p-3">
-                                        <BookCheck className="text-primary h-6 w-6" />
-                                    </div>
-                                </div>
-                            </Card>
-
-                            <Card className="p-6 transition-all hover:shadow-md">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-muted-foreground text-sm font-medium">
-                                            {t?.dashboard?.owner?.stats?.estimatedIncome}
-                                        </p>
-                                        <p className="mt-2 text-3xl font-bold">€{(stats.ingresosEstimados / 1000).toFixed(0)}K</p>
-                                        <p className="text-muted-foreground mt-1 text-xs">{t?.dashboard?.owner?.stats?.perYear}</p>
-                                    </div>
-                                    <div className="bg-secondary/10 rounded-full p-3">
-                                        <Euro className="text-secondary h-6 w-6" />
-                                    </div>
-                                </div>
-                            </Card>
+                            <StatsCard
+                                title={t?.dashboard?.owner?.stats?.activeLands || "Terrenos Activos"}
+                                value={String(stats.terrenosActivos)}
+                                subtitle={t?.dashboard?.owner?.stats?.totalActiveLands?.replace("{total}", String(total))}
+                                icon={MapPin}
+                                variant="primary"
+                            />
+                            <StatsCard
+                                title={t?.dashboard?.owner?.stats?.matchesLabel || "Matches"}
+                                value={String(stats.totalMatches)}
+                                subtitle={t?.dashboard?.owner?.stats?.matchesSubtitle}
+                                icon={TrendingUp}
+                                variant="secondary"
+                            />
+                            <StatsCard
+                                title={t?.dashboard?.owner?.stats?.totalHectares || "Hectáreas Totales"}
+                                value={`${stats.hectareasTotales.toFixed(1)}`}
+                                subtitle={t?.dashboard?.owner?.stats?.multipleLocations?.replace("{count}", String(terrenos.length))}
+                                icon={BookCheck}
+                                variant="primary"
+                            />
+                            <StatsCard
+                                title={t?.dashboard?.owner?.stats?.estimatedIncome || "Ingresos Estimados"}
+                                value={`€${(stats.ingresosEstimados / 1000).toFixed(0)}K`}
+                                subtitle={t?.dashboard?.owner?.stats?.perYear}
+                                icon={Euro}
+                                variant="secondary"
+                            />
                         </div>
 
                         {/* Sección de Terrenos */}

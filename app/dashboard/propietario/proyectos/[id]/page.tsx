@@ -1,5 +1,6 @@
 "use client"
 
+import { StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -137,6 +138,50 @@ export default function ProyectoDetallePropietarioPage() {
                     </div>
                 ) : proyecto ? (
                     <>
+                        {/* Estadísticas del Proyecto */}
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            <StatsCard
+                                icon={Zap}
+                                title="Potencia"
+                                value={proyecto.potenciaObjetivo ? `${proyecto.potenciaObjetivo}` : "0"}
+                                subtitle={proyecto.potenciaObjetivo ? "MW objetivo" : "No especificado"}
+                                variant="primary"
+                            />
+                            <StatsCard
+                                icon={Ruler}
+                                title="Superficie"
+                                value={
+                                    proyecto.superficieNecesaria
+                                        ? `${proyecto.superficieNecesaria}`
+                                        : proyecto.superficieMinima
+                                          ? `${proyecto.superficieMinima}+`
+                                          : "0"
+                                }
+                                subtitle={
+                                    proyecto.superficieNecesaria
+                                        ? "ha necesarias"
+                                        : proyecto.superficieMinima
+                                          ? "ha mínimas"
+                                          : "No especificado"
+                                }
+                                variant="secondary"
+                            />
+                            <StatsCard
+                                icon={Calendar}
+                                title="Estado"
+                                value={getEstadoLabel(proyecto.estado)}
+                                subtitle="Estado actual"
+                                variant="primary"
+                            />
+                            <StatsCard
+                                icon={Building2}
+                                title="Tipo"
+                                value={getTipoLabel(proyecto.tipo)}
+                                subtitle="Tecnología del proyecto"
+                                variant="secondary"
+                            />
+                        </div>
+
                         {/* Header Card con información principal y CTA destacado */}
                         <Card className="border-primary/20 from-primary/5 via-background to-accent/5 bg-gradient-to-br py-0">
                             {/* Decorative background - más sutil */}

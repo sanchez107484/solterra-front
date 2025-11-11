@@ -1,5 +1,6 @@
 "use client"
 
+import { MatchesSection, StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -13,7 +14,7 @@ import { useUnsavedChanges } from "@/hooks/use-unsaved-changes"
 import { useTranslations } from "@/i18n/i18nContext"
 import { proyectosService } from "@/services/proyectos.service"
 import type { EstadoProyecto, Proyecto, TipoProyecto } from "@/types/proyecto.types"
-import { AlertCircle, Building2, Calendar, Edit, Euro, Layers, MapPin, Radio, Save, X, Zap } from "lucide-react"
+import { AlertCircle, Building2, Calendar, Edit, Euro, Layers, MapPin, Radio, Ruler, Save, X, Zap } from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -304,6 +305,52 @@ export default function ProyectoDetallePage() {
                                         </Badge>
                                     ) : null
                                 })()}
+                            </div>
+                        )}
+
+                        {/* Estadísticas del Proyecto */}
+                        {proyecto && (
+                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                <StatsCard
+                                    icon={Zap}
+                                    title="Potencia"
+                                    value={proyecto.potenciaObjetivo ? `${proyecto.potenciaObjetivo}` : "0"}
+                                    subtitle={proyecto.potenciaObjetivo ? "MW" : "No especificado"}
+                                    variant="secondary"
+                                />
+                                <StatsCard
+                                    icon={Euro}
+                                    title="Presupuesto"
+                                    value={proyecto.presupuesto ? formatCurrency(proyecto.presupuesto) : "No especificado"}
+                                    subtitle="Inversión estimada"
+                                    variant="primary"
+                                />
+                                <StatsCard
+                                    icon={Ruler}
+                                    title="Superficie"
+                                    value={
+                                        proyecto.superficieNecesaria
+                                            ? `${proyecto.superficieNecesaria}`
+                                            : proyecto.superficieMinima
+                                              ? `${proyecto.superficieMinima}+`
+                                              : "0"
+                                    }
+                                    subtitle={
+                                        proyecto.superficieNecesaria
+                                            ? "ha necesarias"
+                                            : proyecto.superficieMinima
+                                              ? "ha mínimas"
+                                              : "No especificado"
+                                    }
+                                    variant="primary"
+                                />
+                                <StatsCard
+                                    icon={Building2}
+                                    title="Estado"
+                                    value={proyecto.estado?.replace(/_/g, " ") || "Sin estado"}
+                                    subtitle="Estado actual"
+                                    variant="secondary"
+                                />
                             </div>
                         )}
 
@@ -724,6 +771,17 @@ export default function ProyectoDetallePage() {
                                 />
                             </CardContent>
                         </Card>
+
+                        {/* Terrenos Compatibles */}
+                        <MatchesSection
+                            title="Terrenos Compatibles"
+                            subtitle="Terrenos que mejor se adaptan a este proyecto"
+                            matches={matches}
+                            isLoading={isLoadingMatches}
+                            selectedItemTitle={proyecto?.titulo}
+                            basePath="/dashboard/promotor/terrenos"
+                            variant="secondary"
+                        />
 
                         {/* Información de ayuda cuando está en modo edición */}
                         {isEditing && (
