@@ -188,8 +188,8 @@ export default function TodosTerrenosPage() {
                 </div>
 
                 {/* Filtros inline */}
-                <Card className="border-secondary/20 mb-6 p-0">
-                    <div className="border-secondary/10 border-b p-4">
+                <Card className="mb-6 overflow-hidden p-0">
+                    <div className="from-secondary/5 via-accent/5 border-b bg-gradient-to-r to-transparent px-4 py-3">
                         <div className="flex items-center gap-2">
                             <Landmark className="text-secondary h-5 w-5" />
                             <h3 className="font-semibold">
