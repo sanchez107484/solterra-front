@@ -1219,6 +1219,139 @@ export const es = {
                         vendido: "Vendido",
                     },
                 },
+                detail: {
+                    title: "Detalle del Terreno",
+                    backToLands: "Volver a terrenos",
+                    loading: "Cargando detalles del terreno...",
+                    error: "Error al cargar el terreno",
+                    errorDesc: "No se pudo cargar la información del terreno. Por favor, intenta nuevamente.",
+                    retry: "Reintentar",
+
+                    // Sección Principal
+                    mainInfo: {
+                        disponibilidad: "Disponibilidad",
+                        contactOwner: "Contactar Propietario",
+                        requestInfo: "Solicitar Información",
+                        scheduleVisit: "Programar Visita",
+                        downloadBrochure: "Descargar Ficha",
+                    },
+
+                    // Métricas principales
+                    stats: {
+                        superficie: "Superficie",
+                        precio: "Precio",
+                        tipoSuelo: "Tipo de Suelo",
+                        estado: "Estado",
+                    },
+
+                    // Estados y disponibilidad
+                    availability: {
+                        disponible: "Disponible",
+                        reservado: "Reservado",
+                        vendido: "Vendido",
+                        arrendado: "Arrendado",
+                        no_disponible: "No Disponible",
+                    },
+
+                    // Tipos de suelo
+                    soilTypes: {
+                        AGRICOLA: "Agrícola",
+                        INDUSTRIAL: "Industrial",
+                        RUSTICO: "Rústico",
+                        URBANO: "Urbano",
+                        FORESTAL: "Forestal",
+                    },
+
+                    // Estados del terreno
+                    status: {
+                        activo: "Activo",
+                        inactivo: "Inactivo",
+                        pendiente: "Pendiente",
+                        vendido: "Vendido",
+                        arrendado: "Arrendado",
+                        reservado: "Reservado",
+                    },
+
+                    // Secciones de información
+                    sections: {
+                        characteristics: {
+                            title: "Características del Terreno",
+                            superficie: "Superficie Total",
+                            ubicacion: "Ubicación",
+                            provincia: "Provincia",
+                            municipio: "Municipio",
+                            tipoSuelo: "Tipo de Suelo",
+                            topografia: "Topografía",
+                            orientacion: "Orientación",
+                            pendiente: "Pendiente",
+                            acceso: "Tipo de Acceso",
+                        },
+                        commercial: {
+                            title: "Información Comercial",
+                            precio: "Precio",
+                            modalidad: "Modalidad",
+                            plazoArrendamiento: "Plazo de Arrendamiento",
+                            condicionesPago: "Condiciones de Pago",
+                            gastosAdicionales: "Gastos Adicionales",
+                            negociable: "Negociable",
+                        },
+                        infrastructure: {
+                            title: "Infraestructura",
+                            electricidad: "Conexión Eléctrica",
+                            agua: "Suministro de Agua",
+                            accesoCaminos: "Acceso por Caminos",
+                            internet: "Conectividad Internet",
+                            transporte: "Transporte Público",
+                            distanciaRed: "Distancia a Red Eléctrica",
+                        },
+                        location: {
+                            title: "Ubicación",
+                            coordinates: "Coordenadas",
+                            altitude: "Altitud",
+                            climate: "Clima",
+                            solarHours: "Horas de Sol",
+                            windSpeed: "Velocidad del Viento",
+                            accessibility: "Accesibilidad",
+                        },
+                    },
+
+                    // Acciones y CTAs
+                    actions: {
+                        interestedTitle: "¿Te interesa este terreno?",
+                        interestedDesc: "Contacta al propietario para obtener más información o programar una visita.",
+                        contactNow: "Contactar Ahora",
+                        requestInfo: "Solicitar Información",
+                        scheduleVisit: "Programar Visita",
+                        saveToFavorites: "Guardar en Favoritos",
+                        shareProperty: "Compartir Terreno",
+                    },
+
+                    // Valores por defecto para campos vacíos
+                    defaults: {
+                        notSpecified: "No especificado",
+                        notAvailable: "No disponible",
+                        toBeConfirmed: "Por confirmar",
+                        contactForInfo: "Consultar",
+                        included: "Incluido",
+                        notIncluded: "No incluido",
+                        yes: "Sí",
+                        no: "No",
+                    },
+
+                    // Unidades
+                    units: {
+                        hectares: "ha",
+                        kilometers: "km",
+                        meters: "m",
+                        years: "años",
+                        months: "meses",
+                        euro: "€",
+                        percentage: "%",
+                        degrees: "°",
+                        hours: "h/día",
+                        speed: "m/s",
+                    },
+                },
             },
         },
         owner: {
