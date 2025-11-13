@@ -4,7 +4,7 @@ import { MatchesSection, StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -14,9 +14,68 @@ import { useUnsavedChanges } from "@/hooks/use-unsaved-changes"
 import { useTranslations } from "@/i18n/i18nContext"
 import { proyectosService } from "@/services/proyectos.service"
 import type { EstadoProyecto, Proyecto, TipoProyecto } from "@/types/proyecto.types"
-import { AlertCircle, Building2, Calendar, Edit, Euro, Layers, MapPin, Radio, Ruler, Save, X, Zap } from "lucide-react"
+import {
+    Activity,
+    AlertCircle,
+    ArrowRight,
+    Building2,
+    Calendar,
+    CheckCircle2,
+    Edit,
+    Euro,
+    MapPin,
+    Radio,
+    Ruler,
+    Save,
+    Target,
+    Wind,
+    X,
+    Zap,
+} from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+
+// Funciones helper para iconos y etiquetas
+function getProjectTypeIcon(tipo?: string) {
+    switch (tipo?.toUpperCase()) {
+        case "SOLAR_FOTOVOLTAICO":
+            return <Zap className="h-4 w-4" />
+        case "EOLICO":
+            return <Wind className="h-4 w-4" />
+        case "HIBRIDACION":
+            return <Activity className="h-4 w-4" />
+        case "ALMACENAMIENTO":
+            return <Building2 className="h-4 w-4" />
+        case "HIDROGENO":
+            return <Zap className="h-4 w-4" />
+        case "BIOMETANO":
+            return <Activity className="h-4 w-4" />
+        default:
+            return <Target className="h-4 w-4" />
+    }
+}
+
+function getStatusColor(estado?: string) {
+    switch (estado?.toUpperCase()) {
+        case "ACTIVO":
+            return "bg-emerald-500"
+        case "COMPLETADO":
+            return "bg-blue-500"
+        case "PAUSADO":
+            return "bg-yellow-500"
+        case "BORRADOR":
+            return "bg-gray-500"
+        case "CANCELADO":
+            return "bg-red-500"
+        case "PENDIENTE_REVISION":
+        case "EN_BUSQUEDA":
+        case "PLANIFICACION":
+        case "EN_DESARROLLO":
+            return "bg-orange-500"
+        default:
+            return "bg-gray-500"
+    }
+}
 
 export default function ProyectoDetallePage() {
     const { t } = useTranslations()
@@ -28,7 +87,7 @@ export default function ProyectoDetallePage() {
     const [proyecto, setProyecto] = useState<any>(null)
     const [matches, setMatches] = useState<any[]>([])
     const [isLoadingMatches, setIsLoadingMatches] = useState(false)
-    const [isLoadingProyecto, setIsLoadingProyecto] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
     const [isEditing, setIsEditing] = useState(false)
     const [editedData, setEditedData] = useState<Partial<Proyecto>>({})
     const [isSaving, setIsSaving] = useState(false)
@@ -63,15 +122,20 @@ export default function ProyectoDetallePage() {
                     const data = await response.json()
                     setProyecto(data)
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Error loading proyecto:", error)
+                toast({
+                    title: "Error",
+                    description: error.message || "No se pudo cargar la información del proyecto",
+                    variant: "destructive",
+                })
             } finally {
-                setIsLoadingProyecto(false)
+                setIsLoading(false)
             }
         }
 
         loadProyecto()
-    }, [proyectoId])
+    }, [proyectoId, toast])
 
     useEffect(() => {
         const loadMatches = async () => {
@@ -120,6 +184,13 @@ export default function ProyectoDetallePage() {
         loadMatches()
     }, [proyectoId])
 
+    const handleUpdateProject = () => {
+        toast({
+            title: "Proyecto actualizado",
+            description: "El proyecto se ha actualizado correctamente.",
+        })
+    }
+
     const getEstadoColor = (estado: string) => {
         switch (estado?.toUpperCase()) {
             case "ACTIVO":
@@ -140,6 +211,60 @@ export default function ProyectoDetallePage() {
             default:
                 return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
         }
+    }
+
+    const getEstadoLabel = (estado?: string) => {
+        switch (estado?.toUpperCase()) {
+            case "ACTIVO":
+                return "Activo"
+            case "COMPLETADO":
+                return "Completado"
+            case "PAUSADO":
+                return "Pausado"
+            case "BORRADOR":
+                return "Borrador"
+            case "CANCELADO":
+                return "Cancelado"
+            case "PENDIENTE_REVISION":
+                return "Pendiente Revisión"
+            case "EN_BUSQUEDA":
+                return "En Búsqueda"
+            case "PLANIFICACION":
+                return "Planificación"
+            case "EN_DESARROLLO":
+                return "En Desarrollo"
+            default:
+                return estado || "Sin estado"
+        }
+    }
+
+    const getTipoProyectoLabel = (tipo?: string) => {
+        switch (tipo?.toUpperCase()) {
+            case "SOLAR_FOTOVOLTAICO":
+                return "Solar Fotovoltaico"
+            case "EOLICO":
+                return "Eólico"
+            case "HIBRIDACION":
+                return "Hibridación"
+            case "ALMACENAMIENTO":
+                return "Almacenamiento"
+            case "HIDROGENO":
+                return "Hidrógeno"
+            case "BIOMETANO":
+                return "Biometano"
+            default:
+                return tipo || "No especificado"
+        }
+    }
+
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat("es-ES", {
+            style: "currency",
+            currency: "EUR",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+            notation: "compact",
+        }).format(amount)
     }
 
     const handleEdit = () => {
@@ -256,15 +381,6 @@ export default function ProyectoDetallePage() {
         </div>
     )
 
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat("es-ES", {
-            style: "currency",
-            currency: "EUR",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        }).format(amount)
-    }
-
     return (
         <>
             <DashboardHeader
@@ -277,16 +393,16 @@ export default function ProyectoDetallePage() {
                 userType="promotor"
             />
 
-            <main className="p-6">
-                {isLoadingProyecto ? (
+            <main className="space-y-6 p-6">
+                {isLoading ? (
                     <div className="flex min-h-[50vh] items-center justify-center">
                         <div className="flex flex-col items-center gap-4">
-                            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-orange-600" />
-                            <p className="text-muted-foreground">Cargando proyecto...</p>
+                            <div className="border-t-secondary h-8 w-8 animate-spin rounded-full border-4 border-gray-300" />
+                            <p className="text-muted-foreground text-sm">Cargando proyecto...</p>
                         </div>
                     </div>
                 ) : proyecto ? (
-                    <div className="space-y-6">
+                    <>
                         {/* Banner de Modo Edición */}
                         {isEditing && (
                             <div className="animate-in fade-in slide-in-from-top-2 border-secondary bg-secondary/10 flex items-center gap-3 rounded-lg border-2 p-4 duration-300">
@@ -309,467 +425,639 @@ export default function ProyectoDetallePage() {
                         )}
 
                         {/* Estadísticas del Proyecto */}
-                        {proyecto && (
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                <StatsCard
-                                    icon={Zap}
-                                    title="Potencia"
-                                    value={proyecto.potenciaObjetivo ? `${proyecto.potenciaObjetivo}` : "0"}
-                                    subtitle={proyecto.potenciaObjetivo ? "MW" : "No especificado"}
-                                    variant="secondary"
-                                />
-                                <StatsCard
-                                    icon={Euro}
-                                    title="Presupuesto"
-                                    value={proyecto.presupuesto ? formatCurrency(proyecto.presupuesto) : "No especificado"}
-                                    subtitle="Inversión estimada"
-                                    variant="primary"
-                                />
-                                <StatsCard
-                                    icon={Ruler}
-                                    title="Superficie"
-                                    value={
-                                        proyecto.superficieNecesaria
-                                            ? `${proyecto.superficieNecesaria}`
-                                            : proyecto.superficieMinima
-                                              ? `${proyecto.superficieMinima}+`
-                                              : "0"
-                                    }
-                                    subtitle={
-                                        proyecto.superficieNecesaria
-                                            ? "ha necesarias"
-                                            : proyecto.superficieMinima
-                                              ? "ha mínimas"
-                                              : "No especificado"
-                                    }
-                                    variant="primary"
-                                />
-                                <StatsCard
-                                    icon={Building2}
-                                    title="Estado"
-                                    value={proyecto.estado?.replace(/_/g, " ") || "Sin estado"}
-                                    subtitle="Estado actual"
-                                    variant="secondary"
-                                />
-                            </div>
-                        )}
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            <StatsCard
+                                icon={Zap}
+                                title="Potencia"
+                                value={proyecto.potenciaObjetivo ? `${proyecto.potenciaObjetivo}` : "0"}
+                                subtitle={proyecto.potenciaObjetivo ? "MW objetivo" : "No especificado"}
+                                variant="secondary"
+                            />
+                            <StatsCard
+                                icon={Euro}
+                                title="Presupuesto"
+                                value={proyecto.presupuesto ? formatCurrency(proyecto.presupuesto) : "Consultar"}
+                                subtitle="Inversión estimada"
+                                variant="primary"
+                            />
+                            <StatsCard
+                                icon={Ruler}
+                                title="Superficie"
+                                value={
+                                    proyecto.superficieNecesaria
+                                        ? `${proyecto.superficieNecesaria}`
+                                        : proyecto.superficieMinima
+                                          ? `${proyecto.superficieMinima}+`
+                                          : "0"
+                                }
+                                subtitle={
+                                    proyecto.superficieNecesaria
+                                        ? "ha necesarias"
+                                        : proyecto.superficieMinima
+                                          ? "ha mínimas"
+                                          : "No especificado"
+                                }
+                                variant="secondary"
+                            />
+                            <StatsCard
+                                icon={CheckCircle2}
+                                title="Estado"
+                                value={getEstadoLabel(proyecto.estado)}
+                                subtitle="Estado actual"
+                                variant="primary"
+                            />
+                        </div>
 
-                        {/* Header Card */}
-                        <Card className="border-secondary/20 from-secondary/5 via-background to-secondary/5 bg-gradient-to-br py-0">
-                            <CardHeader className="space-y-4">
-                                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                                    <div className="flex-1 space-y-3">
-                                        {isEditing ? (
-                                            <EditableField label="Título del Proyecto" isEditing={isEditing}>
-                                                <Input
-                                                    value={editedData.titulo || ""}
-                                                    onChange={(e) => handleFieldChange("titulo", e.target.value)}
-                                                    className="mt-1 text-2xl font-bold"
-                                                />
-                                            </EditableField>
-                                        ) : (
-                                            <CardTitle className="text-3xl">{proyecto.titulo}</CardTitle>
-                                        )}
+                        {/* Header Card con información principal y CTA destacado */}
+                        <Card className="border-secondary/20 from-secondary/5 via-background to-accent/5 bg-gradient-to-br py-0">
+                            {/* Decorative background - más sutil */}
+                            <div className="bg-secondary/5 absolute top-0 right-0 -z-0 h-64 w-64 rounded-full opacity-30 blur-3xl" />
+
+                            <div className="relative z-10 p-6">
+                                <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                                    {/* Información principal del proyecto */}
+                                    <div className="flex-1 space-y-4">
+                                        <div className="flex items-start gap-3">
+                                            <div className="bg-secondary/10 ring-secondary/20 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ring-2">
+                                                {getProjectTypeIcon(proyecto.tipo)}
+                                            </div>
+                                            <div className="flex-1">
+                                                {isEditing ? (
+                                                    <div className="space-y-2">
+                                                        <Label className="text-secondary font-semibold">Título del Proyecto</Label>
+                                                        <Input
+                                                            value={editedData.titulo ?? proyecto.titulo}
+                                                            onChange={(e) => handleFieldChange("titulo", e.target.value)}
+                                                            className="text-lg font-bold"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+                                                        {proyecto.titulo}
+                                                    </h1>
+                                                )}
+
+                                                <div className="flex flex-wrap items-center gap-2">
+                                                    {isEditing ? (
+                                                        <div className="space-y-2">
+                                                            <Label className="text-secondary font-semibold">Estado del Proyecto</Label>
+                                                            <Select
+                                                                value={editedData.estado ?? proyecto.estado}
+                                                                onValueChange={(value) =>
+                                                                    handleFieldChange("estado", value as EstadoProyecto)
+                                                                }
+                                                            >
+                                                                <SelectTrigger className="w-[200px]">
+                                                                    <SelectValue />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="BORRADOR">Borrador</SelectItem>
+                                                                    <SelectItem value="PENDIENTE_REVISION">Pendiente Revisión</SelectItem>
+                                                                    <SelectItem value="EN_BUSQUEDA">En Búsqueda</SelectItem>
+                                                                    <SelectItem value="PLANIFICACION">Planificación</SelectItem>
+                                                                    <SelectItem value="EN_DESARROLLO">En Desarrollo</SelectItem>
+                                                                    <SelectItem value="ACTIVO">Activo</SelectItem>
+                                                                    <SelectItem value="PAUSADO">Pausado</SelectItem>
+                                                                    <SelectItem value="CANCELADO">Cancelado</SelectItem>
+                                                                    <SelectItem value="COMPLETADO">Completado</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                    ) : (
+                                                        <Badge className={getEstadoColor(proyecto.estado)}>
+                                                            {getEstadoLabel(proyecto.estado)}
+                                                        </Badge>
+                                                    )}
+
+                                                    {proyecto.potenciaObjetivo && (
+                                                        <Badge variant="outline" className="gap-1">
+                                                            <Zap className="h-3 w-3" />
+                                                            {proyecto.potenciaObjetivo} MW
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         {isEditing ? (
-                                            <EditableField label="Descripción" isEditing={isEditing}>
+                                            <div className="space-y-2">
+                                                <Label className="text-secondary font-semibold">Descripción del Proyecto</Label>
                                                 <Textarea
-                                                    value={editedData.descripcion || ""}
+                                                    value={editedData.descripcion ?? proyecto.descripcion ?? ""}
                                                     onChange={(e) => handleFieldChange("descripcion", e.target.value)}
-                                                    className="mt-1"
                                                     rows={3}
+                                                    className="bg-background/50 rounded-lg border"
                                                 />
-                                            </EditableField>
+                                            </div>
                                         ) : (
                                             proyecto.descripcion && (
-                                                <p className="text-muted-foreground text-base">{proyecto.descripcion}</p>
+                                                <div className="bg-background/50 rounded-lg border p-4">
+                                                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                                                        {proyecto.descripcion}
+                                                    </p>
+                                                </div>
                                             )
                                         )}
+
+                                        {/* Información clave: Ubicación y Tipo */}
+                                        <div className="flex flex-wrap gap-3">
+                                            {(proyecto.ubicacion || proyecto.provincia) && (
+                                                <div className="flex items-center gap-2 rounded-lg bg-white/80 px-3 py-2 text-sm shadow-sm ring-1 ring-gray-200 dark:bg-gray-800/80 dark:ring-gray-700">
+                                                    <MapPin className="text-primary h-4 w-4" />
+                                                    <div>
+                                                        <span className="font-medium">{proyecto.ubicacion || proyecto.provincia}</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <div className="flex items-center gap-2 rounded-lg bg-white/80 px-3 py-2 text-sm shadow-sm ring-1 ring-gray-200 dark:bg-gray-800/80 dark:ring-gray-700">
+                                                <Building2 className="text-secondary h-4 w-4" />
+                                                <div>
+                                                    <span className="text-xs text-gray-500">Tipo de Proyecto</span>
+                                                    <div className="font-medium">{getTipoProyectoLabel(proyecto.tipo)}</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-3 md:items-end">
-                                        {isEditing ? (
-                                            <EditableField label="Estado" isEditing={isEditing}>
-                                                <Select
-                                                    value={editedData.estado || proyecto.estado}
-                                                    onValueChange={(value) => handleFieldChange("estado", value as EstadoProyecto)}
+                                    {/* CTA Card destacado */}
+                                    <Card className="from-secondary to-secondary/80 border-0 bg-gradient-to-br py-0 text-white shadow-xl lg:w-80">
+                                        <div className="space-y-3 p-5">
+                                            <div className="flex items-center gap-2">
+                                                <div className="rounded-lg bg-white/20 p-1.5">
+                                                    {!isEditing ? <Edit className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+                                                </div>
+                                                <h3 className="font-bold">{!isEditing ? "Gestiona tu proyecto" : "Guarda los cambios"}</h3>
+                                            </div>
+                                            <p className="text-xs leading-relaxed text-white/90">
+                                                {!isEditing
+                                                    ? "Edita la información del proyecto o revisa los terrenos compatibles encontrados."
+                                                    : "Revisa los cambios realizados antes de confirmar."}
+                                            </p>
+
+                                            {!isEditing ? (
+                                                <Button
+                                                    onClick={handleEdit}
+                                                    className="text-secondary group w-full gap-2 bg-white font-semibold shadow-lg hover:bg-white/90"
                                                 >
-                                                    <SelectTrigger className="w-[200px]">
+                                                    <Edit className="h-4 w-4" />
+                                                    Editar Proyecto
+                                                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                                                </Button>
+                                            ) : (
+                                                <div className="space-y-2">
+                                                    <Button
+                                                        onClick={handleSave}
+                                                        disabled={isSaving}
+                                                        className="text-secondary group w-full gap-2 bg-white font-semibold shadow-lg hover:bg-white/90"
+                                                    >
+                                                        {isSaving ? (
+                                                            <>
+                                                                <div className="border-secondary h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
+                                                                Guardando...
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Save className="h-4 w-4" />
+                                                                Guardar Cambios
+                                                                <CheckCircle2 className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
+                                                            </>
+                                                        )}
+                                                    </Button>
+                                                    <Button
+                                                        onClick={handleCancel}
+                                                        variant="outline"
+                                                        disabled={isSaving}
+                                                        className="w-full gap-2 border-white/30 bg-white/10 text-white hover:bg-white/20"
+                                                    >
+                                                        <X className="h-4 w-4" />
+                                                        Cancelar
+                                                    </Button>
+                                                </div>
+                                            )}
+                                            <p className="text-center text-xs text-white/70">
+                                                {matches.length > 0
+                                                    ? `${matches.length} terrenos compatibles`
+                                                    : "Buscando terrenos compatibles"}
+                                            </p>
+                                        </div>
+                                    </Card>
+                                </div>
+                            </div>
+                        </Card>
+
+                        {/* Sección: Información del Proyecto */}
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            {/* Tipo y Características */}
+                            <Card
+                                className={`group py-0 transition-all hover:shadow-lg ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}
+                            >
+                                <div className="p-6">
+                                    <div className="mb-4 flex items-center gap-3">
+                                        <div className="bg-secondary/10 group-hover:bg-secondary/20 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                                            <Building2 className="text-secondary h-5 w-5" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-lg font-bold">Tipo de Proyecto</h2>
+                                            <p className="text-muted-foreground text-sm">Tecnología y características</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {isEditing ? (
+                                            <div className="space-y-2">
+                                                <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                    <Edit className="h-3 w-3" />
+                                                    Tipo de Tecnología
+                                                </Label>
+                                                <Select
+                                                    value={editedData.tipo ?? proyecto.tipo}
+                                                    onValueChange={(value) => handleFieldChange("tipo", value as TipoProyecto)}
+                                                >
+                                                    <SelectTrigger>
                                                         <SelectValue />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="BORRADOR">Borrador</SelectItem>
-                                                        <SelectItem value="PENDIENTE_REVISION">Pendiente Revisión</SelectItem>
-                                                        <SelectItem value="EN_BUSQUEDA">En Búsqueda</SelectItem>
-                                                        <SelectItem value="PLANIFICACION">Planificación</SelectItem>
-                                                        <SelectItem value="EN_DESARROLLO">En Desarrollo</SelectItem>
-                                                        <SelectItem value="ACTIVO">Activo</SelectItem>
-                                                        <SelectItem value="PAUSADO">Pausado</SelectItem>
-                                                        <SelectItem value="CANCELADO">Cancelado</SelectItem>
-                                                        <SelectItem value="COMPLETADO">Completado</SelectItem>
+                                                        <SelectItem value="SOLAR_FOTOVOLTAICO">Solar Fotovoltaico</SelectItem>
+                                                        <SelectItem value="EOLICO">Eólico</SelectItem>
+                                                        <SelectItem value="HIBRIDACION">Hibridación</SelectItem>
+                                                        <SelectItem value="ALMACENAMIENTO">Almacenamiento</SelectItem>
+                                                        <SelectItem value="HIDROGENO">Hidrógeno</SelectItem>
+                                                        <SelectItem value="BIOMETANO">Biometano</SelectItem>
                                                     </SelectContent>
                                                 </Select>
-                                            </EditableField>
+                                            </div>
                                         ) : (
-                                            <Badge className={getEstadoColor(proyecto.estado)} variant="secondary">
-                                                {proyecto.estado?.replace(/_/g, " ")}
-                                            </Badge>
+                                            <div className="space-y-1">
+                                                <dt className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+                                                    <Building2 className="h-3.5 w-3.5" />
+                                                    Tipo de Tecnología
+                                                </dt>
+                                                <dd className="text-secondary font-bold">{getTipoProyectoLabel(proyecto.tipo)}</dd>
+                                            </div>
                                         )}
 
-                                        {!isEditing ? (
-                                            <Button onClick={handleEdit} variant="outline" className="gap-2">
-                                                <Edit className="h-4 w-4" />
-                                                Editar Proyecto
-                                            </Button>
+                                        {isEditing ? (
+                                            <div className="space-y-2">
+                                                <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                    <Edit className="h-3 w-3" />
+                                                    Potencia Objetivo (MW)
+                                                </Label>
+                                                <Input
+                                                    type="number"
+                                                    step="0.1"
+                                                    value={editedData.potenciaObjetivo ?? proyecto.potenciaObjetivo ?? ""}
+                                                    onChange={(e) =>
+                                                        handleFieldChange(
+                                                            "potenciaObjetivo",
+                                                            e.target.value ? parseFloat(e.target.value) : null
+                                                        )
+                                                    }
+                                                />
+                                            </div>
                                         ) : (
-                                            <div className="flex gap-2">
-                                                <Button onClick={handleCancel} variant="outline" className="gap-2" disabled={isSaving}>
-                                                    <X className="h-4 w-4" />
-                                                    Cancelar
-                                                </Button>
-                                                <Button
-                                                    onClick={handleSave}
-                                                    className="bg-secondary hover:bg-secondary/90 gap-2"
-                                                    disabled={isSaving}
-                                                >
-                                                    {isSaving ? (
-                                                        <>
-                                                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                                                            Guardando...
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Save className="h-4 w-4" />
-                                                            Guardar Cambios
-                                                        </>
-                                                    )}
-                                                </Button>
+                                            <div className="space-y-1">
+                                                <dt className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+                                                    <Zap className="h-3.5 w-3.5" />
+                                                    Potencia Objetivo
+                                                </dt>
+                                                <dd className="font-bold text-gray-900 dark:text-white">
+                                                    {proyecto.potenciaObjetivo ? `${proyecto.potenciaObjetivo} MW` : "No especificado"}
+                                                </dd>
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                            </CardHeader>
-                        </Card>
-
-                        {/* Grid de información principal */}
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {/* Tipo de Proyecto */}
-                            <Card className={`py-0 ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}>
-                                <CardHeader>
-                                    <CardTitle className="text-secondary flex items-center gap-2">
-                                        <Building2 className="h-5 w-5" />
-                                        Tipo de Proyecto
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-3">
-                                    {isEditing ? (
-                                        <EditableField label="Tipo" isEditing={isEditing}>
-                                            <Select
-                                                value={editedData.tipo || proyecto.tipo}
-                                                onValueChange={(value) => handleFieldChange("tipo", value as TipoProyecto)}
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="SOLAR_FOTOVOLTAICO">Solar Fotovoltaico</SelectItem>
-                                                    <SelectItem value="EOLICO">Eólico</SelectItem>
-                                                    <SelectItem value="HIBRIDACION">Hibridación</SelectItem>
-                                                    <SelectItem value="ALMACENAMIENTO">Almacenamiento</SelectItem>
-                                                    <SelectItem value="HIDROGENO">Hidrógeno</SelectItem>
-                                                    <SelectItem value="BIOMETANO">Biometano</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </EditableField>
-                                    ) : (
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Tipo</Label>
-                                            <p className="mt-1 text-lg font-semibold">{proyecto.tipo?.replace(/_/g, " ")}</p>
-                                        </div>
-                                    )}
-                                </CardContent>
                             </Card>
 
-                            {/* Potencia Objetivo */}
-                            <Card className={`py-0 ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}>
-                                <CardHeader>
-                                    <CardTitle className="text-secondary flex items-center gap-2">
-                                        <Zap className="h-5 w-5" />
-                                        Potencia Objetivo
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-3">
-                                    {isEditing ? (
-                                        <EditableField label="Potencia (MW)" isEditing={isEditing}>
-                                            <Input
-                                                type="number"
-                                                step="0.1"
-                                                value={editedData.potenciaObjetivo ?? ""}
-                                                onChange={(e) =>
-                                                    handleFieldChange(
-                                                        "potenciaObjetivo",
-                                                        e.target.value ? parseFloat(e.target.value) : null
-                                                    )
-                                                }
-                                                className="mt-1"
-                                            />
-                                        </EditableField>
-                                    ) : (
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Potencia</Label>
-                                            <p className="mt-1 text-lg font-semibold">
-                                                {proyecto.potenciaObjetivo ? `${proyecto.potenciaObjetivo} MW` : "No especificado"}
-                                            </p>
+                            {/* Presupuesto e Inversión */}
+                            <Card
+                                className={`group py-0 transition-all hover:shadow-lg ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}
+                            >
+                                <div className="p-6">
+                                    <div className="mb-4 flex items-center gap-3">
+                                        <div className="bg-primary/10 group-hover:bg-primary/20 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                                            <Euro className="text-primary h-5 w-5" />
                                         </div>
-                                    )}
-                                </CardContent>
+                                        <div>
+                                            <h2 className="text-lg font-bold">Presupuesto</h2>
+                                            <p className="text-muted-foreground text-sm">Inversión requerida</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {isEditing ? (
+                                            <div className="space-y-2">
+                                                <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                    <Edit className="h-3 w-3" />
+                                                    Presupuesto Total (€)
+                                                </Label>
+                                                <Input
+                                                    type="number"
+                                                    value={editedData.presupuesto ?? proyecto.presupuesto ?? ""}
+                                                    onChange={(e) =>
+                                                        handleFieldChange("presupuesto", e.target.value ? parseFloat(e.target.value) : null)
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-1">
+                                                <dt className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+                                                    <Euro className="h-3.5 w-3.5" />
+                                                    Inversión Total
+                                                </dt>
+                                                <dd className="text-secondary font-bold">
+                                                    {proyecto.presupuesto ? formatCurrency(proyecto.presupuesto) : "No especificado"}
+                                                </dd>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </Card>
 
-                            {/* Presupuesto */}
-                            <Card className={`py-0 ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}>
-                                <CardHeader>
-                                    <CardTitle className="text-secondary flex items-center gap-2">
-                                        <Euro className="h-5 w-5" />
-                                        Presupuesto
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-3">
-                                    {isEditing ? (
-                                        <EditableField label="Presupuesto (€)" isEditing={isEditing}>
-                                            <Input
-                                                type="number"
-                                                value={editedData.presupuesto ?? ""}
-                                                onChange={(e) =>
-                                                    handleFieldChange("presupuesto", e.target.value ? parseFloat(e.target.value) : null)
-                                                }
-                                                className="mt-1"
-                                            />
-                                        </EditableField>
-                                    ) : (
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Presupuesto</Label>
-                                            <p className="mt-1 text-lg font-semibold">
-                                                {proyecto.presupuesto ? formatCurrency(proyecto.presupuesto) : "No especificado"}
-                                            </p>
+                            {/* Superficie Requerida */}
+                            <Card
+                                className={`group py-0 transition-all hover:shadow-lg ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}
+                            >
+                                <div className="p-6">
+                                    <div className="mb-4 flex items-center gap-3">
+                                        <div className="bg-secondary/10 group-hover:bg-secondary/20 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                                            <Ruler className="text-secondary h-5 w-5" />
                                         </div>
-                                    )}
-                                </CardContent>
+                                        <div>
+                                            <h2 className="text-lg font-bold">Superficie</h2>
+                                            <p className="text-muted-foreground text-sm">Requerimientos de terreno</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {isEditing ? (
+                                            <>
+                                                <div className="space-y-2">
+                                                    <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                        <Edit className="h-3 w-3" />
+                                                        Superficie Mínima (ha)
+                                                    </Label>
+                                                    <Input
+                                                        type="number"
+                                                        step="0.01"
+                                                        value={editedData.superficieMinima ?? proyecto.superficieMinima ?? ""}
+                                                        onChange={(e) =>
+                                                            handleFieldChange(
+                                                                "superficieMinima",
+                                                                e.target.value ? parseFloat(e.target.value) : 0
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                        <Edit className="h-3 w-3" />
+                                                        Superficie Necesaria (ha)
+                                                    </Label>
+                                                    <Input
+                                                        type="number"
+                                                        step="0.01"
+                                                        value={editedData.superficieNecesaria ?? proyecto.superficieNecesaria ?? ""}
+                                                        onChange={(e) =>
+                                                            handleFieldChange(
+                                                                "superficieNecesaria",
+                                                                e.target.value ? parseFloat(e.target.value) : null
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="space-y-1">
+                                                    <dt className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+                                                        <Ruler className="h-3.5 w-3.5" />
+                                                        Superficie Mínima
+                                                    </dt>
+                                                    <dd className="font-bold text-gray-900 dark:text-white">
+                                                        {proyecto.superficieMinima ? `${proyecto.superficieMinima} ha` : "No especificado"}
+                                                    </dd>
+                                                </div>
+                                                {proyecto.superficieNecesaria && (
+                                                    <div className="space-y-1">
+                                                        <dt className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+                                                            <Target className="h-3.5 w-3.5" />
+                                                            Superficie Necesaria
+                                                        </dt>
+                                                        <dd className="text-secondary font-bold">{proyecto.superficieNecesaria} ha</dd>
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
                             </Card>
                         </div>
 
-                        {/* Ubicación */}
-                        <Card className={`py-0 ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}>
-                            <CardHeader>
-                                <CardTitle className="text-secondary flex items-center gap-2">
-                                    <MapPin className="h-5 w-5" />
-                                    Ubicación
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="grid gap-4 md:grid-cols-3">
-                                {isEditing ? (
-                                    <>
-                                        <EditableField label="Ubicación" isEditing={isEditing}>
-                                            <Input
-                                                value={editedData.ubicacion || ""}
-                                                onChange={(e) => handleFieldChange("ubicacion", e.target.value)}
-                                                className="mt-1"
-                                                placeholder="Ej: Madrid"
-                                            />
-                                        </EditableField>
-                                        <EditableField label="Provincia" isEditing={isEditing}>
-                                            <Input
-                                                value={editedData.provincia || ""}
-                                                onChange={(e) => handleFieldChange("provincia", e.target.value)}
-                                                className="mt-1"
-                                                placeholder="Ej: Madrid"
-                                            />
-                                        </EditableField>
-                                        <EditableField label="Comunidad Autónoma" isEditing={isEditing}>
-                                            <Input
-                                                value={editedData.comunidad || ""}
-                                                onChange={(e) => handleFieldChange("comunidad", e.target.value)}
-                                                className="mt-1"
-                                                placeholder="Ej: Comunidad de Madrid"
-                                            />
-                                        </EditableField>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Ubicación</Label>
-                                            <p className="mt-1 font-medium">{proyecto.ubicacion || "No especificado"}</p>
+                        {/* Ubicación e Infraestructura */}
+                        <div className="grid gap-6 md:grid-cols-2">
+                            {/* Ubicación */}
+                            <Card
+                                className={`group py-0 transition-all hover:shadow-lg ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}
+                            >
+                                <div className="p-6">
+                                    <div className="mb-4 flex items-center gap-3">
+                                        <div className="bg-primary/10 group-hover:bg-primary/20 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                                            <MapPin className="text-primary h-5 w-5" />
                                         </div>
                                         <div>
-                                            <Label className="text-muted-foreground text-xs">Provincia</Label>
-                                            <p className="mt-1 font-medium">{proyecto.provincia || "No especificado"}</p>
+                                            <h2 className="text-lg font-bold">Ubicación</h2>
+                                            <p className="text-muted-foreground text-sm">Localización preferida</p>
                                         </div>
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Comunidad Autónoma</Label>
-                                            <p className="mt-1 font-medium">{proyecto.comunidad || "No especificado"}</p>
-                                        </div>
-                                    </>
-                                )}
-                            </CardContent>
-                        </Card>
+                                    </div>
+                                    <div className="grid gap-4">
+                                        {isEditing ? (
+                                            <>
+                                                <div className="space-y-2">
+                                                    <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                        <Edit className="h-3 w-3" />
+                                                        Ubicación
+                                                    </Label>
+                                                    <Input
+                                                        value={editedData.ubicacion ?? proyecto.ubicacion ?? ""}
+                                                        onChange={(e) => handleFieldChange("ubicacion", e.target.value)}
+                                                        placeholder="Ej: Madrid"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                        <Edit className="h-3 w-3" />
+                                                        Provincia
+                                                    </Label>
+                                                    <Input
+                                                        value={editedData.provincia ?? proyecto.provincia ?? ""}
+                                                        onChange={(e) => handleFieldChange("provincia", e.target.value)}
+                                                        placeholder="Ej: Madrid"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                        <Edit className="h-3 w-3" />
+                                                        Comunidad Autónoma
+                                                    </Label>
+                                                    <Input
+                                                        value={editedData.comunidad ?? proyecto.comunidad ?? ""}
+                                                        onChange={(e) => handleFieldChange("comunidad", e.target.value)}
+                                                        placeholder="Ej: Comunidad de Madrid"
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="space-y-1">
+                                                    <dt className="text-muted-foreground text-xs font-medium">Ubicación</dt>
+                                                    <dd className="font-medium">{proyecto.ubicacion || "No especificado"}</dd>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <dt className="text-muted-foreground text-xs font-medium">Provincia</dt>
+                                                    <dd className="font-medium">{proyecto.provincia || "No especificado"}</dd>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <dt className="text-muted-foreground text-xs font-medium">Comunidad Autónoma</dt>
+                                                    <dd className="font-medium">{proyecto.comunidad || "No especificado"}</dd>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </Card>
 
-                        {/* Requisitos de Superficie */}
-                        <Card className={`py-0 ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}>
-                            <CardHeader>
-                                <CardTitle className="text-secondary flex items-center gap-2">
-                                    <Layers className="h-5 w-5" />
-                                    Requisitos de Superficie
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="grid gap-4 md:grid-cols-3">
-                                {isEditing ? (
-                                    <>
-                                        <EditableField label="Superficie Mínima (ha)" isEditing={isEditing}>
-                                            <Input
-                                                type="number"
-                                                step="0.01"
-                                                value={editedData.superficieMinima ?? ""}
-                                                onChange={(e) =>
-                                                    handleFieldChange("superficieMinima", e.target.value ? parseFloat(e.target.value) : 0)
-                                                }
-                                                className="mt-1"
-                                            />
-                                        </EditableField>
-                                        <EditableField label="Superficie Máxima (ha)" isEditing={isEditing}>
-                                            <Input
-                                                type="number"
-                                                step="0.01"
-                                                value={editedData.superficieMaxima ?? ""}
-                                                onChange={(e) =>
-                                                    handleFieldChange(
-                                                        "superficieMaxima",
-                                                        e.target.value ? parseFloat(e.target.value) : null
-                                                    )
-                                                }
-                                                className="mt-1"
-                                            />
-                                        </EditableField>
-                                        <EditableField label="Superficie Necesaria (ha)" isEditing={isEditing}>
-                                            <Input
-                                                type="number"
-                                                step="0.01"
-                                                value={editedData.superficieNecesaria ?? ""}
-                                                onChange={(e) =>
-                                                    handleFieldChange(
-                                                        "superficieNecesaria",
-                                                        e.target.value ? parseFloat(e.target.value) : null
-                                                    )
-                                                }
-                                                className="mt-1"
-                                            />
-                                        </EditableField>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Superficie Mínima</Label>
-                                            <p className="mt-1 font-medium">{proyecto.superficieMinima} ha</p>
+                            {/* Infraestructura Eléctrica */}
+                            <Card
+                                className={`group py-0 transition-all hover:shadow-lg ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}
+                            >
+                                <div className="p-6">
+                                    <div className="mb-4 flex items-center gap-3">
+                                        <div className="bg-secondary/10 group-hover:bg-secondary/20 flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                                            <Radio className="text-secondary h-5 w-5" />
                                         </div>
                                         <div>
-                                            <Label className="text-muted-foreground text-xs">Superficie Máxima</Label>
-                                            <p className="mt-1 font-medium">
-                                                {proyecto.superficieMaxima ? `${proyecto.superficieMaxima} ha` : "No especificado"}
-                                            </p>
+                                            <h2 className="text-lg font-bold">Infraestructura</h2>
+                                            <p className="text-muted-foreground text-sm">Requisitos técnicos</p>
                                         </div>
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Superficie Necesaria</Label>
-                                            <p className="mt-1 font-medium">
-                                                {proyecto.superficieNecesaria ? `${proyecto.superficieNecesaria} ha` : "No especificado"}
-                                            </p>
-                                        </div>
-                                    </>
-                                )}
-                            </CardContent>
-                        </Card>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {isEditing ? (
+                                            <>
+                                                <div className="space-y-2">
+                                                    <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                        <Edit className="h-3 w-3" />
+                                                        Distancia Máxima a Red (km)
+                                                    </Label>
+                                                    <Input
+                                                        type="number"
+                                                        step="0.1"
+                                                        value={editedData.distanciaMaximaRed ?? proyecto.distanciaMaximaRed ?? ""}
+                                                        onChange={(e) =>
+                                                            handleFieldChange(
+                                                                "distanciaMaximaRed",
+                                                                e.target.value ? parseFloat(e.target.value) : null
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label className="text-secondary flex items-center gap-2 font-semibold">
+                                                        <Edit className="h-3 w-3" />
+                                                        Capacidad Subestación Mín. (MVA)
+                                                    </Label>
+                                                    <Input
+                                                        type="number"
+                                                        step="0.1"
+                                                        value={
+                                                            editedData.capacidadSubestacionMinima ??
+                                                            proyecto.capacidadSubestacionMinima ??
+                                                            ""
+                                                        }
+                                                        onChange={(e) =>
+                                                            handleFieldChange(
+                                                                "capacidadSubestacionMinima",
+                                                                e.target.value ? parseFloat(e.target.value) : null
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="space-y-1">
+                                                    <dt className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+                                                        <Radio className="h-3.5 w-3.5" />
+                                                        Distancia Máxima a Red
+                                                    </dt>
+                                                    <dd className="font-bold text-gray-900 dark:text-white">
+                                                        {proyecto.distanciaMaximaRed
+                                                            ? `${proyecto.distanciaMaximaRed} km`
+                                                            : "No especificado"}
+                                                    </dd>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <dt className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+                                                        <Zap className="h-3.5 w-3.5" />
+                                                        Capacidad Subestación Mín.
+                                                    </dt>
+                                                    <dd className="font-bold text-gray-900 dark:text-white">
+                                                        {proyecto.capacidadSubestacionMinima
+                                                            ? `${proyecto.capacidadSubestacionMinima} MVA`
+                                                            : "No especificado"}
+                                                    </dd>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
 
-                        {/* Infraestructura Eléctrica */}
-                        <Card className={`py-0 ${isEditing ? "border-secondary/50 bg-secondary/5 border-2" : ""}`}>
-                            <CardHeader>
-                                <CardTitle className="text-secondary flex items-center gap-2">
-                                    <Radio className="h-5 w-5" />
-                                    Infraestructura Eléctrica
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="grid gap-4 md:grid-cols-2">
-                                {isEditing ? (
-                                    <>
-                                        <EditableField label="Distancia Máxima a Red (km)" isEditing={isEditing}>
-                                            <Input
-                                                type="number"
-                                                step="0.1"
-                                                value={editedData.distanciaMaximaRed ?? ""}
-                                                onChange={(e) =>
-                                                    handleFieldChange(
-                                                        "distanciaMaximaRed",
-                                                        e.target.value ? parseFloat(e.target.value) : null
-                                                    )
-                                                }
-                                                className="mt-1"
-                                            />
-                                        </EditableField>
-                                        <EditableField label="Capacidad Subestación Mínima (MVA)" isEditing={isEditing}>
-                                            <Input
-                                                type="number"
-                                                step="0.1"
-                                                value={editedData.capacidadSubestacionMinima ?? ""}
-                                                onChange={(e) =>
-                                                    handleFieldChange(
-                                                        "capacidadSubestacionMinima",
-                                                        e.target.value ? parseFloat(e.target.value) : null
-                                                    )
-                                                }
-                                                className="mt-1"
-                                            />
-                                        </EditableField>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Distancia Máxima a Red</Label>
-                                            <p className="mt-1 font-medium">
-                                                {proyecto.distanciaMaximaRed ? `${proyecto.distanciaMaximaRed} km` : "No especificado"}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <Label className="text-muted-foreground text-xs">Capacidad Subestación Mínima</Label>
-                                            <p className="mt-1 font-medium">
-                                                {proyecto.capacidadSubestacionMinima
-                                                    ? `${proyecto.capacidadSubestacionMinima} MVA`
-                                                    : "No especificado"}
-                                            </p>
-                                        </div>
-                                    </>
-                                )}
-                            </CardContent>
-                        </Card>
-
-                        {/* Información del Sistema */}
-                        <Card className="py-0">
-                            <CardHeader>
-                                <CardTitle className="text-secondary flex items-center gap-2">
-                                    <Calendar className="h-5 w-5" />
-                                    Información del Sistema
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="grid gap-4 md:grid-cols-3">
-                                <ReadOnlyField label="ID del Proyecto" value={proyecto.id} />
-                                <ReadOnlyField
-                                    label="Fecha de Creación"
-                                    value={proyecto.creadoEn ? new Date(proyecto.creadoEn).toLocaleDateString("es-ES") : "No disponible"}
-                                />
-                                <ReadOnlyField
-                                    label="Última Actualización"
-                                    value={
-                                        proyecto.actualizadoEn
-                                            ? new Date(proyecto.actualizadoEn).toLocaleDateString("es-ES")
-                                            : "No disponible"
-                                    }
-                                />
-                            </CardContent>
+                        {/* Información del Sistema - Solo Lectura */}
+                        <Card className="group py-0 transition-all hover:shadow-lg">
+                            <div className="p-6">
+                                <div className="mb-4 flex items-center gap-3">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 transition-colors group-hover:bg-gray-200 dark:bg-gray-800 dark:group-hover:bg-gray-700">
+                                        <Calendar className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-lg font-bold">Información del Sistema</h2>
+                                        <p className="text-muted-foreground text-sm">Datos de solo lectura</p>
+                                    </div>
+                                </div>
+                                <div className="grid gap-4 md:grid-cols-3">
+                                    <div className="group relative">
+                                        <Label className="text-muted-foreground flex items-center gap-1.5 text-xs">
+                                            <span className="text-lg">🔒</span>
+                                            ID del Proyecto
+                                            <span className="text-muted-foreground text-[10px] italic">(Solo lectura)</span>
+                                        </Label>
+                                        <p className="bg-muted/30 text-muted-foreground mt-1 rounded border border-dashed px-2 py-1.5 font-medium">
+                                            {proyecto.id}
+                                        </p>
+                                    </div>
+                                    <div className="group relative">
+                                        <Label className="text-muted-foreground flex items-center gap-1.5 text-xs">
+                                            <span className="text-lg">🔒</span>
+                                            Fecha de Creación
+                                            <span className="text-muted-foreground text-[10px] italic">(Solo lectura)</span>
+                                        </Label>
+                                        <p className="bg-muted/30 text-muted-foreground mt-1 rounded border border-dashed px-2 py-1.5 font-medium">
+                                            {proyecto.creadoEn ? new Date(proyecto.creadoEn).toLocaleDateString("es-ES") : "No disponible"}
+                                        </p>
+                                    </div>
+                                    <div className="group relative">
+                                        <Label className="text-muted-foreground flex items-center gap-1.5 text-xs">
+                                            <span className="text-lg">🔒</span>
+                                            Última Actualización
+                                            <span className="text-muted-foreground text-[10px] italic">(Solo lectura)</span>
+                                        </Label>
+                                        <p className="bg-muted/30 text-muted-foreground mt-1 rounded border border-dashed px-2 py-1.5 font-medium">
+                                            {proyecto.actualizadoEn
+                                                ? new Date(proyecto.actualizadoEn).toLocaleDateString("es-ES")
+                                                : "No disponible"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </Card>
 
                         {/* Terrenos Compatibles */}
@@ -793,11 +1081,33 @@ export default function ProyectoDetallePage() {
                                         <li>Los campos marcados con 🔒 son de solo lectura y no pueden ser modificados</li>
                                         <li>Todos los cambios deben ser guardados para aplicarse</li>
                                         <li>Puedes cancelar en cualquier momento para descartar los cambios</li>
+                                        <li>Los campos editables tienen un icono de lápiz y fondo destacado</li>
                                     </ul>
                                 </div>
                             </div>
                         )}
-                    </div>
+
+                        {/* Banner de Modo Edición */}
+                        {isEditing && (
+                            <div className="animate-in fade-in slide-in-from-top-2 border-secondary bg-secondary/10 flex items-center gap-3 rounded-lg border-2 p-4 duration-300">
+                                <Edit className="text-secondary h-5 w-5" />
+                                <div className="flex-1">
+                                    <p className="text-secondary font-semibold">Modo de edición activado</p>
+                                    <p className="text-secondary/80 text-sm">Realiza los cambios necesarios y guarda para confirmarlos</p>
+                                </div>
+                                {(() => {
+                                    const changedFieldsCount = Object.keys(editedData).filter(
+                                        (key) => editedData[key as keyof typeof editedData] !== proyecto[key as keyof typeof proyecto]
+                                    ).length
+                                    return changedFieldsCount > 0 ? (
+                                        <Badge variant="secondary" className="bg-secondary text-white">
+                                            {changedFieldsCount} cambio{changedFieldsCount !== 1 ? "s" : ""}
+                                        </Badge>
+                                    ) : null
+                                })()}
+                            </div>
+                        )}
+                    </>
                 ) : (
                     <Card className="p-12 py-0">
                         <CardContent className="flex flex-col items-center gap-4 text-center">
