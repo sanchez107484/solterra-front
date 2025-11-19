@@ -471,37 +471,6 @@ export default function TerrenoDetallePage() {
                                                 <p className="text-foreground mt-1 font-medium">{terreno.codigoPostal}</p>
                                             )}
                                         </EditableField>
-                                        {(terreno.latitud || terreno.longitud || isEditing) && (
-                                            <EditableField
-                                                label={t?.dashboard?.owner?.terrenos?.terrain?.labels?.coordinates || "Coordenadas"}
-                                                isEditing={isEditing}
-                                            >
-                                                {isEditing ? (
-                                                    <div className="mt-1 grid grid-cols-2 gap-2">
-                                                        <Input
-                                                            type="number"
-                                                            step="0.000001"
-                                                            value={editedData.latitud || ""}
-                                                            onChange={(e) => handleFieldChange("latitud", parseFloat(e.target.value))}
-                                                            placeholder="Latitud"
-                                                            className="bg-primary/5 border-primary/50 focus:border-primary transition-all duration-200"
-                                                        />
-                                                        <Input
-                                                            type="number"
-                                                            step="0.000001"
-                                                            value={editedData.longitud || ""}
-                                                            onChange={(e) => handleFieldChange("longitud", parseFloat(e.target.value))}
-                                                            placeholder="Longitud"
-                                                            className="bg-primary/5 border-primary/50 focus:border-primary transition-all duration-200"
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <p className="text-foreground mt-1 font-medium">
-                                                        {terreno.latitud?.toFixed(6)}, {terreno.longitud?.toFixed(6)}
-                                                    </p>
-                                                )}
-                                            </EditableField>
-                                        )}
                                     </div>
                                 </div>
                             </Card>
