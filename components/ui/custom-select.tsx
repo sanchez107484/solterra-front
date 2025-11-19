@@ -13,10 +13,11 @@ export interface CustomSelectProps {
     variant?: "primary" | "secondary"
     className?: string
     disabled?: boolean
+    error?: boolean
 }
 
 const CustomSelect = React.forwardRef<HTMLButtonElement, CustomSelectProps>(
-    ({ value, onValueChange, placeholder = "Selecciona una opción", options, variant = "primary", className, disabled }, ref) => {
+    ({ value, onValueChange, placeholder = "Selecciona una opción", options, variant = "primary", className, disabled, error }, ref) => {
         const variantStyles = {
             primary: {
                 trigger: "border-primary/10 focus:border-primary data-[state=open]:border-primary",
@@ -39,11 +40,11 @@ const CustomSelect = React.forwardRef<HTMLButtonElement, CustomSelectProps>(
                 <SelectPrimitive.Trigger
                     ref={ref}
                     className={cn(
-                        "bg-background flex h-14 w-full items-center justify-between rounded-lg border-2 px-4 text-lg transition-colors",
+                        "bg-background flex h-14 w-full items-center justify-between rounded-lg border-2 px-4 text-lg shadow-xs transition-colors",
                         "hover:bg-accent/5 focus:ring-2 focus:ring-offset-2 focus:outline-none",
                         "disabled:cursor-not-allowed disabled:opacity-50",
                         "data-[placeholder]:text-muted-foreground",
-                        styles.trigger,
+                        error ? "border-red-500" : styles.trigger,
                         className
                     )}
                 >

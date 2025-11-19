@@ -248,8 +248,8 @@ export const es = {
                 title: "Siguientes pasos",
                 step1: "Revisión de requisitos y documentación",
                 step2: "Validación técnica y viabilidad",
-                step3: "Negociación y acuerdo con el propietario",
-                step4: "Inicio de los trámites administrativos",
+                step3: "Buscaremos proyectos compatibles en nuestra base de datos",
+                step4: "Podrás comenzar el proceso de negociación",
             },
             buttons: {
                 publish: "Publicar Terreno",

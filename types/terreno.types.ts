@@ -92,6 +92,7 @@ export interface CreateTerrenoDTO {
     direccion: string
     municipio: string
     provincia: string
+    comunidad: string
     codigoPostal: string
     latitud: number
     longitud: number

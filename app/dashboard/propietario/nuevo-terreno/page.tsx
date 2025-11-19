@@ -6,6 +6,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { CustomSelect } from "@/components/ui/custom-select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -15,6 +16,7 @@ import { useAppData } from "@/hooks/useAppData"
 import { useTerrenos } from "@/hooks/useTerrenos"
 import { useTranslations } from "@/i18n/i18nContext"
 import { useErrorHandler } from "@/lib/error-handler"
+import { getComunidadesAutonomas, getComunidadFromProvincia, getProvinciasFromComunidad } from "@/lib/provincias-data"
 import { CreateTerrenoDTO, DisponibilidadTerreno, Orientacion, TipoSuelo } from "@/types/terreno.types"
 import {
     AlertCircle,
@@ -33,7 +35,7 @@ import {
     TreePine,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 export default function NuevoTerreno() {
     const router = useRouter()
@@ -47,12 +49,22 @@ export default function NuevoTerreno() {
     const { t } = useTranslations()
     const { toast } = useToast()
 
+    // Refs para campos del formulario
+    const tituloRef = useRef<HTMLInputElement>(null)
+    const superficieRef = useRef<HTMLInputElement>(null)
+    const latitudRef = useRef<HTMLInputElement>(null)
+    const longitudRef = useRef<HTMLInputElement>(null)
+    const pendienteRef = useRef<HTMLInputElement>(null)
+    const precioVentaRef = useRef<HTMLInputElement>(null)
+    const precioArrendamientoRef = useRef<HTMLInputElement>(null)
+
     const [formData, setFormData] = useState({
         titulo: "",
         descripcion: "",
         direccion: "",
         municipio: "",
         provincia: "",
+        comunidad: "",
         codigoPostal: "",
         latitud: "",
         longitud: "",
@@ -73,31 +85,75 @@ export default function NuevoTerreno() {
     })
 
     const [validationErrors, setValidationErrors] = useState<string[]>([])
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
     useEffect(() => {
         loadProvincias()
     }, [loadProvincias])
 
-    const validateStep = (currentStep: number): string[] => {
+    // Calcular provincias disponibles según la comunidad seleccionada
+    const provinciasDisponibles = useMemo(() => {
+        if (formData.comunidad) {
+            return getProvinciasFromComunidad(formData.comunidad)
+        }
+        return provincias
+    }, [formData.comunidad, provincias])
+
+    // Handler para cambio de comunidad autónoma
+    const handleComunidadChange = (comunidad: string) => {
+        setFormData({
+            ...formData,
+            comunidad,
+            provincia: "", // Limpiar provincia al cambiar comunidad
+        })
+    }
+
+    // Handler para cambio de provincia
+    const handleProvinciaChange = (provincia: string) => {
+        const comunidad = getComunidadFromProvincia(provincia)
+        setFormData({
+            ...formData,
+            provincia,
+            comunidad: comunidad || formData.comunidad, // Autocompletar comunidad
+        })
+    }
+
+    const validateStep = (currentStep: number): { errors: string[]; fieldErrors: Record<string, string> } => {
         const errors: string[] = []
+        const newFieldErrors: Record<string, string> = {}
 
         if (currentStep === 1) {
             // Validación del paso 1: Información Básica
             if (!formData.titulo.trim()) {
-                errors.push(t?.owner?.validation?.requiredName)
+                const errorMsg = t?.owner?.validation?.requiredName
+                errors.push(errorMsg)
+                newFieldErrors.titulo = errorMsg
+            }
+            if (!formData.comunidad.trim()) {
+                const errorMsg = "La comunidad autónoma es obligatoria"
+                errors.push(errorMsg)
+                newFieldErrors.comunidad = errorMsg
             }
             if (!formData.provincia.trim()) {
-                errors.push(t?.owner?.validation?.requiredProvince)
+                const errorMsg = t?.owner?.validation?.requiredProvince
+                errors.push(errorMsg)
+                newFieldErrors.provincia = errorMsg
             }
             if (!formData.municipio.trim()) {
-                errors.push(t?.owner?.validation?.requiredMunicipio)
+                const errorMsg = t?.owner?.validation?.requiredMunicipio
+                errors.push(errorMsg)
+                newFieldErrors.municipio = errorMsg
             }
             const superficie = parseFloat(formData.superficie)
             if (!formData.superficie || isNaN(superficie) || superficie <= 0) {
-                errors.push(t?.owner?.validation?.superficiePositive)
+                const errorMsg = t?.owner?.validation?.superficiePositive
+                errors.push(errorMsg)
+                newFieldErrors.superficie = errorMsg
             }
             if (!formData.tipoSuelo) {
-                errors.push(t?.owner?.validation?.tipoSueloRequired)
+                const errorMsg = t?.owner?.validation?.tipoSueloRequired
+                errors.push(errorMsg)
+                newFieldErrors.tipoSuelo = errorMsg
             }
         } else if (currentStep === 2) {
             // Validación del paso 2: Detalles Técnicos (todos opcionales, pero validar formato si se llenan)
@@ -105,97 +161,184 @@ export default function NuevoTerreno() {
                 formData.latitud &&
                 (isNaN(parseFloat(formData.latitud)) || parseFloat(formData.latitud) < -90 || parseFloat(formData.latitud) > 90)
             ) {
-                errors.push(t?.owner?.validation?.latRange)
+                const errorMsg = t?.owner?.validation?.latRange
+                errors.push(errorMsg)
+                newFieldErrors.latitud = errorMsg
             }
             if (
                 formData.longitud &&
                 (isNaN(parseFloat(formData.longitud)) || parseFloat(formData.longitud) < -180 || parseFloat(formData.longitud) > 180)
             ) {
-                errors.push(t?.owner?.validation?.lngRange)
+                const errorMsg = t?.owner?.validation?.lngRange
+                errors.push(errorMsg)
+                newFieldErrors.longitud = errorMsg
             }
             if (formData.pendiente && (isNaN(parseFloat(formData.pendiente)) || parseFloat(formData.pendiente) < 0)) {
-                errors.push(t?.owner?.validation?.pendienteInvalid)
+                const errorMsg = t?.owner?.validation?.pendienteInvalid
+                errors.push(errorMsg)
+                newFieldErrors.pendiente = errorMsg
             }
         } else if (currentStep === 3) {
             // Validación del paso 3: Precio y Características
             if (!formData.disponibilidad) {
-                errors.push(t?.owner?.validation?.disponibilidadRequired)
+                const errorMsg = t?.owner?.validation?.disponibilidadRequired
+                errors.push(errorMsg)
+                newFieldErrors.disponibilidad = errorMsg
             }
-            if ((formData.disponibilidad === "VENTA" || formData.disponibilidad === "AMBOS") && formData.precioVenta) {
-                if (isNaN(parseFloat(formData.precioVenta)) || parseFloat(formData.precioVenta) <= 0) {
-                    errors.push(t?.owner?.validation?.precioVentaInvalid)
+            // Validar precio de venta (obligatorio si disponibilidad es VENTA o AMBOS)
+            if (formData.disponibilidad === "VENTA" || formData.disponibilidad === "AMBOS") {
+                if (!formData.precioVenta || formData.precioVenta.trim() === "") {
+                    const errorMsg = "El precio de venta es obligatorio"
+                    errors.push(errorMsg)
+                    newFieldErrors.precioVenta = errorMsg
+                } else if (isNaN(parseFloat(formData.precioVenta)) || parseFloat(formData.precioVenta) <= 0) {
+                    const errorMsg = t?.owner?.validation?.precioVentaInvalid
+                    errors.push(errorMsg)
+                    newFieldErrors.precioVenta = errorMsg
                 }
             }
-            if ((formData.disponibilidad === "ARRENDAMIENTO" || formData.disponibilidad === "AMBOS") && formData.precioArrendamiento) {
-                if (isNaN(parseFloat(formData.precioArrendamiento)) || parseFloat(formData.precioArrendamiento) <= 0) {
-                    errors.push(t?.owner?.validation?.precioArrendamientoInvalid)
+            // Validar precio de arrendamiento (obligatorio si disponibilidad es ARRENDAMIENTO o AMBOS)
+            if (formData.disponibilidad === "ARRENDAMIENTO" || formData.disponibilidad === "AMBOS") {
+                if (!formData.precioArrendamiento || formData.precioArrendamiento.trim() === "") {
+                    const errorMsg = "El precio de arrendamiento es obligatorio"
+                    errors.push(errorMsg)
+                    newFieldErrors.precioArrendamiento = errorMsg
+                } else if (isNaN(parseFloat(formData.precioArrendamiento)) || parseFloat(formData.precioArrendamiento) <= 0) {
+                    const errorMsg = t?.owner?.validation?.precioArrendamientoInvalid
+                    errors.push(errorMsg)
+                    newFieldErrors.precioArrendamiento = errorMsg
                 }
             }
         }
 
-        return errors
+        return { errors, fieldErrors: newFieldErrors }
     }
 
-    const validate = (): string[] => {
+    // Función para hacer scroll al primer campo con error
+    const scrollToFirstError = () => {
+        const refMap: Record<string, React.RefObject<HTMLInputElement | null>> = {
+            titulo: tituloRef,
+            superficie: superficieRef,
+            latitud: latitudRef,
+            longitud: longitudRef,
+            pendiente: pendienteRef,
+            precioVenta: precioVentaRef,
+            precioArrendamiento: precioArrendamientoRef,
+        }
+
+        for (const fieldName in fieldErrors) {
+            const ref = refMap[fieldName]
+            if (ref?.current) {
+                ref.current.scrollIntoView({ behavior: "smooth", block: "center" })
+                ref.current.focus()
+                break
+            }
+        }
+    }
+
+    const validate = (): { errors: string[]; fieldErrors: Record<string, string> } => {
         const errors: string[] = []
+        const newFieldErrors: Record<string, string> = {}
 
         if (!formData.titulo.trim()) {
-            errors.push(t?.owner?.validation?.requiredName)
+            const errorMsg = t?.owner?.validation?.requiredName
+            errors.push(errorMsg)
+            newFieldErrors.titulo = errorMsg
+        }
+
+        if (!formData.comunidad.trim()) {
+            const errorMsg = "La comunidad autónoma es obligatoria"
+            errors.push(errorMsg)
+            newFieldErrors.comunidad = errorMsg
         }
 
         if (!formData.municipio.trim()) {
-            errors.push(t?.owner?.validation?.requiredMunicipio)
+            const errorMsg = t?.owner?.validation?.requiredMunicipio
+            errors.push(errorMsg)
+            newFieldErrors.municipio = errorMsg
         }
 
         if (!formData.provincia.trim()) {
-            errors.push(t?.owner?.validation?.requiredProvince)
+            const errorMsg = t?.owner?.validation?.requiredProvince
+            errors.push(errorMsg)
+            newFieldErrors.provincia = errorMsg
         }
 
         const superficie = parseFloat(formData.superficie)
         if (!formData.superficie || isNaN(superficie) || superficie <= 0) {
-            errors.push(t?.owner?.validation?.superficiePositive)
+            const errorMsg = t?.owner?.validation?.superficiePositive
+            errors.push(errorMsg)
+            newFieldErrors.superficie = errorMsg
         }
 
         if (
             formData.latitud &&
             (isNaN(parseFloat(formData.latitud)) || parseFloat(formData.latitud) < -90 || parseFloat(formData.latitud) > 90)
         ) {
-            errors.push(t?.owner?.validation?.latRange)
+            const errorMsg = t?.owner?.validation?.latRange
+            errors.push(errorMsg)
+            newFieldErrors.latitud = errorMsg
         }
 
         if (
             formData.longitud &&
             (isNaN(parseFloat(formData.longitud)) || parseFloat(formData.longitud) < -180 || parseFloat(formData.longitud) > 180)
         ) {
-            errors.push(t?.owner?.validation?.lngRange)
+            const errorMsg = t?.owner?.validation?.lngRange
+            errors.push(errorMsg)
+            newFieldErrors.longitud = errorMsg
         }
 
-        if (formData.precioVenta && (isNaN(parseFloat(formData.precioVenta)) || parseFloat(formData.precioVenta) <= 0)) {
-            errors.push(t?.owner?.validation?.precioVentaInvalid)
+        // Validación de precios según disponibilidad
+        if (formData.disponibilidad === "VENTA" || formData.disponibilidad === "AMBOS") {
+            if (!formData.precioVenta || formData.precioVenta.trim() === "") {
+                const errorMsg = "El precio de venta es obligatorio"
+                errors.push(errorMsg)
+                newFieldErrors.precioVenta = errorMsg
+            } else if (isNaN(parseFloat(formData.precioVenta)) || parseFloat(formData.precioVenta) <= 0) {
+                const errorMsg = t?.owner?.validation?.precioVentaInvalid
+                errors.push(errorMsg)
+                newFieldErrors.precioVenta = errorMsg
+            }
         }
 
-        if (
-            formData.precioArrendamiento &&
-            (isNaN(parseFloat(formData.precioArrendamiento)) || parseFloat(formData.precioArrendamiento) <= 0)
-        ) {
-            errors.push(t?.owner?.validation?.precioArrendamientoInvalid)
+        if (formData.disponibilidad === "ARRENDAMIENTO" || formData.disponibilidad === "AMBOS") {
+            if (!formData.precioArrendamiento || formData.precioArrendamiento.trim() === "") {
+                const errorMsg = "El precio de arrendamiento es obligatorio"
+                errors.push(errorMsg)
+                newFieldErrors.precioArrendamiento = errorMsg
+            } else if (isNaN(parseFloat(formData.precioArrendamiento)) || parseFloat(formData.precioArrendamiento) <= 0) {
+                const errorMsg = t?.owner?.validation?.precioArrendamientoInvalid
+                errors.push(errorMsg)
+                newFieldErrors.precioArrendamiento = errorMsg
+            }
         }
 
-        return errors
+        return { errors, fieldErrors: newFieldErrors }
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
         // Validar formulario
-        const errors = validate()
+        const { errors, fieldErrors: newFieldErrors } = validate()
         if (errors.length > 0) {
             setValidationErrors(errors)
-            window.scrollTo({ top: 0, behavior: "smooth" })
+            setFieldErrors(newFieldErrors)
+            toast({
+                title: t?.owner?.toast?.validationTitle,
+                description: `${errors.length} ${errors.length === 1 ? "campo requiere" : "campos requieren"} tu atención`,
+                variant: "destructive",
+            })
+            // Pequeño delay para que el DOM se actualice antes del scroll
+            setTimeout(() => {
+                scrollToFirstError()
+            }, 100)
             return
         }
 
         setValidationErrors([])
+        setFieldErrors({})
 
         try {
             // Validar que las coordenadas sean válidas si se proporcionan
@@ -212,6 +355,7 @@ export default function NuevoTerreno() {
                 direccion: formData.direccion || formData.municipio,
                 municipio: formData.municipio,
                 provincia: formData.provincia,
+                comunidad: formData.comunidad,
                 codigoPostal: formData.codigoPostal || "00000",
                 latitud: latitudFinal,
                 longitud: longitudFinal,
@@ -242,23 +386,30 @@ export default function NuevoTerreno() {
     }
 
     const nextStep = () => {
-        const stepErrors = validateStep(step)
+        const { errors: stepErrors, fieldErrors: newFieldErrors } = validateStep(step)
         if (stepErrors.length > 0) {
             setValidationErrors(stepErrors)
+            setFieldErrors(newFieldErrors)
             toast({
                 title: t?.owner?.toast?.validationTitle,
-                description: t?.owner?.toast?.validationDesc,
+                description: `${stepErrors.length} ${stepErrors.length === 1 ? "campo requiere" : "campos requieren"} tu atención`,
                 variant: "destructive",
             })
+            // Pequeño delay para que el DOM se actualice antes del scroll
+            setTimeout(() => {
+                scrollToFirstError()
+            }, 100)
             return
         }
 
         setValidationErrors([])
+        setFieldErrors({})
         setStep(step + 1)
     }
 
     const prevStep = () => {
         setValidationErrors([])
+        setFieldErrors({})
         setStep(step - 1)
     }
 
@@ -436,51 +587,127 @@ export default function NuevoTerreno() {
                                                     {t?.owner?.newLand?.fields?.title} *
                                                 </Label>
                                                 <Input
+                                                    ref={tituloRef}
                                                     id="titulo"
                                                     placeholder={t?.owner?.newLand?.placeholders?.titulo}
-                                                    className="focus:border-primary h-14 border-2 text-lg transition-colors"
+                                                    className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
+                                                        fieldErrors.titulo ? "border-red-500" : ""
+                                                    }`}
                                                     value={formData.titulo}
-                                                    onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
+                                                    onChange={(e) => {
+                                                        setFormData({ ...formData, titulo: e.target.value })
+                                                        if (fieldErrors.titulo) {
+                                                            const newFieldErrors = { ...fieldErrors }
+                                                            delete newFieldErrors.titulo
+                                                            setFieldErrors(newFieldErrors)
+                                                        }
+                                                    }}
                                                     required
                                                 />
-                                                <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.titleHint}</p>
+                                                {fieldErrors.titulo ? (
+                                                    <p className="flex items-center gap-2 text-sm text-red-600">
+                                                        <AlertCircle className="h-4 w-4" />
+                                                        {fieldErrors.titulo}
+                                                    </p>
+                                                ) : (
+                                                    <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.titleHint}</p>
+                                                )}
                                             </div>
 
                                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                 <div className="space-y-3">
-                                                    <Label htmlFor="provincia" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.province} *
+                                                    <Label htmlFor="comunidad" className="text-base font-semibold">
+                                                        Comunidad Autónoma *
                                                     </Label>
-                                                    <Select
-                                                        value={formData.provincia}
-                                                        onValueChange={(value) => setFormData({ ...formData, provincia: value })}
-                                                    >
-                                                        <SelectTrigger className="focus:border-primary h-14 border-2 text-lg">
-                                                            <SelectValue placeholder={t?.owner?.newLand?.placeholders?.provincia} />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {provincias.map((provincia) => (
-                                                                <SelectItem key={provincia} value={provincia}>
-                                                                    {provincia}
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
+                                                    <CustomSelect
+                                                        value={formData.comunidad}
+                                                        onValueChange={(value) => {
+                                                            handleComunidadChange(value)
+                                                            if (fieldErrors.comunidad) {
+                                                                const newFieldErrors = { ...fieldErrors }
+                                                                delete newFieldErrors.comunidad
+                                                                setFieldErrors(newFieldErrors)
+                                                            }
+                                                        }}
+                                                        placeholder="Selecciona una comunidad"
+                                                        options={getComunidadesAutonomas().map((comunidad) => ({
+                                                            value: comunidad,
+                                                            label: comunidad,
+                                                        }))}
+                                                        variant="primary"
+                                                        error={!!fieldErrors.comunidad}
+                                                    />
+                                                    {fieldErrors.comunidad && (
+                                                        <p className="flex items-center gap-2 text-sm text-red-600">
+                                                            <AlertCircle className="h-4 w-4" />
+                                                            {fieldErrors.comunidad}
+                                                        </p>
+                                                    )}
                                                 </div>
 
                                                 <div className="space-y-3">
-                                                    <Label htmlFor="municipio" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.municipality} *
+                                                    <Label htmlFor="provincia" className="text-base font-semibold">
+                                                        {t?.owner?.newLand?.fields?.province} *
                                                     </Label>
-                                                    <Input
-                                                        id="municipio"
-                                                        placeholder={t?.owner?.newLand?.placeholders?.municipio}
-                                                        className="focus:border-primary h-14 border-2 text-lg transition-colors"
-                                                        value={formData.municipio}
-                                                        onChange={(e) => setFormData({ ...formData, municipio: e.target.value })}
-                                                        required
+                                                    <CustomSelect
+                                                        value={formData.provincia}
+                                                        onValueChange={(value) => {
+                                                            handleProvinciaChange(value)
+                                                            if (fieldErrors.provincia) {
+                                                                const newFieldErrors = { ...fieldErrors }
+                                                                delete newFieldErrors.provincia
+                                                                setFieldErrors(newFieldErrors)
+                                                            }
+                                                        }}
+                                                        placeholder={
+                                                            formData.comunidad
+                                                                ? "Selecciona una provincia"
+                                                                : "Primero selecciona una comunidad"
+                                                        }
+                                                        options={provinciasDisponibles.map((provincia) => ({
+                                                            value: provincia,
+                                                            label: provincia,
+                                                        }))}
+                                                        variant="primary"
+                                                        disabled={!formData.comunidad && provinciasDisponibles.length === 0}
+                                                        error={!!fieldErrors.provincia}
                                                     />
+                                                    {fieldErrors.provincia && (
+                                                        <p className="flex items-center gap-2 text-sm text-red-600">
+                                                            <AlertCircle className="h-4 w-4" />
+                                                            {fieldErrors.provincia}
+                                                        </p>
+                                                    )}
                                                 </div>
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                <Label htmlFor="municipio" className="text-base font-semibold">
+                                                    {t?.owner?.newLand?.fields?.municipality} *
+                                                </Label>
+                                                <Input
+                                                    id="municipio"
+                                                    placeholder={t?.owner?.newLand?.placeholders?.municipio}
+                                                    className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
+                                                        fieldErrors.municipio ? "border-red-500" : ""
+                                                    }`}
+                                                    value={formData.municipio}
+                                                    onChange={(e) => {
+                                                        setFormData({ ...formData, municipio: e.target.value })
+                                                        if (fieldErrors.municipio) {
+                                                            const newFieldErrors = { ...fieldErrors }
+                                                            delete newFieldErrors.municipio
+                                                            setFieldErrors(newFieldErrors)
+                                                        }
+                                                    }}
+                                                    required
+                                                />
+                                                {fieldErrors.municipio && (
+                                                    <p className="flex items-center gap-2 text-sm text-red-600">
+                                                        <AlertCircle className="h-4 w-4" />
+                                                        {fieldErrors.municipio}
+                                                    </p>
+                                                )}
                                             </div>
 
                                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -489,15 +716,31 @@ export default function NuevoTerreno() {
                                                         {t?.owner?.newLand?.fields?.surface} *
                                                     </Label>
                                                     <Input
+                                                        ref={superficieRef}
                                                         id="superficie"
                                                         type="number"
                                                         step="0.1"
                                                         placeholder={t?.owner?.newLand?.placeholders?.superficie}
-                                                        className="focus:border-primary h-14 border-2 text-lg transition-colors"
+                                                        className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
+                                                            fieldErrors.superficie ? "border-red-500" : ""
+                                                        }`}
                                                         value={formData.superficie}
-                                                        onChange={(e) => setFormData({ ...formData, superficie: e.target.value })}
+                                                        onChange={(e) => {
+                                                            setFormData({ ...formData, superficie: e.target.value })
+                                                            if (fieldErrors.superficie) {
+                                                                const newFieldErrors = { ...fieldErrors }
+                                                                delete newFieldErrors.superficie
+                                                                setFieldErrors(newFieldErrors)
+                                                            }
+                                                        }}
                                                         required
                                                     />
+                                                    {fieldErrors.superficie && (
+                                                        <p className="flex items-center gap-2 text-sm text-red-600">
+                                                            <AlertCircle className="h-4 w-4" />
+                                                            {fieldErrors.superficie}
+                                                        </p>
+                                                    )}
                                                 </div>
 
                                                 <div className="space-y-3">
@@ -618,28 +861,60 @@ export default function NuevoTerreno() {
                                                             {t?.owner?.newLand?.fields?.latitude}
                                                         </Label>
                                                         <Input
+                                                            ref={latitudRef}
                                                             id="latitud"
                                                             type="number"
                                                             step="any"
                                                             placeholder={t?.owner?.newLand?.placeholders?.latitud}
-                                                            className="focus:border-primary h-12 border-2 text-lg transition-colors"
+                                                            className={`focus:border-primary h-12 border-2 text-lg transition-colors ${
+                                                                fieldErrors.latitud ? "border-red-500" : ""
+                                                            }`}
                                                             value={formData.latitud}
-                                                            onChange={(e) => setFormData({ ...formData, latitud: e.target.value })}
+                                                            onChange={(e) => {
+                                                                setFormData({ ...formData, latitud: e.target.value })
+                                                                if (fieldErrors.latitud) {
+                                                                    const newFieldErrors = { ...fieldErrors }
+                                                                    delete newFieldErrors.latitud
+                                                                    setFieldErrors(newFieldErrors)
+                                                                }
+                                                            }}
                                                         />
+                                                        {fieldErrors.latitud && (
+                                                            <p className="flex items-center gap-2 text-sm text-red-600">
+                                                                <AlertCircle className="h-4 w-4" />
+                                                                {fieldErrors.latitud}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                     <div className="space-y-2">
                                                         <Label htmlFor="longitud" className="text-muted-foreground text-sm">
                                                             {t?.owner?.newLand?.fields?.longitude}
                                                         </Label>
                                                         <Input
+                                                            ref={longitudRef}
                                                             id="longitud"
                                                             type="number"
                                                             step="any"
                                                             placeholder={t?.owner?.newLand?.placeholders?.longitud}
-                                                            className="focus:border-primary h-12 border-2 text-lg transition-colors"
+                                                            className={`focus:border-primary h-12 border-2 text-lg transition-colors ${
+                                                                fieldErrors.longitud ? "border-red-500" : ""
+                                                            }`}
                                                             value={formData.longitud}
-                                                            onChange={(e) => setFormData({ ...formData, longitud: e.target.value })}
+                                                            onChange={(e) => {
+                                                                setFormData({ ...formData, longitud: e.target.value })
+                                                                if (fieldErrors.longitud) {
+                                                                    const newFieldErrors = { ...fieldErrors }
+                                                                    delete newFieldErrors.longitud
+                                                                    setFieldErrors(newFieldErrors)
+                                                                }
+                                                            }}
                                                         />
+                                                        {fieldErrors.longitud && (
+                                                            <p className="flex items-center gap-2 text-sm text-red-600">
+                                                                <AlertCircle className="h-4 w-4" />
+                                                                {fieldErrors.longitud}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                 </div>
                                                 <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.coordinates}</p>
@@ -685,14 +960,30 @@ export default function NuevoTerreno() {
                                                         {t?.owner?.newLand?.fields?.slope}
                                                     </Label>
                                                     <Input
+                                                        ref={pendienteRef}
                                                         id="pendiente"
                                                         type="number"
                                                         step="0.1"
                                                         placeholder={t?.owner?.newLand?.placeholders?.pendiente}
-                                                        className="focus:border-primary h-12 border-2 text-lg transition-colors"
+                                                        className={`focus:border-primary h-12 border-2 text-lg transition-colors ${
+                                                            fieldErrors.pendiente ? "border-red-500" : ""
+                                                        }`}
                                                         value={formData.pendiente}
-                                                        onChange={(e) => setFormData({ ...formData, pendiente: e.target.value })}
+                                                        onChange={(e) => {
+                                                            setFormData({ ...formData, pendiente: e.target.value })
+                                                            if (fieldErrors.pendiente) {
+                                                                const newFieldErrors = { ...fieldErrors }
+                                                                delete newFieldErrors.pendiente
+                                                                setFieldErrors(newFieldErrors)
+                                                            }
+                                                        }}
                                                     />
+                                                    {fieldErrors.pendiente && (
+                                                        <p className="flex items-center gap-2 text-sm text-red-600">
+                                                            <AlertCircle className="h-4 w-4" />
+                                                            {fieldErrors.pendiente}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
 
@@ -870,18 +1161,36 @@ export default function NuevoTerreno() {
                                                         htmlFor="precioVenta"
                                                         className="flex items-center gap-2 text-base font-semibold"
                                                     >
-                                                        <Euro className="h-5 w-5" />
                                                         {t?.owner?.newLand?.fields?.salePrice}
                                                     </Label>
                                                     <Input
+                                                        ref={precioVentaRef}
                                                         id="precioVenta"
                                                         type="number"
                                                         placeholder={t?.owner?.newLand?.placeholders?.precioVenta}
-                                                        className="focus:border-primary h-14 border-2 text-lg transition-colors"
+                                                        className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
+                                                            fieldErrors.precioVenta ? "border-red-500" : ""
+                                                        }`}
                                                         value={formData.precioVenta}
-                                                        onChange={(e) => setFormData({ ...formData, precioVenta: e.target.value })}
+                                                        onChange={(e) => {
+                                                            setFormData({ ...formData, precioVenta: e.target.value })
+                                                            if (fieldErrors.precioVenta) {
+                                                                const newFieldErrors = { ...fieldErrors }
+                                                                delete newFieldErrors.precioVenta
+                                                                setFieldErrors(newFieldErrors)
+                                                            }
+                                                        }}
                                                     />
-                                                    <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.priceSale}</p>
+                                                    {fieldErrors.precioVenta ? (
+                                                        <p className="flex items-center gap-2 text-sm text-red-600">
+                                                            <AlertCircle className="h-4 w-4" />
+                                                            {fieldErrors.precioVenta}
+                                                        </p>
+                                                    ) : (
+                                                        <p className="text-muted-foreground text-sm">
+                                                            {t?.owner?.newLand?.hints?.priceSale}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             )}
 
@@ -891,18 +1200,36 @@ export default function NuevoTerreno() {
                                                         htmlFor="precioArrendamiento"
                                                         className="flex items-center gap-2 text-base font-semibold"
                                                     >
-                                                        <Euro className="h-5 w-5" />
                                                         {t?.owner?.newLand?.fields?.rentPrice}
                                                     </Label>
                                                     <Input
+                                                        ref={precioArrendamientoRef}
                                                         id="precioArrendamiento"
                                                         type="number"
                                                         placeholder={t?.owner?.newLand?.placeholders?.precioArrendamiento}
-                                                        className="focus:border-primary h-14 border-2 text-lg transition-colors"
+                                                        className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
+                                                            fieldErrors.precioArrendamiento ? "border-red-500" : ""
+                                                        }`}
                                                         value={formData.precioArrendamiento}
-                                                        onChange={(e) => setFormData({ ...formData, precioArrendamiento: e.target.value })}
+                                                        onChange={(e) => {
+                                                            setFormData({ ...formData, precioArrendamiento: e.target.value })
+                                                            if (fieldErrors.precioArrendamiento) {
+                                                                const newFieldErrors = { ...fieldErrors }
+                                                                delete newFieldErrors.precioArrendamiento
+                                                                setFieldErrors(newFieldErrors)
+                                                            }
+                                                        }}
                                                     />
-                                                    <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.priceRent}</p>
+                                                    {fieldErrors.precioArrendamiento ? (
+                                                        <p className="flex items-center gap-2 text-sm text-red-600">
+                                                            <AlertCircle className="h-4 w-4" />
+                                                            {fieldErrors.precioArrendamiento}
+                                                        </p>
+                                                    ) : (
+                                                        <p className="text-muted-foreground text-sm">
+                                                            {t?.owner?.newLand?.hints?.priceRent}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             )}
 

@@ -639,14 +639,28 @@ export default function NuevoProyecto() {
                                                             </Label>
                                                             <CustomSelect
                                                                 value={formData.comunidad}
-                                                                onValueChange={handleComunidadChange}
+                                                                onValueChange={(value) => {
+                                                                    handleComunidadChange(value)
+                                                                    if (fieldErrors.comunidad) {
+                                                                        const newFieldErrors = { ...fieldErrors }
+                                                                        delete newFieldErrors.comunidad
+                                                                        setFieldErrors(newFieldErrors)
+                                                                    }
+                                                                }}
                                                                 placeholder="Selecciona una comunidad"
                                                                 options={getComunidadesAutonomas().map((comunidad) => ({
                                                                     value: comunidad,
                                                                     label: comunidad,
                                                                 }))}
                                                                 variant="secondary"
+                                                                error={!!fieldErrors.comunidad}
                                                             />
+                                                            {fieldErrors.comunidad && (
+                                                                <p className="flex items-center gap-2 text-sm text-red-600">
+                                                                    <AlertCircle className="h-4 w-4" />
+                                                                    {fieldErrors.comunidad}
+                                                                </p>
+                                                            )}
                                                         </div>
 
                                                         <div className="space-y-3">
@@ -655,7 +669,14 @@ export default function NuevoProyecto() {
                                                             </Label>
                                                             <CustomSelect
                                                                 value={formData.provincia}
-                                                                onValueChange={handleProvinciaChange}
+                                                                onValueChange={(value) => {
+                                                                    handleProvinciaChange(value)
+                                                                    if (fieldErrors.provincia) {
+                                                                        const newFieldErrors = { ...fieldErrors }
+                                                                        delete newFieldErrors.provincia
+                                                                        setFieldErrors(newFieldErrors)
+                                                                    }
+                                                                }}
                                                                 placeholder={
                                                                     formData.comunidad
                                                                         ? "Selecciona una provincia"
@@ -667,7 +688,14 @@ export default function NuevoProyecto() {
                                                                 }))}
                                                                 variant="secondary"
                                                                 disabled={!formData.comunidad && provinciasDisponibles.length === 0}
+                                                                error={!!fieldErrors.provincia}
                                                             />
+                                                            {fieldErrors.provincia && (
+                                                                <p className="flex items-center gap-2 text-sm text-red-600">
+                                                                    <AlertCircle className="h-4 w-4" />
+                                                                    {fieldErrors.provincia}
+                                                                </p>
+                                                            )}
                                                         </div>
                                                     </div>
 
