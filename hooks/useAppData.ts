@@ -271,7 +271,9 @@ export function useDomainConstants() {
             [TipoSuelo.RUSTICO_COMUN]: "Rústico Común",
             [TipoSuelo.RUSTICO_PROTECCION]: "Rústico de Protección",
             [TipoSuelo.NO_URBANIZABLE]: "No Urbanizable",
-            [TipoSuelo.URBANIZABLE]: "Urbanizable",
+            [TipoSuelo.SECANO]: "Secano",
+            [TipoSuelo.REGADIO]: "Regadío",
+            [TipoSuelo.ERIAL]: "Erial/Barbecho",
         },
 
         disponibilidadLabels: {
