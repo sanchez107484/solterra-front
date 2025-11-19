@@ -2,22 +2,22 @@
 
 import type React from "react"
 
-import { StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
 import ProtectedRoute from "@/components/protected-route"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { CustomSelect } from "@/components/ui/custom-select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { useAppData } from "@/hooks/useAppData"
 import { useProyectos } from "@/hooks/useProyectos"
 import { useTranslations } from "@/i18n/i18nContext"
 import { useErrorHandler } from "@/lib/error-handler"
+import { getComunidadesAutonomas, getComunidadFromProvincia, getProvinciasFromComunidad } from "@/lib/provincias-data"
 import type { CreateProyectoDTO, TipoProyecto } from "@/types/proyecto.types"
 import {
     AlertCircle,
@@ -27,17 +27,15 @@ import {
     Check,
     CheckCircle,
     ChevronRight,
-    Euro,
     Layers,
     Loader2,
-    MapPin,
     Sun,
     Wind,
     Zap,
     Zap as ZapIcon,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 // Mapeo de tipos de UI a API
 const tipoProyectoMap: Record<string, TipoProyecto> = {
@@ -77,10 +75,43 @@ export default function NuevoProyecto() {
     })
 
     const [validationErrors, setValidationErrors] = useState<string[]>([])
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
+    // Referencias a los campos para scroll automático
+    const tituloRef = useRef<HTMLInputElement>(null)
+    const potenciaObjetivoRef = useRef<HTMLInputElement>(null)
+    const superficieMinimaRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         loadProvincias()
     }, [loadProvincias])
+
+    // Calcular provincias disponibles según la comunidad seleccionada
+    const provinciasDisponibles = useMemo(() => {
+        if (formData.comunidad) {
+            return getProvinciasFromComunidad(formData.comunidad)
+        }
+        return provincias
+    }, [formData.comunidad, provincias])
+
+    // Handler para cambio de comunidad autónoma
+    const handleComunidadChange = (comunidad: string) => {
+        setFormData({
+            ...formData,
+            comunidad,
+            provincia: "", // Limpiar provincia al cambiar comunidad
+        })
+    }
+
+    // Handler para cambio de provincia
+    const handleProvinciaChange = (provincia: string) => {
+        const comunidad = getComunidadFromProvincia(provincia)
+        setFormData({
+            ...formData,
+            provincia,
+            comunidad: comunidad || formData.comunidad, // Autocompletar comunidad
+        })
+    }
 
     const validate = (): string[] => {
         const errors: string[] = []
@@ -150,62 +181,70 @@ export default function NuevoProyecto() {
         }
     }
 
-    const validateStep = (currentStep: number): string[] => {
+    const validateStep = (currentStep: number): { errors: string[]; fieldErrors: Record<string, string> } => {
         const errors: string[] = []
+        const fieldErrors: Record<string, string> = {}
 
         if (currentStep === 1) {
             // Validación del paso 1: Información del Proyecto
             if (!formData.titulo.trim()) {
                 errors.push("El título del proyecto es obligatorio")
+                fieldErrors.titulo = "Este campo es obligatorio"
             }
             if (!formData.tipo) {
                 errors.push("El tipo de proyecto es obligatorio")
+                fieldErrors.tipo = "Debes seleccionar un tipo de proyecto"
             }
             if (!formData.potenciaObjetivo || parseFloat(formData.potenciaObjetivo) <= 0) {
                 errors.push("La potencia objetivo debe ser mayor a 0 MW")
-            }
-        } else if (currentStep === 2) {
-            // Validación del paso 2: Ubicación y Requisitos
-            if (!formData.provincia.trim()) {
-                errors.push("La provincia es obligatoria")
+                fieldErrors.potenciaObjetivo = "Debe ser mayor a 0 MW"
             }
             if (!formData.superficieMinima || parseFloat(formData.superficieMinima) <= 0) {
                 errors.push("La superficie mínima debe ser mayor a 0 hectáreas")
-            }
-            if (!formData.presupuesto || parseFloat(formData.presupuesto) <= 0) {
-                errors.push("El presupuesto debe ser mayor a 0")
-            }
-        } else if (currentStep === 3) {
-            // Validación del paso 3: Detalles Técnicos y Financieros
-            if (formData.distanciaMaximaRed && parseFloat(formData.distanciaMaximaRed) < 0) {
-                errors.push("La distancia máxima a red debe ser un número positivo")
-            }
-            if (formData.capacidadSubestacionMinima && parseFloat(formData.capacidadSubestacionMinima) < 0) {
-                errors.push("La capacidad de subestación debe ser un número positivo")
+                fieldErrors.superficieMinima = "Debe ser mayor a 0 hectáreas"
             }
         }
 
-        return errors
+        return { errors, fieldErrors }
+    }
+
+    const scrollToFirstError = () => {
+        // Intentar hacer scroll al primer campo con error
+        if (fieldErrors.titulo && tituloRef.current) {
+            tituloRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+            tituloRef.current.focus()
+        } else if (fieldErrors.potenciaObjetivo && potenciaObjetivoRef.current) {
+            potenciaObjetivoRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+            potenciaObjetivoRef.current.focus()
+        } else if (fieldErrors.superficieMinima && superficieMinimaRef.current) {
+            superficieMinimaRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+            superficieMinimaRef.current.focus()
+        }
     }
 
     const nextStep = () => {
-        const stepErrors = validateStep(step)
-        if (stepErrors.length > 0) {
-            setValidationErrors(stepErrors)
+        const { errors, fieldErrors: newFieldErrors } = validateStep(step)
+        if (errors.length > 0) {
+            setValidationErrors(errors)
+            setFieldErrors(newFieldErrors)
             toast({
                 title: "Campos obligatorios",
-                description: "Por favor, completa todos los campos obligatorios antes de continuar",
+                description: `Hay ${errors.length} campo${errors.length > 1 ? "s" : ""} que necesita${errors.length > 1 ? "n" : ""} tu atención`,
                 variant: "destructive",
             })
+            // Hacer scroll al primer campo con error
+            setTimeout(() => scrollToFirstError(), 100)
             return
         }
 
         setValidationErrors([])
+        setFieldErrors({})
         setStep(step + 1)
     }
 
     const prevStep = () => {
         setValidationErrors([])
+        setFieldErrors({})
         setStep(step - 1)
     }
 
@@ -214,8 +253,6 @@ export default function NuevoProyecto() {
             case 1:
                 return <Briefcase className="h-5 w-5" />
             case 2:
-                return <MapPin className="h-5 w-5" />
-            case 3:
                 return <CheckCircle className="h-5 w-5" />
             default:
                 return stepNumber
@@ -281,78 +318,59 @@ export default function NuevoProyecto() {
 
                     <div className="from-background via-secondary/5 to-background bg-gradient-to-br">
                         <main className="container mx-auto max-w-4xl px-6 py-12">
-                            {/* Información útil para el usuario */}
-                            <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                <StatsCard
-                                    icon={ZapIcon}
-                                    title="Guía de Potencia"
-                                    value="1-50"
-                                    subtitle="MW recomendados"
-                                    variant="secondary"
-                                />
-                                <StatsCard
-                                    icon={Euro}
-                                    title="Inversión Típica"
-                                    value="0.8-1.2M"
-                                    subtitle="€ por MW instalado"
-                                    variant="primary"
-                                />
-                                <StatsCard
-                                    icon={Layers}
-                                    title="Superficie Típica"
-                                    value="2-3"
-                                    subtitle="ha por MW solar"
-                                    variant="secondary"
-                                />
-                                <StatsCard
-                                    icon={MapPin}
-                                    title="Paso Actual"
-                                    value={`${step}/3`}
-                                    subtitle="Progreso del formulario"
-                                    variant="primary"
-                                />
-                            </div>
                             {/* Progress indicator */}
                             <div className="mb-12">
-                                <div className="relative mb-6">
-                                    <div className="flex items-center justify-between">
-                                        {[1, 2, 3].map((s) => (
-                                            <div key={s} className="relative z-10 flex flex-col items-center">
+                                <div className="relative">
+                                    {/* Línea de fondo completa */}
+                                    <div className="bg-muted-foreground/20 absolute top-8 right-0 left-0 h-1 rounded-full" />
+
+                                    {/* Línea de progreso animada */}
+                                    <div
+                                        className="from-secondary via-secondary to-secondary/80 shadow-secondary/30 absolute top-8 left-0 h-1 rounded-full bg-gradient-to-r shadow-lg transition-all duration-500 ease-in-out"
+                                        style={{
+                                            width: step === 1 ? "0%" : "100%",
+                                        }}
+                                    />
+
+                                    {/* Steps */}
+                                    <div className="relative flex items-start justify-between">
+                                        {[1, 2].map((s) => (
+                                            <div key={s} className="flex flex-col items-center" style={{ width: "50%" }}>
+                                                {/* Círculo del paso */}
                                                 <div
-                                                    className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                                                    className={`relative z-10 flex h-16 w-16 items-center justify-center rounded-full border-4 transition-all duration-500 ${
                                                         step >= s
-                                                            ? "bg-secondary border-secondary text-secondary-foreground shadow-lg"
-                                                            : "border-muted-foreground/30 text-muted-foreground bg-background"
+                                                            ? "bg-secondary border-secondary text-secondary-foreground shadow-secondary/50 scale-110 shadow-2xl"
+                                                            : "border-muted-foreground/30 text-muted-foreground bg-background shadow-md"
                                                     }`}
                                                 >
-                                                    {step > s ? <Check className="h-6 w-6" /> : getStepIcon(s)}
+                                                    {step > s ? (
+                                                        <Check className="animate-in zoom-in h-7 w-7 duration-300" />
+                                                    ) : (
+                                                        <div className="transition-transform duration-300">{getStepIcon(s)}</div>
+                                                    )}
+                                                </div>
+
+                                                {/* Texto del paso */}
+                                                <div className="mt-4 px-2 text-center">
+                                                    <p
+                                                        className={`text-sm font-bold transition-colors duration-300 ${
+                                                            step >= s ? "text-secondary" : "text-muted-foreground"
+                                                        }`}
+                                                    >
+                                                        {s === 1 ? "Información del Proyecto" : "Ubicación y Requisitos"}
+                                                    </p>
+                                                    <p
+                                                        className={`mt-1 text-xs transition-colors duration-300 ${
+                                                            step >= s ? "text-secondary/70" : "text-muted-foreground/60"
+                                                        }`}
+                                                    >
+                                                        {s === 1 ? "Datos básicos del proyecto" : "Requisitos técnicos"}
+                                                    </p>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-                                    {/* Línea de conexión que se ajusta exactamente a los textos */}
-                                    <div className="absolute top-6 right-0 left-0 flex">
-                                        <div className="flex-1"></div>
-                                        <div
-                                            className={`h-2 rounded-full transition-all duration-300 ${
-                                                step > 1 ? "bg-secondary shadow-sm" : "bg-muted-foreground/20"
-                                            }`}
-                                            style={{ width: "calc(50% - 3rem)" }}
-                                        />
-                                        <div className="w-12"></div>
-                                        <div
-                                            className={`h-2 rounded-full transition-all duration-300 ${
-                                                step > 2 ? "bg-secondary shadow-sm" : "bg-muted-foreground/20"
-                                            }`}
-                                            style={{ width: "calc(50% - 3rem)" }}
-                                        />
-                                        <div className="flex-1"></div>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-3 gap-4 text-center text-sm font-medium">
-                                    <div className={step >= 1 ? "text-secondary" : "text-muted-foreground"}>Información del Proyecto</div>
-                                    <div className={step >= 2 ? "text-secondary" : "text-muted-foreground"}>Ubicación y Requisitos</div>
-                                    <div className={step >= 3 ? "text-secondary" : "text-muted-foreground"}>Detalles Técnicos</div>
                                 </div>
                             </div>
 
@@ -402,16 +420,34 @@ export default function NuevoProyecto() {
                                                             Nombre del Proyecto *
                                                         </Label>
                                                         <Input
+                                                            ref={tituloRef}
                                                             id="titulo"
                                                             placeholder="Ej: Planta Solar Extremadura Norte"
-                                                            className="focus:border-secondary h-14 border-2 text-lg transition-colors"
+                                                            className={`focus:border-secondary h-14 border-2 text-lg transition-colors ${
+                                                                fieldErrors.titulo ? "border-red-500 focus:border-red-500" : ""
+                                                            }`}
                                                             value={formData.titulo}
-                                                            onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
+                                                            onChange={(e) => {
+                                                                setFormData({ ...formData, titulo: e.target.value })
+                                                                if (fieldErrors.titulo) {
+                                                                    const newErrors = { ...fieldErrors }
+                                                                    delete newErrors.titulo
+                                                                    setFieldErrors(newErrors)
+                                                                }
+                                                            }}
                                                             required
                                                         />
-                                                        <p className="text-muted-foreground text-sm">
-                                                            Dale un nombre descriptivo que identifique claramente tu proyecto
-                                                        </p>
+                                                        {fieldErrors.titulo && (
+                                                            <p className="flex items-center gap-1 text-sm font-medium text-red-600">
+                                                                <AlertCircle className="h-4 w-4" />
+                                                                {fieldErrors.titulo}
+                                                            </p>
+                                                        )}
+                                                        {!fieldErrors.titulo && (
+                                                            <p className="text-muted-foreground text-sm">
+                                                                Dale un nombre descriptivo que identifique claramente tu proyecto
+                                                            </p>
+                                                        )}
                                                     </div>
 
                                                     <div className="space-y-4">
@@ -469,15 +505,49 @@ export default function NuevoProyecto() {
                                                             Superficie Mínima Requerida (hectáreas) *
                                                         </Label>
                                                         <Input
+                                                            ref={superficieMinimaRef}
                                                             id="superficieMinima"
                                                             type="number"
                                                             step="0.1"
                                                             placeholder="Ej: 50"
-                                                            className="focus:border-secondary h-14 border-2 text-lg transition-colors"
+                                                            className={`focus:border-secondary h-14 border-2 text-lg transition-colors ${
+                                                                fieldErrors.superficieMinima ? "border-red-500 focus:border-red-500" : ""
+                                                            }`}
                                                             value={formData.superficieMinima}
-                                                            onChange={(e) => setFormData({ ...formData, superficieMinima: e.target.value })}
+                                                            onChange={(e) => {
+                                                                setFormData({ ...formData, superficieMinima: e.target.value })
+                                                                if (fieldErrors.superficieMinima) {
+                                                                    const newErrors = { ...fieldErrors }
+                                                                    delete newErrors.superficieMinima
+                                                                    setFieldErrors(newErrors)
+                                                                }
+                                                            }}
                                                             required
                                                         />
+                                                        {fieldErrors.superficieMinima && (
+                                                            <p className="flex items-center gap-1 text-sm font-medium text-red-600">
+                                                                <AlertCircle className="h-4 w-4" />
+                                                                {fieldErrors.superficieMinima}
+                                                            </p>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="space-y-3">
+                                                        <Label htmlFor="superficieMaxima" className="text-base font-semibold">
+                                                            Superficie Máxima (hectáreas) (Opcional)
+                                                        </Label>
+                                                        <Input
+                                                            id="superficieMaxima"
+                                                            type="number"
+                                                            step="0.1"
+                                                            placeholder="Ej: 200"
+                                                            className="focus:border-secondary h-14 border-2 text-lg transition-colors"
+                                                            value={formData.superficieMaxima}
+                                                            onChange={(e) => setFormData({ ...formData, superficieMaxima: e.target.value })}
+                                                        />
+                                                        <p className="text-muted-foreground text-sm">
+                                                            Superficie máxima que está dispuesto a utilizar (opcional)
+                                                        </p>
                                                     </div>
 
                                                     <div className="space-y-3">
@@ -486,21 +556,39 @@ export default function NuevoProyecto() {
                                                             className="flex items-center gap-2 text-base font-semibold"
                                                         >
                                                             <Zap className="h-4 w-4" />
-                                                            Potencia Objetivo (MW) *
+                                                            Potencia Nominal (MWn) *
                                                         </Label>
                                                         <Input
+                                                            ref={potenciaObjetivoRef}
                                                             id="potenciaObjetivo"
                                                             type="number"
                                                             step="0.1"
                                                             placeholder="Ej: 50"
-                                                            className="focus:border-secondary h-14 border-2 text-lg transition-colors"
+                                                            className={`focus:border-secondary h-14 border-2 text-lg transition-colors ${
+                                                                fieldErrors.potenciaObjetivo ? "border-red-500 focus:border-red-500" : ""
+                                                            }`}
                                                             value={formData.potenciaObjetivo}
-                                                            onChange={(e) => setFormData({ ...formData, potenciaObjetivo: e.target.value })}
+                                                            onChange={(e) => {
+                                                                setFormData({ ...formData, potenciaObjetivo: e.target.value })
+                                                                if (fieldErrors.potenciaObjetivo) {
+                                                                    const newErrors = { ...fieldErrors }
+                                                                    delete newErrors.potenciaObjetivo
+                                                                    setFieldErrors(newErrors)
+                                                                }
+                                                            }}
                                                             required
                                                         />
-                                                        <p className="text-muted-foreground text-sm">
-                                                            Potencia instalada que planeas desarrollar
-                                                        </p>
+                                                        {fieldErrors.potenciaObjetivo && (
+                                                            <p className="flex items-center gap-1 text-sm font-medium text-red-600">
+                                                                <AlertCircle className="h-4 w-4" />
+                                                                {fieldErrors.potenciaObjetivo}
+                                                            </p>
+                                                        )}
+                                                        {!fieldErrors.potenciaObjetivo && (
+                                                            <p className="text-muted-foreground text-sm">
+                                                                Potencia instalada que planeas desarrollar
+                                                            </p>
+                                                        )}
                                                     </div>
 
                                                     <div className="space-y-3">
@@ -533,7 +621,7 @@ export default function NuevoProyecto() {
                                             <div className="space-y-8">
                                                 <div className="text-center">
                                                     <div className="bg-secondary/10 mb-6 inline-flex rounded-3xl p-6">
-                                                        <MapPin className="text-secondary h-12 w-12" />
+                                                        <CheckCircle className="text-secondary h-12 w-12" />
                                                     </div>
                                                     <h2 className="from-secondary to-secondary/70 mb-3 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent">
                                                         Ubicación y Requisitos
@@ -546,47 +634,50 @@ export default function NuevoProyecto() {
                                                 <div className="space-y-6">
                                                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                         <div className="space-y-3">
-                                                            <Label htmlFor="provincia" className="text-base font-semibold">
-                                                                Provincia Preferida
-                                                            </Label>
-                                                            <Select
-                                                                value={formData.provincia}
-                                                                onValueChange={(value) => setFormData({ ...formData, provincia: value })}
-                                                            >
-                                                                <SelectTrigger className="focus:border-secondary h-14 border-2 text-lg">
-                                                                    <SelectValue placeholder="Selecciona una provincia" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {provincias.map((provincia) => (
-                                                                        <SelectItem key={provincia} value={provincia}>
-                                                                            {provincia}
-                                                                        </SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-
-                                                        <div className="space-y-3">
                                                             <Label htmlFor="comunidad" className="text-base font-semibold">
                                                                 Comunidad Autónoma
                                                             </Label>
-                                                            <Input
-                                                                id="comunidad"
-                                                                placeholder="Ej: Extremadura"
-                                                                className="focus:border-secondary h-14 border-2 text-lg transition-colors"
+                                                            <CustomSelect
                                                                 value={formData.comunidad}
-                                                                onChange={(e) => setFormData({ ...formData, comunidad: e.target.value })}
+                                                                onValueChange={handleComunidadChange}
+                                                                placeholder="Selecciona una comunidad"
+                                                                options={getComunidadesAutonomas().map((comunidad) => ({
+                                                                    value: comunidad,
+                                                                    label: comunidad,
+                                                                }))}
+                                                                variant="secondary"
+                                                            />
+                                                        </div>
+
+                                                        <div className="space-y-3">
+                                                            <Label htmlFor="provincia" className="text-base font-semibold">
+                                                                Provincia
+                                                            </Label>
+                                                            <CustomSelect
+                                                                value={formData.provincia}
+                                                                onValueChange={handleProvinciaChange}
+                                                                placeholder={
+                                                                    formData.comunidad
+                                                                        ? "Selecciona una provincia"
+                                                                        : "Primero selecciona una comunidad"
+                                                                }
+                                                                options={provinciasDisponibles.map((provincia) => ({
+                                                                    value: provincia,
+                                                                    label: provincia,
+                                                                }))}
+                                                                variant="secondary"
+                                                                disabled={!formData.comunidad && provinciasDisponibles.length === 0}
                                                             />
                                                         </div>
                                                     </div>
 
                                                     <div className="space-y-3">
                                                         <Label htmlFor="ubicacion" className="text-base font-semibold">
-                                                            Ubicación Específica
+                                                            Términos municipales
                                                         </Label>
                                                         <Input
                                                             id="ubicacion"
-                                                            placeholder="Ej: Municipios cercanos a Badajoz, zonas industriales..."
+                                                            placeholder="Ej: Azagra, San Adrián, Andosilla..."
                                                             className="focus:border-secondary h-14 border-2 text-lg transition-colors"
                                                             value={formData.ubicacion}
                                                             onChange={(e) => setFormData({ ...formData, ubicacion: e.target.value })}
@@ -596,32 +687,30 @@ export default function NuevoProyecto() {
                                                         </p>
                                                     </div>
 
-                                                    <div className="space-y-3">
-                                                        <Label
-                                                            htmlFor="presupuesto"
-                                                            className="flex items-center gap-2 text-base font-semibold"
-                                                        >
-                                                            <Euro className="h-4 w-4" />
-                                                            Presupuesto Estimado (€) *
-                                                        </Label>
-                                                        <Input
-                                                            id="presupuesto"
-                                                            type="number"
-                                                            placeholder="Ej: 50000000"
-                                                            className="focus:border-secondary h-14 border-2 text-lg transition-colors"
-                                                            value={formData.presupuesto}
-                                                            onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })}
-                                                            required
-                                                        />
-                                                        <p className="text-muted-foreground text-sm">
-                                                            Inversión total estimada para el proyecto
-                                                        </p>
-                                                    </div>
-
                                                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                         <div className="space-y-3">
+                                                            <Label
+                                                                htmlFor="presupuesto"
+                                                                className="flex items-center gap-2 text-base font-semibold"
+                                                            >
+                                                                Presupuesto Estimado (€/ha)
+                                                            </Label>
+                                                            <Input
+                                                                id="presupuesto"
+                                                                type="number"
+                                                                placeholder="Ej: 2.000"
+                                                                className="focus:border-secondary h-14 border-2 text-lg transition-colors"
+                                                                value={formData.presupuesto}
+                                                                onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })}
+                                                            />
+                                                            <p className="text-muted-foreground text-sm">
+                                                                Inversión estimada por hectárea para el proyecto
+                                                            </p>
+                                                        </div>
+
+                                                        <div className="space-y-3">
                                                             <Label htmlFor="distanciaMaximaRed" className="text-base font-semibold">
-                                                                Distancia Máxima a Red (km)
+                                                                Distancia Máxima a Punto de Conexión (m)
                                                             </Label>
                                                             <Input
                                                                 id="distanciaMaximaRed"
@@ -635,80 +724,6 @@ export default function NuevoProyecto() {
                                                                 }
                                                             />
                                                         </div>
-
-                                                        <div className="space-y-3">
-                                                            <Label htmlFor="capacidadSubestacionMinima" className="text-base font-semibold">
-                                                                Capacidad Mínima Subestación (MVA)
-                                                            </Label>
-                                                            <Input
-                                                                id="capacidadSubestacionMinima"
-                                                                type="number"
-                                                                step="0.1"
-                                                                placeholder="Ej: 100"
-                                                                className="focus:border-secondary h-14 border-2 text-lg transition-colors"
-                                                                value={formData.capacidadSubestacionMinima}
-                                                                onChange={(e) =>
-                                                                    setFormData({ ...formData, capacidadSubestacionMinima: e.target.value })
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex gap-4">
-                                                    <Button
-                                                        type="button"
-                                                        onClick={prevStep}
-                                                        variant="outline"
-                                                        className="hover:bg-secondary/5 h-14 flex-1 border-2 text-lg font-semibold"
-                                                    >
-                                                        <ArrowLeft className="mr-2 h-5 w-5" />
-                                                        Atrás
-                                                    </Button>
-                                                    <Button
-                                                        type="button"
-                                                        onClick={nextStep}
-                                                        className="bg-secondary hover:bg-secondary/90 h-14 flex-1 text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-xl"
-                                                    >
-                                                        Continuar
-                                                        <ChevronRight className="ml-2 h-5 w-5" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Step 3: Detalles Técnicos */}
-                                        {step === 3 && (
-                                            <div className="space-y-8">
-                                                <div className="text-center">
-                                                    <div className="bg-secondary/10 mb-6 inline-flex rounded-3xl p-6">
-                                                        <CheckCircle className="text-secondary h-12 w-12" />
-                                                    </div>
-                                                    <h2 className="from-secondary to-secondary/70 mb-3 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent">
-                                                        Detalles Técnicos y Financieros
-                                                    </h2>
-                                                    <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-                                                        Completa la información técnica y presupuestaria del proyecto
-                                                    </p>
-                                                </div>
-
-                                                <div className="space-y-6">
-                                                    <div className="space-y-3">
-                                                        <Label htmlFor="superficieMaxima" className="text-base font-semibold">
-                                                            Superficie Máxima (hectáreas)
-                                                        </Label>
-                                                        <Input
-                                                            id="superficieMaxima"
-                                                            type="number"
-                                                            step="0.1"
-                                                            placeholder="Ej: 200"
-                                                            className="focus:border-secondary h-14 border-2 text-lg transition-colors"
-                                                            value={formData.superficieMaxima}
-                                                            onChange={(e) => setFormData({ ...formData, superficieMaxima: e.target.value })}
-                                                        />
-                                                        <p className="text-muted-foreground text-sm">
-                                                            Superficie máxima que está dispuesto a utilizar (opcional)
-                                                        </p>
                                                     </div>
 
                                                     <div className="from-secondary/5 to-secondary/10 border-secondary/20 rounded-2xl border-2 bg-gradient-to-r p-8">
@@ -746,9 +761,7 @@ export default function NuevoProyecto() {
                                                                     <Badge variant="secondary" className="mt-1">
                                                                         4
                                                                     </Badge>
-                                                                    <p className="text-sm">
-                                                                        Podrás contactar directamente con los propietarios
-                                                                    </p>
+                                                                    <p className="text-sm">Podrás comenzar el proceso de negociación</p>
                                                                 </div>
                                                             </div>
                                                         </div>

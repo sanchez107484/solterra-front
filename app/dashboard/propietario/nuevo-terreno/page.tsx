@@ -2,7 +2,6 @@
 
 import type React from "react"
 
-import { StatsCard } from "@/components/dashboard"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -327,7 +326,7 @@ export default function NuevoTerreno() {
             <div className="from-background via-primary/5 to-background min-h-screen bg-gradient-to-br">
                 <main className="container mx-auto max-w-4xl px-6 py-12">
                     {/* Información útil para el usuario */}
-                    <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    {/* <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                         <StatsCard icon={MapPin} title="Superficie Mínima" value="0.5" subtitle="hectáreas requeridas" variant="primary" />
                         <StatsCard icon={Euro} title="Ingresos Típicos" value="€2,500" subtitle="por hectárea/año" variant="secondary" />
                         <StatsCard icon={TreePine} title="Duración Contrato" value="25" subtitle="años promedio" variant="primary" />
@@ -338,10 +337,10 @@ export default function NuevoTerreno() {
                             subtitle="Progreso del formulario"
                             variant="secondary"
                         />
-                    </div>
+                    </div> */}
                     {/* Progress indicator */}
-                    <div className="mb-12">
-                        <div className="relative mb-6">
+                    <div className="mb-6">
+                        <div className="relative mb-3">
                             <div className="flex items-center justify-between">
                                 {[1, 2, 3].map((s) => (
                                     <div key={s} className="relative z-10 flex flex-col items-center">
@@ -376,12 +375,20 @@ export default function NuevoTerreno() {
                                 <div className="flex-1"></div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-4 text-center text-sm font-medium">
-                            <div className={step >= 1 ? "text-primary" : "text-muted-foreground"}>{t?.owner?.newLand?.steps?.info}</div>
-                            <div className={step >= 2 ? "text-primary" : "text-muted-foreground"}>
-                                {t?.owner?.newLand?.steps?.technical}
+                        <div className="flex items-center justify-between text-center text-sm font-medium">
+                            <div className="flex w-12 flex-col items-center">
+                                <div className={step >= 1 ? "text-primary" : "text-muted-foreground"}>{t?.owner?.newLand?.steps?.info}</div>
                             </div>
-                            <div className={step >= 3 ? "text-primary" : "text-muted-foreground"}>{t?.owner?.newLand?.steps?.price}</div>
+                            <div className="flex w-12 flex-col items-center">
+                                <div className={step >= 2 ? "text-primary" : "text-muted-foreground"}>
+                                    {t?.owner?.newLand?.steps?.technical}
+                                </div>
+                            </div>
+                            <div className="flex w-12 flex-col items-center">
+                                <div className={step >= 3 ? "text-primary" : "text-muted-foreground"}>
+                                    {t?.owner?.newLand?.steps?.price}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
