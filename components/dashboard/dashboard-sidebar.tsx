@@ -10,7 +10,21 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useSidebar } from "@/contexts/SidebarContext"
 import { useTranslations } from "@/i18n/i18nContext"
 import { cn } from "@/lib/utils"
-import { Briefcase, ChevronLeft, ChevronRight, Globe, Home, LayoutDashboard, Leaf, LogOut, MapPin, Settings, User, Zap } from "lucide-react"
+import {
+    Briefcase,
+    ChevronLeft,
+    ChevronRight,
+    CirclePlus,
+    Globe,
+    Home,
+    LayoutDashboard,
+    Leaf,
+    LogOut,
+    MapPin,
+    Settings,
+    User,
+    Zap,
+} from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -41,7 +55,11 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                   label: t?.sidebar?.navigation?.allProjects || "Todos los Proyectos",
                   icon: Briefcase,
               },
-              { href: "/dashboard/propietario/nuevo-terreno", label: t?.sidebar?.navigation?.addLand || "Añadir Terreno", icon: MapPin },
+              {
+                  href: "/dashboard/propietario/nuevo-terreno",
+                  label: t?.sidebar?.navigation?.addLand || "Añadir Terreno",
+                  icon: CirclePlus,
+              },
           ]
         : [
               { href: "/dashboard/promotor", label: t?.sidebar?.navigation?.dashboard || "Dashboard", icon: LayoutDashboard },
@@ -54,7 +72,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
               {
                   href: "/dashboard/promotor/nuevo-proyecto",
                   label: t?.sidebar?.navigation?.addProject || "Añadir Proyecto",
-                  icon: Briefcase,
+                  icon: CirclePlus,
               },
           ]
 
