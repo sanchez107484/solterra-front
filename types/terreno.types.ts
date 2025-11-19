@@ -8,7 +8,9 @@ export enum TipoSuelo {
     RUSTICO_COMUN = "RUSTICO_COMUN",
     RUSTICO_PROTECCION = "RUSTICO_PROTECCION",
     NO_URBANIZABLE = "NO_URBANIZABLE",
-    URBANIZABLE = "URBANIZABLE",
+    SECANO = "SECANO",
+    REGADIO = "REGADIO",
+    ERIAL = "ERIAL",
 }
 
 export enum DisponibilidadTerreno {
@@ -51,13 +53,13 @@ export interface Terreno {
     municipio: string
     provincia: string
     codigoPostal: string
-    latitud: number
-    longitud: number
     poligonoGeoJson?: string | null
 
     superficie: number
     tipoSuelo: TipoSuelo
-    referenciaCatastral?: string | null
+    referenciaCatastral: string
+    poligono: string
+    parcela: string
 
     disponibilidad: DisponibilidadTerreno
     precioVenta?: number | null
@@ -94,13 +96,13 @@ export interface CreateTerrenoDTO {
     provincia: string
     comunidad: string
     codigoPostal: string
-    latitud: number
-    longitud: number
     poligonoGeoJson?: string | null
 
     superficie: number
     tipoSuelo: TipoSuelo
-    referenciaCatastral?: string | null
+    referenciaCatastral: string
+    poligono: string
+    parcela: string
 
     disponibilidad: DisponibilidadTerreno
     precioVenta?: number | null

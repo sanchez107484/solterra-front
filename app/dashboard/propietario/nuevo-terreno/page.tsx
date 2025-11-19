@@ -9,7 +9,6 @@ import { Card } from "@/components/ui/card"
 import { CustomSelect } from "@/components/ui/custom-select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { useAppData } from "@/hooks/useAppData"
@@ -21,7 +20,6 @@ import { CreateTerrenoDTO, DisponibilidadTerreno, Orientacion, TipoSuelo } from 
 import {
     AlertCircle,
     ArrowLeft,
-    Building,
     Check,
     CheckCircle,
     ChevronRight,
@@ -52,25 +50,26 @@ export default function NuevoTerreno() {
     // Refs para campos del formulario
     const tituloRef = useRef<HTMLInputElement>(null)
     const superficieRef = useRef<HTMLInputElement>(null)
-    const latitudRef = useRef<HTMLInputElement>(null)
-    const longitudRef = useRef<HTMLInputElement>(null)
+    const referenciaCatastralRef = useRef<HTMLInputElement>(null)
+    const poligonoRef = useRef<HTMLInputElement>(null)
+    const parcelaRef = useRef<HTMLInputElement>(null)
     const pendienteRef = useRef<HTMLInputElement>(null)
     const precioVentaRef = useRef<HTMLInputElement>(null)
     const precioArrendamientoRef = useRef<HTMLInputElement>(null)
 
     const [formData, setFormData] = useState({
-        titulo: "",
+        titulo: "", // Campo oculto, se generará automáticamente
         descripcion: "",
-        direccion: "",
+        direccion: "", // Campo oculto
         municipio: "",
         provincia: "",
         comunidad: "",
-        codigoPostal: "",
-        latitud: "",
-        longitud: "",
+        codigoPostal: "", // Campo oculto
         superficie: "",
         tipoSuelo: "RUSTICO_COMUN" as TipoSuelo,
         referenciaCatastral: "",
+        poligono: "",
+        parcela: "",
         disponibilidad: "AMBOS" as DisponibilidadTerreno,
         precioVenta: "",
         precioArrendamiento: "",
@@ -82,6 +81,7 @@ export default function NuevoTerreno() {
         servidumbres: "",
         restriccionesAmbientales: "",
         zonasProtegidas: false,
+        tieneRestriccionesAmbientales: false,
     })
 
     const [validationErrors, setValidationErrors] = useState<string[]>([])
@@ -124,11 +124,6 @@ export default function NuevoTerreno() {
 
         if (currentStep === 1) {
             // Validación del paso 1: Información Básica
-            if (!formData.titulo.trim()) {
-                const errorMsg = t?.owner?.validation?.requiredName
-                errors.push(errorMsg)
-                newFieldErrors.titulo = errorMsg
-            }
             if (!formData.comunidad.trim()) {
                 const errorMsg = "La comunidad autónoma es obligatoria"
                 errors.push(errorMsg)
@@ -155,31 +150,24 @@ export default function NuevoTerreno() {
                 errors.push(errorMsg)
                 newFieldErrors.tipoSuelo = errorMsg
             }
+            // Validación de campos catastrales obligatorios
+            if (!formData.referenciaCatastral || formData.referenciaCatastral.trim() === "") {
+                const errorMsg = "La referencia catastral es obligatoria"
+                errors.push(errorMsg)
+                newFieldErrors.referenciaCatastral = errorMsg
+            }
+            if (!formData.poligono || formData.poligono.trim() === "") {
+                const errorMsg = "El polígono es obligatorio"
+                errors.push(errorMsg)
+                newFieldErrors.poligono = errorMsg
+            }
+            if (!formData.parcela || formData.parcela.trim() === "") {
+                const errorMsg = "La parcela es obligatoria"
+                errors.push(errorMsg)
+                newFieldErrors.parcela = errorMsg
+            }
         } else if (currentStep === 2) {
-            // Validación del paso 2: Detalles Técnicos (todos opcionales, pero validar formato si se llenan)
-            if (
-                formData.latitud &&
-                (isNaN(parseFloat(formData.latitud)) || parseFloat(formData.latitud) < -90 || parseFloat(formData.latitud) > 90)
-            ) {
-                const errorMsg = t?.owner?.validation?.latRange
-                errors.push(errorMsg)
-                newFieldErrors.latitud = errorMsg
-            }
-            if (
-                formData.longitud &&
-                (isNaN(parseFloat(formData.longitud)) || parseFloat(formData.longitud) < -180 || parseFloat(formData.longitud) > 180)
-            ) {
-                const errorMsg = t?.owner?.validation?.lngRange
-                errors.push(errorMsg)
-                newFieldErrors.longitud = errorMsg
-            }
-            if (formData.pendiente && (isNaN(parseFloat(formData.pendiente)) || parseFloat(formData.pendiente) < 0)) {
-                const errorMsg = t?.owner?.validation?.pendienteInvalid
-                errors.push(errorMsg)
-                newFieldErrors.pendiente = errorMsg
-            }
-        } else if (currentStep === 3) {
-            // Validación del paso 3: Precio y Características
+            // Validación del paso 2: Precio y disponibilidad
             if (!formData.disponibilidad) {
                 const errorMsg = t?.owner?.validation?.disponibilidadRequired
                 errors.push(errorMsg)
@@ -219,8 +207,9 @@ export default function NuevoTerreno() {
         const refMap: Record<string, React.RefObject<HTMLInputElement | null>> = {
             titulo: tituloRef,
             superficie: superficieRef,
-            latitud: latitudRef,
-            longitud: longitudRef,
+            referenciaCatastral: referenciaCatastralRef,
+            poligono: poligonoRef,
+            parcela: parcelaRef,
             pendiente: pendienteRef,
             precioVenta: precioVentaRef,
             precioArrendamiento: precioArrendamientoRef,
@@ -239,12 +228,6 @@ export default function NuevoTerreno() {
     const validate = (): { errors: string[]; fieldErrors: Record<string, string> } => {
         const errors: string[] = []
         const newFieldErrors: Record<string, string> = {}
-
-        if (!formData.titulo.trim()) {
-            const errorMsg = t?.owner?.validation?.requiredName
-            errors.push(errorMsg)
-            newFieldErrors.titulo = errorMsg
-        }
 
         if (!formData.comunidad.trim()) {
             const errorMsg = "La comunidad autónoma es obligatoria"
@@ -271,22 +254,21 @@ export default function NuevoTerreno() {
             newFieldErrors.superficie = errorMsg
         }
 
-        if (
-            formData.latitud &&
-            (isNaN(parseFloat(formData.latitud)) || parseFloat(formData.latitud) < -90 || parseFloat(formData.latitud) > 90)
-        ) {
-            const errorMsg = t?.owner?.validation?.latRange
+        // Validación de campos catastrales obligatorios
+        if (!formData.referenciaCatastral || formData.referenciaCatastral.trim() === "") {
+            const errorMsg = "La referencia catastral es obligatoria"
             errors.push(errorMsg)
-            newFieldErrors.latitud = errorMsg
+            newFieldErrors.referenciaCatastral = errorMsg
         }
-
-        if (
-            formData.longitud &&
-            (isNaN(parseFloat(formData.longitud)) || parseFloat(formData.longitud) < -180 || parseFloat(formData.longitud) > 180)
-        ) {
-            const errorMsg = t?.owner?.validation?.lngRange
+        if (!formData.poligono || formData.poligono.trim() === "") {
+            const errorMsg = "El polígono es obligatorio"
             errors.push(errorMsg)
-            newFieldErrors.longitud = errorMsg
+            newFieldErrors.poligono = errorMsg
+        }
+        if (!formData.parcela || formData.parcela.trim() === "") {
+            const errorMsg = "La parcela es obligatoria"
+            errors.push(errorMsg)
+            newFieldErrors.parcela = errorMsg
         }
 
         // Validación de precios según disponibilidad
@@ -341,27 +323,25 @@ export default function NuevoTerreno() {
         setFieldErrors({})
 
         try {
-            // Validar que las coordenadas sean válidas si se proporcionan
-            const lat = formData.latitud ? parseFloat(formData.latitud) : null
-            const lng = formData.longitud ? parseFloat(formData.longitud) : null
+            // Generar título automáticamente: "Terreno en {municipio}, {provincia}"
+            const tituloGenerado = `Terreno en ${formData.municipio}, ${formData.provincia}`
 
-            // Si no hay coordenadas válidas, usar coordenadas por defecto para España
-            const latitudFinal = lat && !isNaN(lat) ? lat : 40.4168
-            const longitudFinal = lng && !isNaN(lng) ? lng : -3.7038
+            // Usar municipio como dirección si está vacía
+            const direccionFinal = formData.direccion || formData.municipio
 
             const terrenoData: CreateTerrenoDTO = {
-                titulo: formData.titulo,
+                titulo: tituloGenerado,
                 descripcion: formData.descripcion || undefined,
-                direccion: formData.direccion || formData.municipio,
+                direccion: direccionFinal,
                 municipio: formData.municipio,
                 provincia: formData.provincia,
                 comunidad: formData.comunidad,
                 codigoPostal: formData.codigoPostal || "00000",
-                latitud: latitudFinal,
-                longitud: longitudFinal,
                 superficie: parseFloat(formData.superficie),
                 tipoSuelo: formData.tipoSuelo,
-                referenciaCatastral: formData.referenciaCatastral || undefined,
+                referenciaCatastral: formData.referenciaCatastral,
+                poligono: formData.poligono,
+                parcela: formData.parcela,
                 disponibilidad: formData.disponibilidad,
                 precioVenta: formData.precioVenta ? parseFloat(formData.precioVenta) : undefined,
                 precioArrendamiento: formData.precioArrendamiento ? parseFloat(formData.precioArrendamiento) : undefined,
@@ -371,8 +351,7 @@ export default function NuevoTerreno() {
                 potencialSolar: formData.potencialSolar ? parseFloat(formData.potencialSolar) : undefined,
                 potencialEolico: formData.potencialEolico ? parseFloat(formData.potencialEolico) : undefined,
                 servidumbres: formData.servidumbres || undefined,
-                restriccionesAmbientales: formData.restriccionesAmbientales || undefined,
-                // Nota: zonasProtegidas no está en el DTO del backend, lo removemos
+                restriccionesAmbientales: formData.tieneRestriccionesAmbientales ? formData.restriccionesAmbientales : undefined,
             }
 
             await createTerreno(terrenoData)
@@ -418,8 +397,6 @@ export default function NuevoTerreno() {
             case 1:
                 return <MapPin className="h-5 w-5" />
             case 2:
-                return <Mountain className="h-5 w-5" />
-            case 3:
                 return <CheckCircle className="h-5 w-5" />
             default:
                 return stepNumber
@@ -434,8 +411,12 @@ export default function NuevoTerreno() {
                 return <Leaf className="h-6 w-6" />
             case "NO_URBANIZABLE":
                 return <Mountain className="h-6 w-6" />
-            case "URBANIZABLE":
-                return <Building className="h-6 w-6" />
+            case "SECANO":
+                return <TreePine className="h-6 w-6" />
+            case "REGADIO":
+                return <TreePine className="h-6 w-6" />
+            case "ERIAL":
+                return <Mountain className="h-6 w-6" />
             default:
                 return <TreePine className="h-6 w-6" />
         }
@@ -476,69 +457,60 @@ export default function NuevoTerreno() {
             />
             <div className="from-background via-primary/5 to-background min-h-screen bg-gradient-to-br">
                 <main className="container mx-auto max-w-4xl px-6 py-12">
-                    {/* Información útil para el usuario */}
-                    {/* <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                        <StatsCard icon={MapPin} title="Superficie Mínima" value="0.5" subtitle="hectáreas requeridas" variant="primary" />
-                        <StatsCard icon={Euro} title="Ingresos Típicos" value="€2,500" subtitle="por hectárea/año" variant="secondary" />
-                        <StatsCard icon={TreePine} title="Duración Contrato" value="25" subtitle="años promedio" variant="primary" />
-                        <StatsCard
-                            icon={Building}
-                            title="Paso Actual"
-                            value={`${step}/3`}
-                            subtitle="Progreso del formulario"
-                            variant="secondary"
-                        />
-                    </div> */}
                     {/* Progress indicator */}
-                    <div className="mb-6">
-                        <div className="relative mb-3">
-                            <div className="flex items-center justify-between">
-                                {[1, 2, 3].map((s) => (
-                                    <div key={s} className="relative z-10 flex flex-col items-center">
+                    <div className="mb-12">
+                        <div className="relative">
+                            {/* Línea de fondo completa */}
+                            <div className="bg-muted-foreground/20 absolute top-8 right-0 left-0 h-1 rounded-full" />
+
+                            {/* Línea de progreso animada */}
+                            <div
+                                className="from-primary via-primary to-primary/80 shadow-primary/30 absolute top-8 left-0 h-1 rounded-full bg-gradient-to-r shadow-lg transition-all duration-500 ease-in-out"
+                                style={{
+                                    width: step === 1 ? "0%" : "100%",
+                                }}
+                            />
+
+                            {/* Steps */}
+                            <div className="relative flex items-start justify-between">
+                                {[1, 2].map((s) => (
+                                    <div key={s} className="flex flex-col items-center" style={{ width: "50%" }}>
+                                        {/* Círculo del paso */}
                                         <div
-                                            className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                                            className={`relative z-10 flex h-16 w-16 items-center justify-center rounded-full border-4 transition-all duration-500 ${
                                                 step >= s
-                                                    ? "bg-primary border-primary text-primary-foreground shadow-lg"
-                                                    : "border-muted-foreground/30 text-muted-foreground bg-background"
+                                                    ? "bg-primary border-primary text-primary-foreground shadow-primary/50 scale-110 shadow-2xl"
+                                                    : "border-muted-foreground/30 text-muted-foreground bg-background shadow-md"
                                             }`}
                                         >
-                                            {step > s ? <Check className="h-6 w-6" /> : getStepIcon(s)}
+                                            {step > s ? (
+                                                <Check className="animate-in zoom-in h-7 w-7 duration-300" />
+                                            ) : (
+                                                <div className="transition-transform duration-300">{getStepIcon(s)}</div>
+                                            )}
+                                        </div>
+
+                                        {/* Texto del paso */}
+                                        <div className="mt-4 px-2 text-center">
+                                            <p
+                                                className={`text-sm font-bold transition-colors duration-300 ${
+                                                    step >= s ? "text-primary" : "text-muted-foreground"
+                                                }`}
+                                            >
+                                                {s === 1
+                                                    ? t?.owner?.newLand?.steps?.info || "Información del Terreno"
+                                                    : t?.owner?.newLand?.steps?.price || "Disponibilidad y Precio"}
+                                            </p>
+                                            <p
+                                                className={`mt-1 text-xs transition-colors duration-300 ${
+                                                    step >= s ? "text-primary/70" : "text-muted-foreground/60"
+                                                }`}
+                                            >
+                                                {s === 1 ? "Ubicación y características" : "Condiciones comerciales"}
+                                            </p>
                                         </div>
                                     </div>
                                 ))}
-                            </div>
-                            {/* Línea de conexión que se ajusta exactamente a los textos */}
-                            <div className="absolute top-6 right-0 left-0 flex">
-                                <div className="flex-1"></div>
-                                <div
-                                    className={`h-2 rounded-full transition-all duration-300 ${
-                                        step > 1 ? "bg-primary shadow-sm" : "bg-muted-foreground/20"
-                                    }`}
-                                    style={{ width: "calc(50% - 3rem)" }}
-                                />
-                                <div className="w-12"></div>
-                                <div
-                                    className={`h-2 rounded-full transition-all duration-300 ${
-                                        step > 2 ? "bg-primary shadow-sm" : "bg-muted-foreground/20"
-                                    }`}
-                                    style={{ width: "calc(50% - 3rem)" }}
-                                />
-                                <div className="flex-1"></div>
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-between text-center text-sm font-medium">
-                            <div className="flex w-12 flex-col items-center">
-                                <div className={step >= 1 ? "text-primary" : "text-muted-foreground"}>{t?.owner?.newLand?.steps?.info}</div>
-                            </div>
-                            <div className="flex w-12 flex-col items-center">
-                                <div className={step >= 2 ? "text-primary" : "text-muted-foreground"}>
-                                    {t?.owner?.newLand?.steps?.technical}
-                                </div>
-                            </div>
-                            <div className="flex w-12 flex-col items-center">
-                                <div className={step >= 3 ? "text-primary" : "text-muted-foreground"}>
-                                    {t?.owner?.newLand?.steps?.price}
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -582,38 +554,6 @@ export default function NuevoTerreno() {
                                         </div>
 
                                         <div className="space-y-6">
-                                            <div className="space-y-3">
-                                                <Label htmlFor="titulo" className="text-base font-semibold">
-                                                    {t?.owner?.newLand?.fields?.title} *
-                                                </Label>
-                                                <Input
-                                                    ref={tituloRef}
-                                                    id="titulo"
-                                                    placeholder={t?.owner?.newLand?.placeholders?.titulo}
-                                                    className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
-                                                        fieldErrors.titulo ? "border-red-500" : ""
-                                                    }`}
-                                                    value={formData.titulo}
-                                                    onChange={(e) => {
-                                                        setFormData({ ...formData, titulo: e.target.value })
-                                                        if (fieldErrors.titulo) {
-                                                            const newFieldErrors = { ...fieldErrors }
-                                                            delete newFieldErrors.titulo
-                                                            setFieldErrors(newFieldErrors)
-                                                        }
-                                                    }}
-                                                    required
-                                                />
-                                                {fieldErrors.titulo ? (
-                                                    <p className="flex items-center gap-2 text-sm text-red-600">
-                                                        <AlertCircle className="h-4 w-4" />
-                                                        {fieldErrors.titulo}
-                                                    </p>
-                                                ) : (
-                                                    <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.titleHint}</p>
-                                                )}
-                                            </div>
-
                                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                                 <div className="space-y-3">
                                                     <Label htmlFor="comunidad" className="text-base font-semibold">
@@ -710,50 +650,127 @@ export default function NuevoTerreno() {
                                                 )}
                                             </div>
 
-                                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                            <div className="space-y-3">
+                                                <Label htmlFor="superficie" className="text-base font-semibold">
+                                                    {t?.owner?.newLand?.fields?.surface} *
+                                                </Label>
+                                                <Input
+                                                    ref={superficieRef}
+                                                    id="superficie"
+                                                    type="number"
+                                                    step="0.1"
+                                                    placeholder={t?.owner?.newLand?.placeholders?.superficie}
+                                                    className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
+                                                        fieldErrors.superficie ? "border-red-500" : ""
+                                                    }`}
+                                                    value={formData.superficie}
+                                                    onChange={(e) => {
+                                                        setFormData({ ...formData, superficie: e.target.value })
+                                                        if (fieldErrors.superficie) {
+                                                            const newFieldErrors = { ...fieldErrors }
+                                                            delete newFieldErrors.superficie
+                                                            setFieldErrors(newFieldErrors)
+                                                        }
+                                                    }}
+                                                    required
+                                                />
+                                                {fieldErrors.superficie && (
+                                                    <p className="flex items-center gap-2 text-sm text-red-600">
+                                                        <AlertCircle className="h-4 w-4" />
+                                                        {fieldErrors.superficie}
+                                                    </p>
+                                                )}
+                                            </div>
+
+                                            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                                                 <div className="space-y-3">
-                                                    <Label htmlFor="superficie" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.surface} *
+                                                    <Label htmlFor="referenciaCatastral" className="text-base font-semibold">
+                                                        {t?.owner?.newLand?.fields?.cadastralRef} *
                                                     </Label>
                                                     <Input
-                                                        ref={superficieRef}
-                                                        id="superficie"
-                                                        type="number"
-                                                        step="0.1"
-                                                        placeholder={t?.owner?.newLand?.placeholders?.superficie}
+                                                        ref={referenciaCatastralRef}
+                                                        id="referenciaCatastral"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.referenciaCatastral}
                                                         className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
-                                                            fieldErrors.superficie ? "border-red-500" : ""
+                                                            fieldErrors.referenciaCatastral ? "border-red-500" : ""
                                                         }`}
-                                                        value={formData.superficie}
+                                                        value={formData.referenciaCatastral}
                                                         onChange={(e) => {
-                                                            setFormData({ ...formData, superficie: e.target.value })
-                                                            if (fieldErrors.superficie) {
+                                                            setFormData({ ...formData, referenciaCatastral: e.target.value })
+                                                            if (fieldErrors.referenciaCatastral) {
                                                                 const newFieldErrors = { ...fieldErrors }
-                                                                delete newFieldErrors.superficie
+                                                                delete newFieldErrors.referenciaCatastral
                                                                 setFieldErrors(newFieldErrors)
                                                             }
                                                         }}
                                                         required
                                                     />
-                                                    {fieldErrors.superficie && (
+                                                    {fieldErrors.referenciaCatastral && (
                                                         <p className="flex items-center gap-2 text-sm text-red-600">
                                                             <AlertCircle className="h-4 w-4" />
-                                                            {fieldErrors.superficie}
+                                                            {fieldErrors.referenciaCatastral}
                                                         </p>
                                                     )}
                                                 </div>
 
                                                 <div className="space-y-3">
-                                                    <Label htmlFor="codigoPostal" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.postalCode}
+                                                    <Label htmlFor="poligono" className="text-base font-semibold">
+                                                        {t?.owner?.newLand?.fields?.polygon} *
                                                     </Label>
                                                     <Input
-                                                        id="codigoPostal"
-                                                        placeholder={t?.owner?.newLand?.placeholders?.codigoPostal}
-                                                        className="focus:border-primary h-14 border-2 text-lg transition-colors"
-                                                        value={formData.codigoPostal}
-                                                        onChange={(e) => setFormData({ ...formData, codigoPostal: e.target.value })}
+                                                        ref={poligonoRef}
+                                                        id="poligono"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.poligono}
+                                                        className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
+                                                            fieldErrors.poligono ? "border-red-500" : ""
+                                                        }`}
+                                                        value={formData.poligono}
+                                                        onChange={(e) => {
+                                                            setFormData({ ...formData, poligono: e.target.value })
+                                                            if (fieldErrors.poligono) {
+                                                                const newFieldErrors = { ...fieldErrors }
+                                                                delete newFieldErrors.poligono
+                                                                setFieldErrors(newFieldErrors)
+                                                            }
+                                                        }}
+                                                        required
                                                     />
+                                                    {fieldErrors.poligono && (
+                                                        <p className="flex items-center gap-2 text-sm text-red-600">
+                                                            <AlertCircle className="h-4 w-4" />
+                                                            {fieldErrors.poligono}
+                                                        </p>
+                                                    )}
+                                                </div>
+
+                                                <div className="space-y-3">
+                                                    <Label htmlFor="parcela" className="text-base font-semibold">
+                                                        {t?.owner?.newLand?.fields?.parcel} *
+                                                    </Label>
+                                                    <Input
+                                                        ref={parcelaRef}
+                                                        id="parcela"
+                                                        placeholder={t?.owner?.newLand?.placeholders?.parcela}
+                                                        className={`focus:border-primary h-14 border-2 text-lg transition-colors ${
+                                                            fieldErrors.parcela ? "border-red-500" : ""
+                                                        }`}
+                                                        value={formData.parcela}
+                                                        onChange={(e) => {
+                                                            setFormData({ ...formData, parcela: e.target.value })
+                                                            if (fieldErrors.parcela) {
+                                                                const newFieldErrors = { ...fieldErrors }
+                                                                delete newFieldErrors.parcela
+                                                                setFieldErrors(newFieldErrors)
+                                                            }
+                                                        }}
+                                                        required
+                                                    />
+                                                    {fieldErrors.parcela && (
+                                                        <p className="flex items-center gap-2 text-sm text-red-600">
+                                                            <AlertCircle className="h-4 w-4" />
+                                                            {fieldErrors.parcela}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
 
@@ -797,19 +814,6 @@ export default function NuevoTerreno() {
                                             </div>
 
                                             <div className="space-y-3">
-                                                <Label htmlFor="direccion" className="text-base font-semibold">
-                                                    {t?.owner?.newLand?.fields?.address}
-                                                </Label>
-                                                <Input
-                                                    id="direccion"
-                                                    placeholder={t?.owner?.newLand?.placeholders?.direccion}
-                                                    className="focus:border-primary h-14 border-2 text-lg transition-colors"
-                                                    value={formData.direccion}
-                                                    onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
-                                                />
-                                            </div>
-
-                                            <div className="space-y-3">
                                                 <Label htmlFor="descripcion" className="text-base font-semibold">
                                                     {t?.owner?.newLand?.fields?.description}
                                                 </Label>
@@ -820,6 +824,46 @@ export default function NuevoTerreno() {
                                                     value={formData.descripcion}
                                                     onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
                                                 />
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <div className="flex items-center space-x-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="tieneRestriccionesAmbientales"
+                                                        checked={formData.tieneRestriccionesAmbientales}
+                                                        onChange={(e) =>
+                                                            setFormData({
+                                                                ...formData,
+                                                                tieneRestriccionesAmbientales: e.target.checked,
+                                                                restriccionesAmbientales: e.target.checked
+                                                                    ? formData.restriccionesAmbientales
+                                                                    : "",
+                                                            })
+                                                        }
+                                                        className="text-primary focus:ring-primary h-5 w-5 rounded border-gray-300 bg-gray-100 focus:ring-2"
+                                                    />
+                                                    <Label htmlFor="tieneRestriccionesAmbientales" className="text-base font-medium">
+                                                        {t?.owner?.newLand?.fields?.hasEnvRestrictions}
+                                                    </Label>
+                                                </div>
+
+                                                {formData.tieneRestriccionesAmbientales && (
+                                                    <div className="space-y-3">
+                                                        <Label htmlFor="restriccionesAmbientales" className="text-base font-semibold">
+                                                            {t?.owner?.newLand?.fields?.envRestrictions}
+                                                        </Label>
+                                                        <Textarea
+                                                            id="restriccionesAmbientales"
+                                                            placeholder={t?.owner?.newLand?.placeholders?.restriccionesAmbientales}
+                                                            className="focus:border-primary min-h-24 resize-none border-2 text-base transition-colors"
+                                                            value={formData.restriccionesAmbientales}
+                                                            onChange={(e) =>
+                                                                setFormData({ ...formData, restriccionesAmbientales: e.target.value })
+                                                            }
+                                                        />
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
 
@@ -834,272 +878,8 @@ export default function NuevoTerreno() {
                                     </div>
                                 )}
 
-                                {/* Step 2: Detalles Técnicos */}
+                                {/* Step 2: Precio y Disponibilidad */}
                                 {step === 2 && (
-                                    <div className="space-y-8">
-                                        <div className="text-center">
-                                            <div className="bg-primary/10 mb-6 inline-flex rounded-3xl p-6">
-                                                <Mountain className="text-primary h-12 w-12" />
-                                            </div>
-                                            <h2 className="from-primary to-primary/70 mb-3 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent">
-                                                {t?.owner?.newLand?.sections?.technicalTitle}
-                                            </h2>
-                                            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-                                                {t?.owner?.newLand?.sections?.technicalSubtitle}
-                                            </p>
-                                        </div>
-
-                                        <div className="space-y-6">
-                                            <div className="space-y-4">
-                                                <Label className="flex items-center gap-2 text-base font-semibold">
-                                                    <MapPin className="h-5 w-5" />
-                                                    {t?.owner?.newLand?.sections?.coordinatesTitle}
-                                                </Label>
-                                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="latitud" className="text-muted-foreground text-sm">
-                                                            {t?.owner?.newLand?.fields?.latitude}
-                                                        </Label>
-                                                        <Input
-                                                            ref={latitudRef}
-                                                            id="latitud"
-                                                            type="number"
-                                                            step="any"
-                                                            placeholder={t?.owner?.newLand?.placeholders?.latitud}
-                                                            className={`focus:border-primary h-12 border-2 text-lg transition-colors ${
-                                                                fieldErrors.latitud ? "border-red-500" : ""
-                                                            }`}
-                                                            value={formData.latitud}
-                                                            onChange={(e) => {
-                                                                setFormData({ ...formData, latitud: e.target.value })
-                                                                if (fieldErrors.latitud) {
-                                                                    const newFieldErrors = { ...fieldErrors }
-                                                                    delete newFieldErrors.latitud
-                                                                    setFieldErrors(newFieldErrors)
-                                                                }
-                                                            }}
-                                                        />
-                                                        {fieldErrors.latitud && (
-                                                            <p className="flex items-center gap-2 text-sm text-red-600">
-                                                                <AlertCircle className="h-4 w-4" />
-                                                                {fieldErrors.latitud}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="longitud" className="text-muted-foreground text-sm">
-                                                            {t?.owner?.newLand?.fields?.longitude}
-                                                        </Label>
-                                                        <Input
-                                                            ref={longitudRef}
-                                                            id="longitud"
-                                                            type="number"
-                                                            step="any"
-                                                            placeholder={t?.owner?.newLand?.placeholders?.longitud}
-                                                            className={`focus:border-primary h-12 border-2 text-lg transition-colors ${
-                                                                fieldErrors.longitud ? "border-red-500" : ""
-                                                            }`}
-                                                            value={formData.longitud}
-                                                            onChange={(e) => {
-                                                                setFormData({ ...formData, longitud: e.target.value })
-                                                                if (fieldErrors.longitud) {
-                                                                    const newFieldErrors = { ...fieldErrors }
-                                                                    delete newFieldErrors.longitud
-                                                                    setFieldErrors(newFieldErrors)
-                                                                }
-                                                            }}
-                                                        />
-                                                        {fieldErrors.longitud && (
-                                                            <p className="flex items-center gap-2 text-sm text-red-600">
-                                                                <AlertCircle className="h-4 w-4" />
-                                                                {fieldErrors.longitud}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <p className="text-muted-foreground text-sm">{t?.owner?.newLand?.hints?.coordinates}</p>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                                <div className="space-y-3">
-                                                    <Label htmlFor="orientacion" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.orientation}
-                                                    </Label>
-                                                    <Select
-                                                        value={formData.orientacion}
-                                                        onValueChange={(value) =>
-                                                            setFormData({ ...formData, orientacion: value as Orientacion })
-                                                        }
-                                                    >
-                                                        <SelectTrigger className="focus:border-primary h-12 border-2">
-                                                            <SelectValue placeholder={t?.owner?.newLand?.placeholders?.orientacion} />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="SUR">{t?.owner?.newLand?.orientations?.SUR}</SelectItem>
-                                                            <SelectItem value="NORTE">{t?.owner?.newLand?.orientations?.NORTE}</SelectItem>
-                                                            <SelectItem value="ESTE">{t?.owner?.newLand?.orientations?.ESTE}</SelectItem>
-                                                            <SelectItem value="OESTE">{t?.owner?.newLand?.orientations?.OESTE}</SelectItem>
-                                                            <SelectItem value="SURESTE">
-                                                                {t?.owner?.newLand?.orientations?.SURESTE}
-                                                            </SelectItem>
-                                                            <SelectItem value="SUROESTE">
-                                                                {t?.owner?.newLand?.orientations?.SUROESTE}
-                                                            </SelectItem>
-                                                            <SelectItem value="NORESTE">
-                                                                {t?.owner?.newLand?.orientations?.NORESTE}
-                                                            </SelectItem>
-                                                            <SelectItem value="NOROESTE">
-                                                                {t?.owner?.newLand?.orientations?.NOROESTE}
-                                                            </SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-
-                                                <div className="space-y-3">
-                                                    <Label htmlFor="pendiente" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.slope}
-                                                    </Label>
-                                                    <Input
-                                                        ref={pendienteRef}
-                                                        id="pendiente"
-                                                        type="number"
-                                                        step="0.1"
-                                                        placeholder={t?.owner?.newLand?.placeholders?.pendiente}
-                                                        className={`focus:border-primary h-12 border-2 text-lg transition-colors ${
-                                                            fieldErrors.pendiente ? "border-red-500" : ""
-                                                        }`}
-                                                        value={formData.pendiente}
-                                                        onChange={(e) => {
-                                                            setFormData({ ...formData, pendiente: e.target.value })
-                                                            if (fieldErrors.pendiente) {
-                                                                const newFieldErrors = { ...fieldErrors }
-                                                                delete newFieldErrors.pendiente
-                                                                setFieldErrors(newFieldErrors)
-                                                            }
-                                                        }}
-                                                    />
-                                                    {fieldErrors.pendiente && (
-                                                        <p className="flex items-center gap-2 text-sm text-red-600">
-                                                            <AlertCircle className="h-4 w-4" />
-                                                            {fieldErrors.pendiente}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                                <div className="space-y-3">
-                                                    <Label htmlFor="distanciaRed" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.gridDistance}
-                                                    </Label>
-                                                    <Input
-                                                        id="distanciaRed"
-                                                        type="number"
-                                                        step="0.1"
-                                                        placeholder={t?.owner?.newLand?.placeholders?.distanciaRed}
-                                                        className="focus:border-primary h-12 border-2 text-lg transition-colors"
-                                                        value={formData.distanciaRed}
-                                                        onChange={(e) => setFormData({ ...formData, distanciaRed: e.target.value })}
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-3">
-                                                    <Label htmlFor="referenciaCatastral" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.cadastralRef}
-                                                    </Label>
-                                                    <Input
-                                                        id="referenciaCatastral"
-                                                        placeholder={t?.owner?.newLand?.placeholders?.referenciaCatastral}
-                                                        className="focus:border-primary h-12 border-2 text-lg transition-colors"
-                                                        value={formData.referenciaCatastral}
-                                                        onChange={(e) => setFormData({ ...formData, referenciaCatastral: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                                <div className="space-y-3">
-                                                    <Label htmlFor="potencialSolar" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.solarPotential}
-                                                    </Label>
-                                                    <Input
-                                                        id="potencialSolar"
-                                                        type="number"
-                                                        step="0.1"
-                                                        placeholder={t?.owner?.newLand?.placeholders?.potencialSolar}
-                                                        className="focus:border-primary h-12 border-2 text-lg transition-colors"
-                                                        value={formData.potencialSolar}
-                                                        onChange={(e) => setFormData({ ...formData, potencialSolar: e.target.value })}
-                                                    />
-                                                </div>
-
-                                                <div className="space-y-3">
-                                                    <Label htmlFor="potencialEolico" className="text-base font-semibold">
-                                                        {t?.owner?.newLand?.fields?.windPotential}
-                                                    </Label>
-                                                    <Input
-                                                        id="potencialEolico"
-                                                        type="number"
-                                                        step="0.1"
-                                                        placeholder={t?.owner?.newLand?.placeholders?.potencialEolico}
-                                                        className="focus:border-primary h-12 border-2 text-lg transition-colors"
-                                                        value={formData.potencialEolico}
-                                                        onChange={(e) => setFormData({ ...formData, potencialEolico: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="space-y-3">
-                                                <Label htmlFor="restriccionesAmbientales" className="text-base font-semibold">
-                                                    Restricciones Ambientales
-                                                </Label>
-                                                <Textarea
-                                                    id="restriccionesAmbientales"
-                                                    placeholder={t?.owner?.newLand?.placeholders?.restriccionesAmbientales}
-                                                    className="focus:border-primary min-h-24 resize-none border-2 text-base transition-colors"
-                                                    value={formData.restriccionesAmbientales}
-                                                    onChange={(e) => setFormData({ ...formData, restriccionesAmbientales: e.target.value })}
-                                                />
-                                            </div>
-
-                                            <div className="flex items-center space-x-3">
-                                                <input
-                                                    type="checkbox"
-                                                    id="zonasProtegidas"
-                                                    checked={formData.zonasProtegidas}
-                                                    onChange={(e) => setFormData({ ...formData, zonasProtegidas: e.target.checked })}
-                                                    className="text-primary focus:ring-primary h-5 w-5 rounded border-gray-300 bg-gray-100 focus:ring-2"
-                                                />
-                                                <Label htmlFor="zonasProtegidas" className="text-base font-medium">
-                                                    {t?.owner?.newLand?.protectedAreaLabel}
-                                                </Label>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-4">
-                                            <Button
-                                                type="button"
-                                                onClick={prevStep}
-                                                variant="outline"
-                                                className="hover:bg-primary/5 h-14 flex-1 border-2 text-lg font-semibold"
-                                            >
-                                                <ArrowLeft className="mr-2 h-5 w-5" />
-                                                {t?.common?.back}
-                                            </Button>
-                                            <Button
-                                                type="button"
-                                                onClick={nextStep}
-                                                className="bg-primary hover:bg-primary/90 h-14 flex-1 text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-xl"
-                                            >
-                                                {t?.common?.continue}
-                                                <ChevronRight className="ml-2 h-5 w-5" />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Step 3: Precio y Características */}
-                                {step === 3 && (
                                     <div className="space-y-8">
                                         <div className="text-center">
                                             <div className="bg-primary/10 mb-6 inline-flex rounded-3xl p-6">
