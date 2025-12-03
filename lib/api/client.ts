@@ -95,13 +95,15 @@ api.interceptors.response.use(
             // No loguear errores esperados:
             // - 401/403 en general (autenticación)
             // - Cualquier error en /profile (intento de carga automática)
+            // - Errores en /login o /register (manejados por el formulario)
             const isAuthError = status === 401 || status === 403
             const isProfileCheck = url.includes("/profile")
+            const isLoginRegister = url.includes("/login") || url.includes("/register")
 
-            // Solo loguear si hay información real de error
+            // Solo loguear si hay información real de error y no es un error esperado
             const hasErrorInfo = url || status || error.response?.data || error.message
 
-            if (!isAuthError && !isProfileCheck && hasErrorInfo) {
+            if (!isAuthError && !isProfileCheck && !isLoginRegister && hasErrorInfo) {
                 console.error("API Error:", {
                     url: error.config?.url,
                     method: error.config?.method,
