@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useAppData } from "@/hooks/useAppData"
 import { useTerrenos } from "@/hooks/useTerrenos"
 import { useTranslations } from "@/i18n/i18nContext"
+import { trackFormStep, trackTerrenoCreated, trackFormError } from "@/lib/analytics"
 import { useErrorHandler } from "@/lib/error-handler"
 import { getComunidadesAutonomas, getComunidadFromProvincia, getProvinciasFromComunidad } from "@/lib/provincias-data"
 import { CreateTerrenoDTO, DisponibilidadTerreno, Orientacion, TipoSuelo } from "@/types/terreno.types"
@@ -356,6 +357,14 @@ export default function NuevoTerreno() {
 
             await createTerreno(terrenoData)
 
+            // Tracking: terreno creado exitosamente
+            trackTerrenoCreated({
+                tipoSuelo: formData.tipoSuelo,
+                superficie: parseFloat(formData.superficie),
+                provincia: formData.provincia,
+                municipio: formData.municipio,
+            })
+
             // El servicio con error handling automático ya muestra el mensaje de éxito
             router.push("/dashboard/propietario")
         } catch (error) {
@@ -374,6 +383,13 @@ export default function NuevoTerreno() {
                 description: `${stepErrors.length} ${stepErrors.length === 1 ? "campo requiere" : "campos requieren"} tu atención`,
                 variant: "destructive",
             })
+
+            // Tracking: errores de validación
+            if (Object.keys(newFieldErrors).length > 0) {
+                const firstError = Object.keys(newFieldErrors)[0]
+                trackFormError("nuevo-terreno", firstError)
+            }
+
             // Pequeño delay para que el DOM se actualice antes del scroll
             setTimeout(() => {
                 scrollToFirstError()
@@ -383,6 +399,10 @@ export default function NuevoTerreno() {
 
         setValidationErrors([])
         setFieldErrors({})
+
+        // Tracking: paso completado exitosamente
+        trackFormStep("nuevo-terreno", step)
+
         setStep(step + 1)
     }
 

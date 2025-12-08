@@ -1,6 +1,7 @@
 "use client"
 import authService from "@/services/auth.service"
 import type { LoginDTO, RegisterDTO, Usuario } from "@/types/usuario.types"
+import { trackLogin, trackSignup } from "@/lib/analytics"
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react"
 
 type AuthState = {
@@ -95,6 +96,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             localStorage.setItem("user", JSON.stringify(user))
         }
         setAuth({ user, token, isLoading: false, isAuthenticated: true })
+
+        // Tracking: login exitoso
+        trackLogin("email")
     }, [])
 
     const register = useCallback(async (data: RegisterDTO) => {
@@ -105,6 +109,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             localStorage.setItem("user", JSON.stringify(user))
         }
         setAuth({ user, token, isLoading: false, isAuthenticated: true })
+
+        // Tracking: registro exitoso
+        trackSignup("email")
     }, [])
 
     const logout = useCallback(() => {

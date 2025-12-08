@@ -3,7 +3,8 @@ import { StructuredData } from "@/components/seo/structured-data"
 import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { I18nProvider } from "@/i18n/i18nContext"
-import { Analytics } from "@vercel/analytics/next"
+import Analytics from "@/components/Analytics"
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next"
 import { GeistMono } from "geist/font/mono"
 import { GeistSans } from "geist/font/sans"
 import type { Metadata } from "next"
@@ -118,6 +119,7 @@ export default function RootLayout({
                         <Suspense fallback={null}>
                             {children}
                             <Analytics />
+                            <VercelAnalytics />
                         </Suspense>
                         <Toaster />
                         <CookieBanner />
