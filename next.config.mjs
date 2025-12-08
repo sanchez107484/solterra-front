@@ -14,8 +14,8 @@ const nextConfig = {
 
     // Optimizaciones experimentales para performance
     experimental: {
-        // Optimizar CSS crítico
-        optimizeCss: true,
+        // optimizeCss causa problemas en Vercel con critters
+        // optimizeCss: true,
         // Inline font data para reducir requests
         optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
         ...(process.env.NODE_ENV === "development" && {
