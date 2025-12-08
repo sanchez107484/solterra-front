@@ -1,5 +1,6 @@
 "use client"
 
+import Clarity from "@microsoft/clarity"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import { useEffect } from "react"
 
@@ -13,23 +14,12 @@ export default function Analytics() {
     const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
     const clarityId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
 
-    // Integrar Microsoft Clarity
+    // Integrar Microsoft Clarity usando el paquete oficial de npm
     useEffect(() => {
-        if (!clarityId)
-            return // Script de Clarity según documentación oficial
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ;(function (c: any, l: Document, a: string, r: string, i: string, t: HTMLScriptElement, y: Element | null) {
-            c[a] =
-                c[a] ||
-                function (...args: unknown[]) {
-                    ;(c[a].q = c[a].q || []).push(args)
-                }
-            t = l.createElement(r) as HTMLScriptElement
-            t.async = true
-            t.src = "https://www.clarity.ms/tag/" + i
-            y = l.getElementsByTagName(r)[0]
-            y?.parentNode?.insertBefore(t, y)
-        })(window, document, "clarity", "script", clarityId, {} as HTMLScriptElement, document.getElementsByTagName("script")[0])
+        if (!clarityId) return
+
+        // Inicializar Clarity con el ID del proyecto
+        Clarity.init(clarityId)
     }, [clarityId])
 
     return (
@@ -37,7 +27,7 @@ export default function Analytics() {
             {/* Google Analytics 4 */}
             {gaId && <GoogleAnalytics gaId={gaId} />}
 
-            {/* Microsoft Clarity se carga mediante el useEffect arriba */}
+            {/* Microsoft Clarity se inicializa mediante el useEffect arriba */}
         </>
     )
 }
