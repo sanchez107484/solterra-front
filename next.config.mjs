@@ -12,6 +12,17 @@ const nextConfig = {
         ignoreBuildErrors: process.env.NODE_ENV === "development",
     },
 
+    // Optimizaciones experimentales para performance
+    experimental: {
+        // Optimizar CSS crítico
+        optimizeCss: true,
+        // Inline font data para reducir requests
+        optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
+        ...(process.env.NODE_ENV === "development" && {
+            allowedDevOrigins: ["http://192.168.100.162:3000", "http://192.168.100.162"],
+        }),
+    },
+
     // Optimización de imágenes habilitada en producción
     images: {
         // En desarrollo puedes usar unoptimized: true para rapidez
@@ -22,6 +33,7 @@ const nextConfig = {
                 hostname: "**",
             },
         ],
+        formats: ["image/webp", "image/avif"],
     },
 
     // Headers de seguridad para producción
@@ -46,16 +58,6 @@ const nextConfig = {
             },
         ]
     },
-
-    // Configuración de desarrollo (solo aplica en modo dev)
-    ...(process.env.NODE_ENV === "development" && {
-        devIndicators: {
-            appIsrStatus: false,
-        },
-        experimental: {
-            allowedDevOrigins: ["http://192.168.100.162:3000", "http://192.168.100.162"],
-        },
-    }),
 }
 
 export default nextConfig

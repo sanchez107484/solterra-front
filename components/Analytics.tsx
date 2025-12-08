@@ -1,7 +1,6 @@
 "use client"
 
 import Clarity from "@microsoft/clarity"
-import { GoogleAnalytics } from "@next/third-parties/google"
 import { useEffect, useState } from "react"
 
 /**
@@ -13,6 +12,7 @@ import { useEffect, useState } from "react"
  * Optimizado para no bloquear el renderizado inicial:
  * - Carga diferida después de que la página esté interactiva
  * - requestIdleCallback para mejor performance
+ * - GA4 cargado manualmente con script async para evitar @next/third-parties
  */
 export default function Analytics() {
     const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
@@ -37,15 +37,35 @@ export default function Analytics() {
         Clarity.init(clarityId)
     }, [clarityId, shouldLoad])
 
-    // No renderizar analytics hasta que la página esté lista
-    if (!shouldLoad) return null
+    // Cargar Google Analytics manualmente de forma diferida
+    useEffect(() => {
+        if (!gaId || !shouldLoad) return
 
-    return (
-        <>
-            {/* Google Analytics 4 */}
-            {gaId && <GoogleAnalytics gaId={gaId} />}
+        // Insertar script de gtag de forma asíncrona
+        const script1 = document.createElement("script")
+        script1.async = true
+        script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
+        document.head.appendChild(script1)
 
-            {/* Microsoft Clarity se inicializa mediante el useEffect arriba */}
-        </>
-    )
+        // Inicializar gtag
+        const script2 = document.createElement("script")
+        script2.innerHTML = `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gaId}', {
+                page_path: window.location.pathname,
+            });
+        `
+        document.head.appendChild(script2)
+
+        return () => {
+            // Cleanup si el componente se desmonta
+            document.head.removeChild(script1)
+            document.head.removeChild(script2)
+        }
+    }, [gaId, shouldLoad])
+
+    // No renderizar nada, los scripts se insertan en useEffect
+    return null
 }

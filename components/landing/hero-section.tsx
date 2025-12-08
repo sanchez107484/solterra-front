@@ -31,10 +31,10 @@ export function HeroSection() {
 
             {/* Floating particles effect - reducidas para mejor performance */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                {[...Array(12)].map((_, i) => (
+                {[...Array(6)].map((_, i) => (
                     <div
                         key={i}
-                        className="bg-primary/20 animate-float absolute h-1.5 w-1.5 rounded-full"
+                        className="bg-primary/20 animate-float absolute h-1.5 w-1.5 rounded-full will-change-transform"
                         style={{
                             left: `${Math.random() * 100}%`,
                             top: `${Math.random() * 100}%`,
