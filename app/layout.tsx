@@ -112,6 +112,24 @@ export default function RootLayout({
                 <link rel="icon" href="/solterra-logo2.svg" type="image/svg+xml" />
                 <link rel="icon" href="/placeholder-logo.png" sizes="32x32" />
                 <link rel="apple-touch-icon" href="/placeholder-logo.png" />
+
+                {/* Preconnect to external domains for performance */}
+                <link rel="preconnect" href="https://www.googletagmanager.com" />
+                <link rel="preconnect" href="https://www.google-analytics.com" />
+                <link rel="preconnect" href="https://scripts.clarity.ms" />
+                <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+                <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+                <link rel="dns-prefetch" href="https://scripts.clarity.ms" />
+
+                {/* Preload LCP image */}
+                <link
+                    rel="preload"
+                    as="image"
+                    href="/solterra-logo-grande.png"
+                    imageSrcSet="/_next/image?url=%2Fsolterra-logo-grande.png&w=640&q=75 1x, /_next/image?url=%2Fsolterra-logo-grande.png&w=828&q=75 2x"
+                    imageSizes="400px"
+                />
+
                 <StructuredData />
             </head>
             <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>

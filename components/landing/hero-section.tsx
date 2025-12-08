@@ -62,6 +62,8 @@ export function HeroSection() {
                                 height={400}
                                 className="relative drop-shadow-2xl"
                                 priority
+                                fetchPriority="high"
+                                sizes="(max-width: 768px) 300px, 400px"
                             />
                         </div>
                     </div>
