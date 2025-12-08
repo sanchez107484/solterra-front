@@ -1,7 +1,7 @@
 "use client"
+import { trackLogin, trackSignup } from "@/lib/analytics"
 import authService from "@/services/auth.service"
 import type { LoginDTO, RegisterDTO, Usuario } from "@/types/usuario.types"
-import { trackLogin, trackSignup } from "@/lib/analytics"
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react"
 
 type AuthState = {
