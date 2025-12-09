@@ -1,0 +1,24 @@
+# Browsers that support ES6+ (modern browsers)
+# This eliminates unnecessary polyfills for Array.at, Object.fromEntries, etc.
+
+# Chrome/Edge: last 2 versions
+last 2 Chrome versions
+last 2 Edge versions
+
+# Firefox: last 2 versions
+last 2 Firefox versions
+
+# Safari: last 2 versions (iOS and macOS)
+last 2 Safari versions
+iOS >= 14
+
+# Samsung Internet
+last 2 Samsung versions
+
+# Exclude dead browsers and old IE
+not dead
+not IE 11
+not op_mini all
+
+# Target browsers with >0.2% market share
+> 0.2%

@@ -19,14 +19,14 @@ export default function Analytics() {
     const clarityId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
     const [shouldLoad, setShouldLoad] = useState(false)
 
-    // Diferir la carga de analytics hasta que la página esté interactiva
+    // Diferir la carga de analytics hasta 3 segundos después del load para priorizar LCP
     useEffect(() => {
-        // Usar requestIdleCallback si está disponible, si no, setTimeout
-        if ("requestIdleCallback" in window) {
-            requestIdleCallback(() => setShouldLoad(true))
-        } else {
-            setTimeout(() => setShouldLoad(true), 1)
-        }
+        // Esperar a que la página esté completamente cargada
+        const timer = setTimeout(() => {
+            setShouldLoad(true)
+        }, 3000)
+
+        return () => clearTimeout(timer)
     }, [])
 
     // Integrar Microsoft Clarity una vez que shouldLoad sea true
