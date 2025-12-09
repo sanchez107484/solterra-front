@@ -49,12 +49,10 @@ export function HeroSection() {
                 <div className="mx-auto max-w-6xl">
                     {/* Logo and Brand - más compacto */}
                     <div
-                        className={`mb-4 flex flex-col items-center justify-center transition-all duration-1000 md:mb-6 ${
-                            isVisible ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
-                        }`}
+                        className={`mb-4 flex flex-col items-center justify-center md:mb-6 ${isVisible ? "opacity-100" : "opacity-0"}`}
+                        style={{ transition: "opacity 0.3s ease-in" }}
                     >
-                        <div className="relative transition-all duration-700 hover:scale-105">
-                            <div className="from-primary/20 via-secondary/20 to-accent/20 absolute inset-0 animate-pulse rounded-full bg-gradient-to-br blur-2xl" />
+                        <div className="relative" style={{ width: "400px", height: "400px", maxWidth: "min(400px, 75vw)" }}>
                             <Image
                                 src="/solterra-logo-grande.png"
                                 alt="Solterra Advisory - Plataforma líder de conexión entre terrenos rurales y proyectos de energía renovable solar y eólica en España"
@@ -64,14 +62,14 @@ export function HeroSection() {
                                 priority
                                 fetchPriority="high"
                                 sizes="(max-width: 768px) 300px, 400px"
+                                style={{ width: "100%", height: "auto" }}
                             />
                         </div>
                     </div>
 
                     <div
-                        className={`text-center transition-all delay-300 duration-1000 ${
-                            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-                        }`}
+                        className={`text-center ${isVisible ? "opacity-100" : "opacity-0"}`}
+                        style={{ transition: "opacity 0.5s ease-in 0.2s" }}
                     >
                         <h1 className="text-foreground mb-3 text-3xl font-bold tracking-tight text-balance md:mb-4 md:text-4xl lg:text-5xl">
                             {t.hero?.title}
@@ -85,7 +83,7 @@ export function HeroSection() {
                         <div className="mx-auto mb-6 grid max-w-4xl gap-4 md:mb-8 md:grid-cols-2 md:gap-5">
                             {/* Propietario Card */}
                             <Link href="/login/propietario" className="group">
-                                <div className="border-primary/20 from-primary/10 to-primary/5 hover:border-primary relative h-full overflow-hidden rounded-xl border-2 bg-gradient-to-br p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl md:rounded-2xl md:p-7">
+                                <div className="border-primary/20 from-primary/10 to-primary/5 hover:border-primary relative h-full overflow-hidden rounded-xl border-2 bg-gradient-to-br p-6 shadow-lg transition-all duration-300 hover:shadow-xl md:rounded-2xl md:p-7">
                                     <div className="bg-primary/20 absolute top-3 right-3 rounded-full p-2.5 transition-transform duration-300 group-hover:scale-110 md:top-4 md:right-4 md:p-3">
                                         <Zap className="text-primary h-5 w-5 md:h-6 md:w-6" />
                                     </div>
@@ -98,7 +96,7 @@ export function HeroSection() {
                                     </p>
                                     <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
                                         <div className="flex items-center gap-2">
-                                            <span className="bg-primary inline-block h-1.5 w-1.5 animate-pulse rounded-full md:h-2 md:w-2"></span>
+                                            <span className="bg-primary inline-block h-1.5 w-1.5 rounded-full md:h-2 md:w-2"></span>
                                             <span className="font-medium">{t.hero?.cards?.landowner?.income}</span>
                                         </div>
                                     </div>
@@ -111,7 +109,7 @@ export function HeroSection() {
 
                             {/* Promotor Card */}
                             <Link href="/login/promotor" className="group">
-                                <div className="border-secondary/20 from-secondary/10 to-secondary/5 hover:border-secondary relative h-full overflow-hidden rounded-xl border-2 bg-gradient-to-br p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl md:rounded-2xl md:p-7">
+                                <div className="border-secondary/20 from-secondary/10 to-secondary/5 hover:border-secondary relative h-full overflow-hidden rounded-xl border-2 bg-gradient-to-br p-6 shadow-lg transition-all duration-300 hover:shadow-xl md:rounded-2xl md:p-7">
                                     <div className="bg-secondary/20 absolute top-3 right-3 rounded-full p-2.5 transition-transform duration-300 group-hover:scale-110 md:top-4 md:right-4 md:p-3">
                                         <Zap className="text-secondary-foreground h-5 w-5 md:h-6 md:w-6" />
                                     </div>
@@ -124,7 +122,7 @@ export function HeroSection() {
                                     </p>
                                     <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
                                         <div className="flex items-center gap-2">
-                                            <span className="bg-secondary inline-block h-1.5 w-1.5 animate-pulse rounded-full md:h-2 md:w-2"></span>
+                                            <span className="bg-secondary inline-block h-1.5 w-1.5 rounded-full md:h-2 md:w-2"></span>
                                             <span className="font-medium">{t.hero?.cards?.developer?.lands}</span>
                                         </div>
                                     </div>
