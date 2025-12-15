@@ -8,7 +8,7 @@ export function SeccionBeneficios() {
         {
             icon: TrendingUp,
             title: t.benefits?.landowners?.benefit1,
-            description: t.benefits?.landowners?.benefit1Desc,
+            description: t.benefits?.landowners?.benefit1Desc2,
             color: "primary",
         },
         {
@@ -29,7 +29,7 @@ export function SeccionBeneficios() {
         {
             icon: MapPin,
             title: t.benefits?.developers?.benefit1,
-            description: t.benefits?.developers?.benefit1Desc,
+            description: t.benefits?.developers?.benefit1Desc2,
             color: "secondary",
         },
         {

@@ -92,12 +92,12 @@ export function HeroSection() {
                                     <p className="text-muted-foreground relative z-10 mb-4 text-sm md:mb-5 md:text-base">
                                         {t.benefits?.landowners?.benefit1Desc}
                                     </p>
-                                    <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
+                                    {/* <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
                                         <div className="flex items-center gap-2">
                                             <span className="bg-primary inline-block h-1.5 w-1.5 rounded-full md:h-2 md:w-2"></span>
                                             <span className="font-medium">{t.hero?.cards?.landowner?.income}</span>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <Button className="bg-primary hover:bg-primary/90 relative z-10 w-full transition-colors group-hover:gap-3">
                                         <span className="text-sm md:text-base">{t.cta?.landowner}</span>
                                         <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
@@ -118,12 +118,12 @@ export function HeroSection() {
                                     <p className="text-muted-foreground relative z-10 mb-4 text-sm md:mb-5 md:text-base">
                                         {t.benefits?.developers?.benefit1Desc}
                                     </p>
-                                    <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
+                                    {/* <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
                                         <div className="flex items-center gap-2">
                                             <span className="bg-secondary inline-block h-1.5 w-1.5 rounded-full md:h-2 md:w-2"></span>
                                             <span className="font-medium">{t.hero?.cards?.developer?.lands}</span>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <Button className="bg-secondary hover:bg-secondary/90 relative z-10 w-full transition-colors group-hover:gap-3">
                                         <span className="text-sm md:text-base">{t.cta?.developer}</span>
                                         <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />

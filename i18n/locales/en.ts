@@ -291,20 +291,23 @@ export const en = {
         landowners: {
             title: "For Landowners",
             benefit1: "Passive Income",
-            benefit1Desc: "Generate consistent income by leasing your land for renewable projects",
+            benefit1Desc: "Generate income with your land for renewable projects",
+            benefit1Desc2: "Monetize your land by leasing or selling it for renewable energy projects",
             benefit2: "Sustainable Impact",
-            benefit2Desc: "Contribute to energy transition and environmental care",
+            benefit2Desc: "Be part of the energy transition by driving projects that care for the environment",
             benefit3: "Secure Process",
-            benefit3Desc: "KYC verification and legal contracts that protect your interests",
+            benefit3Desc: "We validate each project and guarantee transparent legal agreements",
         },
         developers: {
             title: "For Developers",
             benefit1: "Verified Land",
             benefit1Desc: "Access pre-evaluated land with accurate geospatial data",
+            benefit1Desc2: "We connect you with ideal land for your project",
             benefit2: "Save Time",
-            benefit2Desc: "Find ideal land in minutes with our matching algorithm",
-            benefit3: "Direct Connection",
-            benefit3Desc: "Communicate directly with landowners interested in your project",
+            benefit2Desc:
+                "Find ideal land in minutes with our matching algorithm or access a specialized prospecting service when no match is available",
+            benefit3: "Centralized Management",
+            benefit3Desc: "We handle the relationship with landowners so you as a developer can focus on project development",
         },
     },
     howItWorks: {
@@ -348,17 +351,17 @@ export const en = {
                 step2: {
                     step: "STEP 2",
                     title: "List your land",
-                    description: "Add information about your property: location, area, features.",
+                    description: "Add information about your property: location, area, features...",
                 },
                 step3: {
                     step: "STEP 3",
                     title: "Receive proposals",
-                    description: "Interested developers will contact you. Compare offers and choose the best option.",
+                    description: "Interested developers will contact you. Compare and choose the best option.",
                 },
                 step4: {
                     step: "STEP 4",
                     title: "Close the deal",
-                    description: "Sign the contract and start generating passive income for 20-25 years.",
+                    description: "Sign the contract and earn income by leasing or selling your land.",
                 },
             },
             developers: {
@@ -370,17 +373,18 @@ export const en = {
                 step2: {
                     step: "STEP 2",
                     title: "Define your project",
-                    description: "Specify energy type, capacity, preferred location and technical requirements.",
+                    description: "Specify technology type, capacity, preferred location and technical requirements.",
                 },
                 step3: {
                     step: "STEP 3",
-                    title: "Get matches",
-                    description: "Our algorithm will show lands compatible with your project. Analyze and compare options.",
+                    title: "Receive matches",
+                    description:
+                        "Our algorithm will show you lands compatible with your project, or access our personalized prospecting service when no match is available",
                 },
                 step4: {
                     step: "STEP 4",
-                    title: "Contact and negotiate",
-                    description: "Communicate directly with landowners and close agreements quickly and transparently.",
+                    title: "Analyze and negotiate",
+                    description: "Analyze the options Solterra offers you and close deals quickly and transparently.",
                 },
             },
         },
