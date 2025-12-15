@@ -10,7 +10,7 @@ export const es = {
     },
     hero: {
         title: "Conectamos terrenos con proyectos de energía renovable",
-        subtitle: "La plataforma que une propietarios de terrenos rurales con desarrolladores de proyectos solares y eólicos",
+        subtitle: "La plataforma que une propietarios de terrenos con desarrolladores de proyectos",
         ctaLandowner: "Soy Propietario",
         ctaDeveloper: "Soy Promotor",
         badge: "81% energía renovable para 2030",
@@ -290,20 +290,24 @@ export const es = {
         landowners: {
             title: "Para Propietarios",
             benefit1: "Ingresos Pasivos",
-            benefit1Desc: "Genera ingresos constantes arrendando tu terreno para proyectos renovables",
+            benefit1Desc: "Genera ingresos con tu terreno para proyectos renovables",
+            benefit1Desc2: "Obtén ingresos arrendando o vendiendo tu terreno a proyectos de energía renovable",
             benefit2: "Impacto Sostenible",
-            benefit2Desc: "Contribuye a la transición energética y al cuidado del medio ambiente",
+            benefit2Desc: "Forma parte de la transición energética impulsando proyectos que cuidan el medio ambiente",
             benefit3: "Proceso Seguro",
-            benefit3Desc: "Verificación KYC y contratos legales que protegen tus intereses",
+            benefit3Desc: "Validamos cada proyecto y garantizamos acuerdos legales transparentes",
         },
         developers: {
             title: "Para Promotores",
             benefit1: "Terrenos Verificados",
             benefit1Desc: "Accede a terrenos pre-evaluados con datos geoespaciales precisos",
+            benefit1Desc2: "Te conectamos con terrenos idóneos para tu proyecto",
             benefit2: "Ahorra Tiempo",
-            benefit2Desc: "Encuentra terrenos ideales en minutos con nuestro algoritmo de matching",
-            benefit3: "Conexión Directa",
-            benefit3Desc: "Comunícate directamente con propietarios interesados en tu proyecto",
+            benefit2Desc:
+                "Encuentra terrenos ideales en minutos con nuestro algoritmo de matching o accede a un servicio de prospección especializada cuando no exista un match disponible",
+            benefit3: "Gestión Centralizada",
+            benefit3Desc:
+                "Nos encargamos de la relación con los propietarios para que como promotor te centres en el desarrollo del proyecto",
         },
     },
     howItWorks: {
@@ -347,39 +351,40 @@ export const es = {
                 step2: {
                     step: "PASO 2",
                     title: "Lista tu terreno",
-                    description: "Añade información sobre tu propiedad: ubicación, superficie, características.",
+                    description: "Añade información sobre tu propiedad: ubicación, superficie, características...",
                 },
                 step3: {
                     step: "PASO 3",
                     title: "Recibe propuestas",
-                    description: "Los promotores interesados contactarán contigo. Compara ofertas y elige la mejor opción.",
+                    description: "Los promotores interesados contactarán contigo. Compara y elige la mejor opción.",
                 },
                 step4: {
                     step: "PASO 4",
                     title: "Cierra el acuerdo",
-                    description: "Firma el contrato y comienza a generar ingresos pasivos durante 20-25 años.",
+                    description: "Firma el contrato y consigue ingresos arrendando o vendiendo tu terreno.",
                 },
             },
             developers: {
                 step1: {
                     step: "PASO 1",
                     title: "Regístrate como promotor",
-                    description: "Crea tu perfil empresarial y accede a nuestra base de datos de terrenos disponibles.",
+                    description: "Crea tu perfil de empresa y accede a nuestra base de datos de terrenos disponibles.",
                 },
                 step2: {
                     step: "PASO 2",
                     title: "Define tu proyecto",
-                    description: "Especifica tipo de energía, capacidad, ubicación preferida y requisitos técnicos.",
+                    description: "Especifica tipo de tecnología, capacidad, ubicación preferida y requisitos técnicos.",
                 },
                 step3: {
                     step: "PASO 3",
                     title: "Recibe matches",
-                    description: "Nuestro algoritmo te mostrará terrenos compatibles con tu proyecto. Analiza y compara opciones.",
+                    description:
+                        "Nuestro algoritmo te mostrará terrenos compatibles con tu proyecto, o accede a nuestro servicio de prospección personalizada cuando no exista un match disponible",
                 },
                 step4: {
                     step: "PASO 4",
-                    title: "Contacta y negocia",
-                    description: "Comunícate directamente con propietarios y cierra acuerdos de forma ágil y transparente.",
+                    title: "Analiza y negocia",
+                    description: "Analiza las opciones que Solterra te ofrece y cierra acuerdos de forma ágil y transparente.",
                 },
             },
         },
