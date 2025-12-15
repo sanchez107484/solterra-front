@@ -3,7 +3,7 @@
 import { BadgePill } from "@/components/ui/badge-pill"
 import { Card } from "@/components/ui/card"
 import { useTranslations } from "@/i18n/i18nContext"
-import { Calendar, Euro, MapPin, TrendingUp } from "lucide-react"
+import { Briefcase, Recycle, TrendingUp } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 interface Stat {
@@ -91,29 +91,21 @@ export function StatsSection() {
             description: t.stats?.cards?.renewable?.description,
         },
         {
-            icon: MapPin,
-            value: 500,
-            suffix: "+",
+            icon: Briefcase,
+            prefix: "+",
+            value: 20,
+            suffix: t.stats?.cards?.duration?.suffix,
             label: t.stats?.cards?.lands?.label,
             color: "secondary",
             description: t.stats?.cards?.lands?.description,
         },
         {
-            icon: Euro,
-            value: 2500,
+            icon: Recycle,
+            value: Infinity,
             suffix: "",
-            prefix: "€",
             label: t.stats?.cards?.income?.label,
             color: "primary",
             description: t.stats?.cards?.income?.description,
-        },
-        {
-            icon: Calendar,
-            value: 25,
-            suffix: t.stats?.cards?.duration?.suffix,
-            label: t.stats?.cards?.duration?.label,
-            color: "secondary",
-            description: t.stats?.cards?.duration?.description,
         },
     ]
 
@@ -139,7 +131,7 @@ export function StatsSection() {
                     <p className="text-muted-foreground mx-auto max-w-2xl text-xl">{t.stats?.sourceNote}</p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-3">
                     {stats.map((stat, index) => {
                         const Icon = stat.icon
                         return (
@@ -177,11 +169,6 @@ export function StatsSection() {
                             </Card>
                         )
                     })}
-                </div>
-
-                {/* Additional info */}
-                <div className="mt-16 text-center">
-                    <p className="text-muted-foreground mx-auto max-w-3xl">{t.stats?.sourceNote}</p>
                 </div>
             </div>
         </section>

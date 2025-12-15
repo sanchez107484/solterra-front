@@ -533,23 +533,23 @@ export const es = {
     },
     stats: {
         impactLabel: "Impacto Real",
-        title: "Los números que",
-        titleHighlight: "respaldan",
-        titleEnd: "nuestra misión",
-        sourceNote:
-            "Datos basados en el Plan Nacional Integrado de Energía y Clima (PNIEC 2023-2030) y la experiencia de más de 200 proyectos completados",
+        title: "El",
+        titleHighlight: "propósito",
+        titleEnd: "que nos mueve",
+        sourceNote: "Impulsamos la transición energética conectando suelo, inversión y desarrollo sostenible",
         cards: {
             renewable: {
-                label: "Energía Renovable 2030",
-                description: "Objetivo del PNIEC para generación eléctrica",
+                label: "Generación de Energía Renovable",
+                description: "Datos basados en el Plan Nacional Integrado de Energía y Clima (PNIEC 2023-2030)",
             },
             lands: {
-                label: "Terrenos Disponibles",
-                description: "Hectáreas verificadas en toda España",
+                label: "Experiencia en búsqueda y gestión de terrenos",
+                description: "Gestión integral del suelo, desde la identificación hasta la ejecución del proyecto",
             },
             income: {
-                label: "Ingreso por hectárea/año",
-                description: "Renta media en proyectos solares",
+                label: "Desarrollo Sostenible",
+                description:
+                    "Impulsamos proyectos de energía renovable que respetan el entorno, generan valor local y promueven un desarrollo responsable a largo plazo",
             },
             duration: {
                 label: "Duración de contratos",

@@ -491,23 +491,23 @@ export const en = {
     },
     stats: {
         impactLabel: "Real Impact",
-        title: "The numbers that",
-        titleHighlight: "support",
-        titleEnd: "our mission",
-        sourceNote:
-            "Data based on the National Integrated Energy and Climate Plan (PNIEC 2023-2030) and the experience of over 200 completed projects",
+        title: "The",
+        titleHighlight: "purpose",
+        titleEnd: "that drives us",
+        sourceNote: "We drive the energy transition by connecting land, investment, and sustainable development",
         cards: {
             renewable: {
-                label: "Renewable Energy 2030",
-                description: "PNIEC target for electricity generation",
+                label: "Renewable Energy Generation",
+                description: "Data based on the National Integrated Energy and Climate Plan (PNIEC 2023-2030)",
             },
             lands: {
-                label: "Available Lands",
-                description: "Verified hectares throughout Spain",
+                label: "Experience in land search and management",
+                description: "Comprehensive land management, from identification to project execution",
             },
             income: {
-                label: "Income per hectare/year",
-                description: "Average rent in solar projects",
+                label: "Sustainable Development",
+                description:
+                    "We drive renewable energy projects that respect the environment, generate local value, and promote responsible long-term development",
             },
             duration: {
                 label: "Contract duration",
