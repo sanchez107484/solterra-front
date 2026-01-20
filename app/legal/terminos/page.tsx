@@ -370,8 +370,8 @@ export default function TerminosPage() {
                     <ul className="space-y-3 text-sm">
                         <li className="flex items-start gap-2">
                             <span className="min-w-[120px] font-semibold text-gray-900 dark:text-white">📧 Email:</span>
-                            <a href="mailto:legal@solterraadvisory.com" className="text-primary hover:underline">
-                                legal@solterraadvisory.com
+                            <a href="mailto:legal@solterradvisory.com" className="text-primary hover:underline">
+                                legal@solterradvisory.com
                             </a>
                         </li>
                         <li className="flex items-start gap-2">

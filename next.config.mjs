@@ -18,9 +18,6 @@ const nextConfig = {
         // optimizeCss: true,
         // Inline font data para reducir requests
         optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
-        ...(process.env.NODE_ENV === "development" && {
-            allowedDevOrigins: ["http://192.168.100.162:3000", "http://192.168.100.162"],
-        }),
     },
 
     // Optimización de imágenes habilitada en producción

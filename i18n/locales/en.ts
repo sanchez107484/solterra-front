@@ -909,7 +909,7 @@ export const en = {
         info: {
             title: "Other contact methods",
             emailTitle: "Email",
-            email: "info@solterraadvisory.com",
+            email: "info@solterradvisory.com",
             emailNote: "Response within 24 hours",
             scheduleTitle: "Office hours",
             schedule: {

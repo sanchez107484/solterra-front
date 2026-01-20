@@ -28,7 +28,7 @@ export default function AvisoLegalPage() {
                         </div>
                         <div>
                             <dt className="font-semibold text-gray-900 dark:text-white">Email de contacto:</dt>
-                            <dd className="text-muted-foreground">info@solterraadvisory.com</dd>
+                            <dd className="text-muted-foreground">info@solterradvisory.com</dd>
                         </div>
                         <div>
                             <dt className="font-semibold text-gray-900 dark:text-white">Registro Mercantil:</dt>
@@ -183,14 +183,14 @@ export default function AvisoLegalPage() {
                 <ul className="list-disc space-y-2 pl-6">
                     <li>
                         Email:{" "}
-                        <a href="mailto:info@solterraadvisory.com" className="text-primary hover:underline">
-                            info@solterraadvisory.com
+                        <a href="mailto:info@solterradvisory.com" className="text-primary hover:underline">
+                            info@solterradvisory.com
                         </a>
                     </li>
                     <li>
                         Formulario de contacto:{" "}
                         <a href="/contacto" className="text-primary hover:underline">
-                            www.solterraadvisory.com/contacto
+                            www.solterradvisory.com/contacto
                         </a>
                     </li>
                 </ul>

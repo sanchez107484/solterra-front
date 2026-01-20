@@ -913,7 +913,7 @@ export const es = {
         info: {
             title: "Otras formas de contacto",
             emailTitle: "Email",
-            email: "info@solterraadvisory.com",
+            email: "info@solterradvisory.com",
             emailNote: "Respuesta en menos de 24 horas",
             scheduleTitle: "Horario de atención",
             schedule: {

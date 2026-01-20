@@ -7,7 +7,7 @@ export default function ContactPageSEO() {
             <title>Contacto Solterra Advisory | Plataforma de Energía Renovable Solar y Eólica en España</title>
             <meta
                 name="description"
-                content="Contacta con Solterra Advisory, plataforma líder para arrendamiento de terrenos solares y eólicos. Conectamos propietarios con promotores de energía renovable en toda España. Respuesta garantizada en 24 horas. Email: info@solterraadvisory.com"
+                content="Contacta con Solterra Advisory, plataforma líder para arrendamiento de terrenos solares y eólicos. Conectamos propietarios con promotores de energía renovable en toda España. Respuesta garantizada en 24 horas. Email: info@solterradvisory.com"
             />
             <meta
                 name="keywords"
@@ -16,7 +16,7 @@ export default function ContactPageSEO() {
 
             {/* Open Graph / Facebook */}
             <meta property="og:type" content="website" />
-            <meta property="og:url" content="https://solterraadvisory.com/contacto" />
+            <meta property="og:url" content="https://solterradvisory.com/contacto" />
             <meta property="og:title" content="Contacto Solterra Advisory - Plataforma de Energía Renovable" />
             <meta
                 property="og:description"
@@ -27,7 +27,7 @@ export default function ContactPageSEO() {
 
             {/* Twitter */}
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:url" content="https://solterraadvisory.com/contacto" />
+            <meta name="twitter:url" content="https://solterradvisory.com/contacto" />
             <meta name="twitter:title" content="Contacto Solterra Advisory - Energía Renovable" />
             <meta
                 name="twitter:description"
@@ -39,7 +39,7 @@ export default function ContactPageSEO() {
             <meta name="author" content="Solterra Advisory" />
             <meta name="geo.region" content="ES" />
             <meta name="geo.placename" content="España" />
-            <link rel="canonical" href="https://solterraadvisory.com/contacto" />
+            <link rel="canonical" href="https://solterradvisory.com/contacto" />
 
             {/* Structured Data - Organization Contact Point */}
             <script
@@ -48,21 +48,21 @@ export default function ContactPageSEO() {
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "ContactPage",
-                        "@id": "https://solterraadvisory.com/contacto",
-                        url: "https://solterraadvisory.com/contacto",
+                        "@id": "https://solterradvisory.com/contacto",
+                        url: "https://solterradvisory.com/contacto",
                         name: "Contacto Solterra Advisory",
                         description:
                             "Página de contacto de Solterra Advisory, plataforma líder para conectar propietarios de terrenos con promotores de energía renovable solar y eólica en España.",
                         mainEntity: {
                             "@type": "Organization",
                             name: "Solterra Advisory",
-                            url: "https://solterraadvisory.com",
-                            logo: "https://solterraadvisory.com/logo.png",
+                            url: "https://solterradvisory.com",
+                            logo: "https://solterradvisory.com/solterra-logo.png",
                             contactPoint: [
                                 {
                                     "@type": "ContactPoint",
                                     telephone: "+34-900-000-000",
-                                    email: "info@solterraadvisory.com",
+                                    email: "info@solterradvisory.com",
                                     contactType: "customer service",
                                     areaServed: "ES",
                                     availableLanguage: ["Spanish", "English"],
@@ -76,12 +76,12 @@ export default function ContactPageSEO() {
                                 {
                                     "@type": "ContactPoint",
                                     contactType: "sales",
-                                    email: "info@solterraadvisory.com",
+                                    email: "info@solterradvisory.com",
                                     areaServed: "ES",
                                     availableLanguage: ["Spanish", "English"],
                                 },
                             ],
-                            sameAs: ["https://linkedin.com/company/solterra-advisory", "https://twitter.com/solterraadvisory"],
+                            sameAs: ["https://linkedin.com/company/solterra-advisory"],
                             areaServed: {
                                 "@type": "Country",
                                 name: "España",
@@ -103,13 +103,13 @@ export default function ContactPageSEO() {
                                 "@type": "ListItem",
                                 position: 1,
                                 name: "Inicio",
-                                item: "https://solterraadvisory.com",
+                                item: "https://solterradvisory.com",
                             },
                             {
                                 "@type": "ListItem",
                                 position: 2,
                                 name: "Contacto",
-                                item: "https://solterraadvisory.com/contacto",
+                                item: "https://solterradvisory.com/contacto",
                             },
                         ],
                     }),
