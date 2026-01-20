@@ -38,11 +38,11 @@ export default function PrivacidadPage() {
                         </div>
                         <div>
                             <dt className="font-semibold text-gray-900 dark:text-white">Email:</dt>
-                            <dd className="text-muted-foreground">info@solterraadvisory.com</dd>
+                            <dd className="text-muted-foreground">info@solterradvisory.com</dd>
                         </div>
                         <div>
                             <dt className="font-semibold text-gray-900 dark:text-white">Email del Delegado de Protección de Datos:</dt>
-                            <dd className="text-muted-foreground">dpo@solterraadvisory.com</dd>
+                            <dd className="text-muted-foreground">dpo@solterradvisory.com</dd>
                         </div>
                     </dl>
                 </div>
@@ -259,7 +259,7 @@ export default function PrivacidadPage() {
                     <p className="mb-2 text-sm">Puede ejercer sus derechos en cualquier momento enviando un correo electrónico a:</p>
                     <ul className="list-disc space-y-1 pl-6 text-sm">
                         <li>
-                            <strong>Email:</strong> dpo@solterraadvisory.com
+                            <strong>Email:</strong> dpo@solterradvisory.com
                         </li>
                         <li>
                             <strong>Formulario:</strong> Disponible en su panel de usuario (Configuración → Privacidad)
@@ -348,17 +348,17 @@ export default function PrivacidadPage() {
                     <dl className="grid gap-3">
                         <div>
                             <dt className="font-semibold text-gray-900 dark:text-white">Responsable de Protección de Datos:</dt>
-                            <dd className="text-muted-foreground">dpo@solterraadvisory.com</dd>
+                            <dd className="text-muted-foreground">dpo@solterradvisory.com</dd>
                         </div>
                         <div>
                             <dt className="font-semibold text-gray-900 dark:text-white">Atención al cliente:</dt>
-                            <dd className="text-muted-foreground">info@solterraadvisory.com</dd>
+                            <dd className="text-muted-foreground">info@solterradvisory.com</dd>
                         </div>
                         <div>
                             <dt className="font-semibold text-gray-900 dark:text-white">Formulario de contacto:</dt>
                             <dd>
                                 <a href="/contacto" className="text-primary hover:underline">
-                                    www.solterraadvisory.com/contacto
+                                    www.solterradvisory.com/contacto
                                 </a>
                             </dd>
                         </div>

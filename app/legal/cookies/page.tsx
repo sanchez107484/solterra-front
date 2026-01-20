@@ -364,20 +364,20 @@ export default function CookiesPage() {
                 <ul className="list-disc space-y-2 pl-6">
                     <li>
                         Email:{" "}
-                        <a href="mailto:info@solterraadvisory.com" className="text-primary hover:underline">
-                            info@solterraadvisory.com
+                        <a href="mailto:info@solterradvisory.com" className="text-primary hover:underline">
+                            info@solterradvisory.com
                         </a>
                     </li>
                     <li>
                         Delegado de Protección de Datos:{" "}
-                        <a href="mailto:dpo@solterraadvisory.com" className="text-primary hover:underline">
-                            dpo@solterraadvisory.com
+                        <a href="mailto:dpo@solterradvisory.com" className="text-primary hover:underline">
+                            dpo@solterradvisory.com
                         </a>
                     </li>
                     <li>
                         Formulario de contacto:{" "}
                         <a href="/contacto" className="text-primary hover:underline">
-                            www.solterraadvisory.com/contacto
+                            www.solterradvisory.com/contacto
                         </a>
                     </li>
                 </ul>

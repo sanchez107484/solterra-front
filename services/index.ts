@@ -3,6 +3,7 @@ import type { ApiError } from "@/types/api.types"
 import { proyectosService } from "./proyectos.service"
 import { terrenosService } from "./terrenos.service"
 import { usuariosService } from "./usuarios.service"
+import { contactService } from "./contact.service"
 
 /**
  * Función helper que envuelve llamadas a servicios con manejo de errores automático
@@ -98,5 +99,12 @@ export const terrenosServiceWithHandling = {
     duplicate: withSuccessMessage(terrenosService.duplicate, "Terreno duplicado exitosamente", "Error al duplicar el terreno"),
 }
 
+/**
+ * Servicios de contacto con manejo de errores automático
+ */
+export const contactServiceWithHandling = {
+    sendMessage: withSuccessMessage(contactService.sendMessage, "Mensaje enviado exitosamente", "Error al enviar el mensaje"),
+}
+
 // Exportar también los servicios originales para casos donde no se quiera el manejo automático
-export { proyectosService, terrenosService, usuariosService }
+export { proyectosService, terrenosService, usuariosService, contactService }

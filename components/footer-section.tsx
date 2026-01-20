@@ -26,7 +26,7 @@ export function FooterSection() {
                         <p className="text-muted-foreground mb-4 text-sm leading-relaxed md:mb-6">{t.footer?.description}</p>
                         {/* LinkedIn */}
                         <a
-                            href="https://linkedin.com"
+                            href="https://linkedin.com/company/solterra-advisory"
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Síguenos en LinkedIn"

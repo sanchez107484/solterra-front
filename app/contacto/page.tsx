@@ -2,6 +2,9 @@
 
 import type React from "react"
 import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 
 import StandardLayout from "@/components/layouts/StandardLayout"
 import ContactPageSEO from "@/components/seo/ContactPageSEO"
@@ -11,54 +14,42 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
 import { useTranslations } from "@/i18n/i18nContext"
+import { contactServiceWithHandling } from "@/services"
 import { Clock, Mail, Send } from "lucide-react"
+
+const contactSchema = z.object({
+    nombre: z.string().min(2, "Nombre debe tener al menos 2 caracteres"),
+    email: z.string().email("Email inválido"),
+    telefono: z.string().optional(),
+    tipo: z.enum(["propietario", "promotor", "general", "soporte"], {
+        errorMap: () => ({ message: "Selecciona un tipo de consulta" }),
+    }),
+    mensaje: z.string().min(10, "Mensaje debe tener al menos 10 caracteres"),
+})
+
+type ContactFormData = z.infer<typeof contactSchema>
 
 export default function Contacto() {
     const { t } = useTranslations()
-    const { toast } = useToast()
     const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm<ContactFormData>({
+        resolver: zodResolver(contactSchema),
+    })
+
+    const onSubmit = async (data: ContactFormData) => {
         setIsSubmitting(true)
-
-        const formData = new FormData(e.currentTarget)
-        const data = {
-            nombre: formData.get("nombre"),
-            email: formData.get("email"),
-            telefono: formData.get("telefono"),
-            tipo: formData.get("tipo"),
-            mensaje: formData.get("mensaje"),
-        }
-
         try {
-            const response = await fetch("/api/contact", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            })
-
-            if (!response.ok) {
-                throw new Error("Error al enviar el mensaje")
-            }
-
-            toast({
-                title: t?.contact?.form?.success || "¡Mensaje enviado!",
-                description: t?.contact?.form?.successDesc || "Nos pondremos en contacto contigo pronto.",
-            })
-
-            // Reset form
-            e.currentTarget.reset()
+            await contactServiceWithHandling.sendMessage(data)
+            reset()
         } catch (error) {
-            toast({
-                title: t?.contact?.form?.error || "Error al enviar",
-                description: t?.contact?.form?.errorDesc || "Por favor, intenta de nuevo.",
-                variant: "destructive",
-            })
+            // Error ya manejado por el servicio
         } finally {
             setIsSubmitting(false)
         }
@@ -87,31 +78,31 @@ export default function Contacto() {
                             <h2 className="mb-6 text-3xl font-bold">{t?.contact?.form?.title || "Envíanos un mensaje"}</h2>
 
                             <Card className="border-2 bg-white p-8 shadow-lg">
-                                <form onSubmit={handleSubmit} className="space-y-6">
+                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                                     <div className="grid gap-6 md:grid-cols-2">
                                         <div className="space-y-2">
                                             <Label htmlFor="nombre">{t?.contact?.form?.nameLabel || "Nombre completo"}</Label>
                                             <Input
                                                 id="nombre"
-                                                name="nombre"
+                                                {...register("nombre")}
                                                 placeholder={t?.contact?.form?.namePlaceholder || "Juan Pérez"}
                                                 className="h-12"
-                                                required
                                                 disabled={isSubmitting}
                                             />
+                                            {errors.nombre && <p className="text-sm text-red-600">{errors.nombre.message}</p>}
                                         </div>
 
                                         <div className="space-y-2">
                                             <Label htmlFor="email">{t?.contact?.form?.emailLabel || "Email"}</Label>
                                             <Input
                                                 id="email"
-                                                name="email"
                                                 type="email"
+                                                {...register("email")}
                                                 placeholder={t?.contact?.form?.emailPlaceholder || "tu@email.com"}
                                                 className="h-12"
-                                                required
                                                 disabled={isSubmitting}
                                             />
+                                            {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
                                         </div>
                                     </div>
 
@@ -120,21 +111,21 @@ export default function Contacto() {
                                             <Label htmlFor="telefono">{t?.contact?.form?.phoneLabel || "Teléfono"}</Label>
                                             <Input
                                                 id="telefono"
-                                                name="telefono"
                                                 type="tel"
+                                                {...register("telefono")}
                                                 placeholder={t?.contact?.form?.phonePlaceholder || "+34 600 000 000"}
                                                 className="h-12"
                                                 disabled={isSubmitting}
                                             />
+                                            {errors.telefono && <p className="text-sm text-red-600">{errors.telefono.message}</p>}
                                         </div>
 
                                         <div className="space-y-2">
                                             <Label htmlFor="tipo">{t?.contact?.form?.typeLabel || "Tipo de consulta"}</Label>
                                             <select
                                                 id="tipo"
-                                                name="tipo"
+                                                {...register("tipo")}
                                                 className="border-input bg-background ring-offset-background focus-visible:ring-ring h-12 w-full rounded-md border px-3 text-base focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                                                required
                                                 disabled={isSubmitting}
                                             >
                                                 <option value="">{t?.contact?.form?.typeOptions?.empty || "Selecciona una opción"}</option>
@@ -151,6 +142,7 @@ export default function Contacto() {
                                                     {t?.contact?.form?.typeOptions?.support || "Soporte técnico"}
                                                 </option>
                                             </select>
+                                            {errors.tipo && <p className="text-sm text-red-600">{errors.tipo.message}</p>}
                                         </div>
                                     </div>
 
@@ -158,12 +150,12 @@ export default function Contacto() {
                                         <Label htmlFor="mensaje">{t?.contact?.form?.messageLabel || "Mensaje"}</Label>
                                         <Textarea
                                             id="mensaje"
-                                            name="mensaje"
+                                            {...register("mensaje")}
                                             placeholder={t?.contact?.form?.messagePlaceholder || "Cuéntanos en qué podemos ayudarte..."}
                                             className="min-h-40 resize-none"
-                                            required
                                             disabled={isSubmitting}
                                         />
+                                        {errors.mensaje && <p className="text-sm text-red-600">{errors.mensaje.message}</p>}
                                     </div>
 
                                     <Button
@@ -193,10 +185,10 @@ export default function Contacto() {
                                     <div className="flex-1">
                                         <h3 className="mb-1 text-xl font-bold">{t?.contact?.info?.emailTitle || "Email"}</h3>
                                         <a
-                                            href={`mailto:${t?.contact?.info?.email || "info@solterraadvisory.com"}`}
+                                            href={`mailto:${t?.contact?.info?.email || "info@solterradvisory.com"}`}
                                             className="text-primary mb-2 block text-lg font-semibold transition-colors hover:underline"
                                         >
-                                            {t?.contact?.info?.email || "info@solterraadvisory.com"}
+                                            {t?.contact?.info?.email || "info@solterradvisory.com"}
                                         </a>
                                         <p className="text-muted-foreground flex items-center gap-2 text-sm">
                                             <Clock className="h-4 w-4" />
@@ -315,8 +307,8 @@ export default function Contacto() {
                         <div className="mt-6 text-center">
                             <p className="text-muted-foreground text-sm">
                                 <strong className="text-foreground">Email:</strong>{" "}
-                                <a href="mailto:info@solterraadvisory.com" className="text-primary hover:underline">
-                                    info@solterraadvisory.com
+                                <a href="mailto:info@solterradvisory.com" className="text-primary hover:underline">
+                                    info@solterradvisory.com
                                 </a>{" "}
                                 | <strong className="text-foreground">Horario:</strong> Lunes a Viernes 9:00-18:00, Sábados 10:00-14:00 |{" "}
                                 <strong className="text-foreground">Tiempo de respuesta:</strong> Menos de 24 horas

@@ -49,8 +49,8 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Descomentar el bloque de código marcado con "TODO"
 await resend.emails.send({
-    from: "Solterra Advisory <contacto@solterraadvisory.com>",
-    to: "info@solterraadvisory.com",
+    from: "Solterra Advisory <contacto@solterradvisory.com>",
+    to: "info@solterradvisory.com",
     replyTo: email,
     subject: `Nuevo mensaje de contacto: ${tipo}`,
     html: `...`, // Ya está en el código
@@ -59,7 +59,7 @@ await resend.emails.send({
 
 5. **Configurar dominio (producción):**
 
-- En Resend dashboard, agregar dominio `solterraadvisory.com`
+- En Resend dashboard, agregar dominio `solterradvisory.com`
 - Configurar registros DNS (MX, TXT, CNAME)
 - Verificar dominio
 
@@ -86,8 +86,8 @@ import sgMail from "@sendgrid/mail"
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!)
 
 await sgMail.send({
-    to: "info@solterraadvisory.com",
-    from: "contacto@solterraadvisory.com",
+    to: "info@solterradvisory.com",
+    from: "contacto@solterradvisory.com",
     replyTo: email,
     subject: `Nuevo mensaje: ${tipo}`,
     html: `...`,
@@ -137,7 +137,7 @@ const transporter = nodemailer.createTransport({
 
 await transporter.sendMail({
     from: process.env.GMAIL_USER,
-    to: "info@solterraadvisory.com",
+    to: "info@solterradvisory.com",
     replyTo: email,
     subject: `Nuevo mensaje: ${tipo}`,
     html: `...`,
