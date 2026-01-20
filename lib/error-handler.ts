@@ -56,7 +56,9 @@ export class ErrorHandlerService {
      */
     static handleValidationError(error: ApiError): void {
         if (error.details && Array.isArray(error.details)) {
-            const validationMessages = error.details.map((detail: any) => detail.message || detail).join(", ")
+            const validationMessages = error.details
+                .map((detail: string | { message: string }) => (typeof detail === "string" ? detail : detail.message || "Error"))
+                .join(", ")
 
             toast({
                 title: "Error de validación",
@@ -124,7 +126,7 @@ export const useErrorHandler = () => {
             // Error genérico
             toast({
                 title: "Error",
-                description: customMessage || error?.message || "Ha ocurrido un error inesperado",
+                description: customMessage || (error as any)?.message || "Ha ocurrido un error inesperado",
                 variant: "destructive",
             })
         }
