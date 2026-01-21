@@ -1,7 +1,10 @@
 export const es = {
     idioma: "Español",
     cambiarIdioma: "Cambiar idioma",
-    copyright: "© 2025 Solterra Advisory. Todos los derechos reservados.",
+    copyright: "© 2026 Solterra Advisory. Todos los derechos reservados.",
+    promotorUser: "Promotor",
+    propietarioUser: "Propietario",
+    adminUser: "Administrador",
     nav: {
         home: "Inicio",
         howItWorks: "Cómo funciona",

@@ -240,7 +240,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                         </Tooltip>
 
                         {/* Configuración */}
-                        <Tooltip delayDuration={300}>
+                        {/* <Tooltip delayDuration={300}>
                             <TooltipTrigger asChild>
                                 <Link href="/dashboard/configuracion">
                                     <Button
@@ -270,7 +270,7 @@ export function DashboardSidebar({ userType }: DashboardSidebarProps) {
                                     <p>{t?.sidebar?.navigation?.configuration || "Configuración"}</p>
                                 </TooltipContent>
                             )}
-                        </Tooltip>
+                        </Tooltip> */}
 
                         <Separator className="my-2" />
 

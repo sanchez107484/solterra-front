@@ -132,17 +132,17 @@ export function UserMenu({ userType }: UserMenuProps) {
                 {/* Volver al Home */}
                 <DropdownMenuItem onClick={() => router.push("/")} className="cursor-pointer">
                     <Home className="mr-2 h-4 w-4" />
-                    <span>Volver al inicio</span>
+                    <span>{t?.sidebar?.navigation?.backToHome || "Volver al inicio"}</span>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => router.push("/perfil")} className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     <span>{t?.common?.myProfile}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push("/configuracion")} className="cursor-pointer">
+                {/* <DropdownMenuItem onClick={() => router.push("/configuracion")} className="cursor-pointer">
                     <Settings className="mr-2 h-4 w-4" />
                     <span>{t?.common?.settings}</span>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
                 <DropdownMenuSeparator />
 
@@ -150,7 +150,7 @@ export function UserMenu({ userType }: UserMenuProps) {
                 <div className="px-2 py-1.5">
                     <p className="text-muted-foreground mb-2 flex items-center gap-2 text-xs font-medium">
                         <Globe className="h-3 w-3" />
-                        Idioma
+                        {t?.sidebar?.navigation?.language || "Idioma"}
                     </p>
                     <div className="flex gap-2">
                         <Button

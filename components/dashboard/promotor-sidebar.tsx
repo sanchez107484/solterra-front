@@ -3,6 +3,7 @@
 import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { useTranslations } from "@/i18n/i18nContext"
 import { cn } from "@/lib/utils"
 import { Briefcase, LayoutDashboard, LogOut, MapPin, Settings, User } from "lucide-react"
 import Link from "next/link"
@@ -10,6 +11,7 @@ import { usePathname } from "next/navigation"
 
 export function PromotorSidebar() {
     const pathname = usePathname()
+    const { t } = useTranslations()
 
     const navItems = [
         { href: "/dashboard/promotor", label: "Dashboard", icon: LayoutDashboard },
@@ -25,8 +27,8 @@ export function PromotorSidebar() {
                 <div className="flex h-16 items-center gap-3 border-b px-6">
                     <Logo />
                     <div>
-                        <span className="font-bold">Solterra</span>
-                        <p className="text-muted-foreground text-xs">Promotor</p>
+                        <span className="font-bold">Solterra Advisory</span>
+                        <p className="text-muted-foreground text-xs">{t?.promotorUser || "Promotor"}</p>
                     </div>
                 </div>
 
@@ -55,20 +57,20 @@ export function PromotorSidebar() {
                     <Link href="/perfil">
                         <Button variant="ghost" className="w-full justify-start gap-3">
                             <User className="h-4 w-4" />
-                            Mi Perfil
+                            {t?.sidebar?.navigation?.myProfile || "Mi Perfil"}
                         </Button>
                     </Link>
-                    <Link href="/dashboard/configuracion">
+                    {/* <Link href="/dashboard/configuracion">
                         <Button variant="ghost" className="w-full justify-start gap-3">
                             <Settings className="h-4 w-4" />
                             Configuración
                         </Button>
-                    </Link>
+                    </Link> */}
                     <Separator className="my-2" />
                     <Link href="/">
                         <Button variant="ghost" className="text-destructive hover:text-destructive w-full justify-start gap-3">
                             <LogOut className="h-4 w-4" />
-                            Cerrar Sesión
+                            {t?.common?.logout}
                         </Button>
                     </Link>
                 </div>

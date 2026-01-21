@@ -25,13 +25,13 @@ export function SeccionCTA() {
                         <p className="text-muted-foreground mb-10 text-xl md:text-2xl">{t.cta?.subtitle}</p>
 
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <Link href="/login/propietario">
+                            <Link href="/registro/propietario">
                                 <Button size="lg" className="group bg-primary hover:bg-primary/90 w-full sm:w-auto">
                                     {t.cta?.landowner}
                                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                                 </Button>
                             </Link>
-                            <Link href="/login/promotor">
+                            <Link href="/registro/promotor">
                                 <Button size="lg" className="group bg-secondary hover:bg-secondary/90 w-full sm:w-auto">
                                     {t.cta?.developer}
                                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />

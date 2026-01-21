@@ -23,7 +23,7 @@ export function HeroSection() {
     }
 
     return (
-        <section className="relative flex min-h-screen items-center justify-center overflow-hidden py-8 md:py-12">
+        <section className="relative flex min-h-screen items-center justify-center overflow-hidden py-4 md:py-8 lg:py-12">
             {/* Animated background gradient */}
             <div className="from-primary/10 via-secondary/5 to-accent/10 absolute inset-0 bg-gradient-to-br" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(34,197,94,0.15),transparent_50%)]" />
@@ -47,10 +47,10 @@ export function HeroSection() {
                 <div className="mx-auto max-w-6xl">
                     {/* Logo and Brand - más compacto */}
                     <div
-                        className={`mb-4 flex flex-col items-center justify-center md:mb-6 ${isVisible ? "opacity-100" : "opacity-0"}`}
+                        className={`mb-1 flex -translate-y-8 transform flex-col items-center justify-center md:mb-2 md:-translate-y-12 ${isVisible ? "opacity-100" : "opacity-0"}`}
                         style={{ transition: "opacity 0.3s ease-in" }}
                     >
-                        <div className="relative" style={{ width: "400px", height: "400px", maxWidth: "min(400px, 75vw)" }}>
+                        <div className="relative" style={{ width: "400px", height: "300px", maxWidth: "min(400px, 75vw)" }}>
                             <Image
                                 src="/solterra-logo-grande.png"
                                 alt="Solterra Advisory - Plataforma líder de conexión entre terrenos rurales y proyectos de energía renovable solar y eólica en España"
@@ -60,7 +60,7 @@ export function HeroSection() {
                                 priority
                                 fetchPriority="high"
                                 sizes="(max-width: 768px) 300px, 400px"
-                                style={{ width: "100%", height: "auto" }}
+                                style={{ width: "100%", height: "100%", objectFit: "contain" }}
                             />
                         </div>
                     </div>
@@ -69,7 +69,7 @@ export function HeroSection() {
                         className={`text-center ${isVisible ? "opacity-100" : "opacity-0"}`}
                         style={{ transition: "opacity 0.5s ease-in 0.2s" }}
                     >
-                        <h1 className="text-foreground mb-3 text-3xl font-bold tracking-tight text-balance md:mb-4 md:text-4xl lg:text-5xl">
+                        <h1 className="text-foreground -mt-12 mb-3 text-3xl font-bold tracking-tight text-balance md:-mt-12 md:mb-4 md:text-4xl lg:text-5xl">
                             {t.hero?.title}
                         </h1>
 
@@ -80,7 +80,7 @@ export function HeroSection() {
                         {/* CTA Cards - más compactas */}
                         <div className="mx-auto mb-6 grid max-w-4xl gap-4 md:mb-8 md:grid-cols-2 md:gap-5">
                             {/* Propietario Card */}
-                            <Link href="/login/propietario" className="group">
+                            <Link href="/registro/propietario" className="group">
                                 <div className="border-primary/20 from-primary/10 to-primary/5 hover:border-primary relative h-full overflow-hidden rounded-xl border-2 bg-gradient-to-br p-6 shadow-lg transition-all duration-300 hover:shadow-xl md:rounded-2xl md:p-7">
                                     <div className="bg-primary/20 absolute top-3 right-3 rounded-full p-2.5 md:top-4 md:right-4 md:p-3">
                                         <Zap className="text-primary h-5 w-5 md:h-6 md:w-6" />
@@ -92,12 +92,7 @@ export function HeroSection() {
                                     <p className="text-muted-foreground relative z-10 mb-4 text-sm md:mb-5 md:text-base">
                                         {t.benefits?.landowners?.benefit1Desc}
                                     </p>
-                                    {/* <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
-                                        <div className="flex items-center gap-2">
-                                            <span className="bg-primary inline-block h-1.5 w-1.5 rounded-full md:h-2 md:w-2"></span>
-                                            <span className="font-medium">{t.hero?.cards?.landowner?.income}</span>
-                                        </div>
-                                    </div> */}
+
                                     <Button className="bg-primary hover:bg-primary/90 relative z-10 w-full transition-colors group-hover:gap-3">
                                         <span className="text-sm md:text-base">{t.cta?.landowner}</span>
                                         <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
@@ -106,7 +101,7 @@ export function HeroSection() {
                             </Link>
 
                             {/* Promotor Card */}
-                            <Link href="/login/promotor" className="group">
+                            <Link href="/registro/promotor" className="group">
                                 <div className="border-secondary/20 from-secondary/10 to-secondary/5 hover:border-secondary relative h-full overflow-hidden rounded-xl border-2 bg-gradient-to-br p-6 shadow-lg transition-all duration-300 hover:shadow-xl md:rounded-2xl md:p-7">
                                     <div className="bg-secondary/20 absolute top-3 right-3 rounded-full p-2.5 md:top-4 md:right-4 md:p-3">
                                         <Zap className="text-secondary-foreground h-5 w-5 md:h-6 md:w-6" />
@@ -118,12 +113,7 @@ export function HeroSection() {
                                     <p className="text-muted-foreground relative z-10 mb-4 text-sm md:mb-5 md:text-base">
                                         {t.benefits?.developers?.benefit1Desc}
                                     </p>
-                                    {/* <div className="text-muted-foreground relative z-10 mb-4 flex items-center text-xs md:mb-5 md:text-sm">
-                                        <div className="flex items-center gap-2">
-                                            <span className="bg-secondary inline-block h-1.5 w-1.5 rounded-full md:h-2 md:w-2"></span>
-                                            <span className="font-medium">{t.hero?.cards?.developer?.lands}</span>
-                                        </div>
-                                    </div> */}
+
                                     <Button className="bg-secondary hover:bg-secondary/90 relative z-10 w-full transition-colors group-hover:gap-3">
                                         <span className="text-sm md:text-base">{t.cta?.developer}</span>
                                         <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />

@@ -97,7 +97,7 @@ export function Sidebar() {
                                         <span>{t?.common?.login}</span>
                                     </Button>
                                 </Link>
-                                <Link href="/login/propietario" className="block">
+                                <Link href="/registro/propietario" className="block">
                                     <Button className="from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 w-full justify-center gap-2 bg-gradient-to-r shadow-md transition-all duration-200 hover:shadow-lg">
                                         <span>{t?.common?.register}</span>
                                     </Button>
