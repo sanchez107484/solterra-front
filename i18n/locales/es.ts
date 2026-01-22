@@ -7,9 +7,87 @@ export const es = {
     adminUser: "Administrador",
     nav: {
         home: "Inicio",
+        services: "Servicios",
         howItWorks: "Cómo funciona",
         about: "Nosotros",
         contact: "Contacto",
+    },
+    services: {
+        title: "Nuestros Servicios",
+        subtitle: "Soluciones integrales para el desarrollo de proyectos de energía renovable",
+        overview:
+            "En Solterra Advisory ofrecemos un ecosistema completo de servicios diseñados para conectar propietarios de terrenos con promotores de energía renovable, facilitando el desarrollo sostenible y maximizando el valor para todas las partes involucradas.",
+        cta: "Descubre Más",
+        list: {
+            matching: {
+                title: "Matching Inteligente",
+                shortDesc: "Conectamos terrenos ideales con proyectos renovables mediante algoritmos avanzados.",
+                longDesc:
+                    "Nuestro sistema de matching utiliza inteligencia artificial para analizar características de terrenos, requisitos de proyectos y normativas locales, encontrando las mejores combinaciones posibles. Esto acelera el proceso de desarrollo y aumenta las probabilidades de éxito.",
+                benefits: [
+                    "Reducción del tiempo de búsqueda en un 60%",
+                    "Mayor precisión en las conexiones",
+                    "Análisis de viabilidad preliminar incluido",
+                ],
+                process: [
+                    "Registro y verificación de terrenos",
+                    "Análisis de datos técnicos y legales",
+                    "Matching con proyectos compatibles",
+                    "Facilitación del contacto inicial",
+                ],
+                cta: "Ver Terrenos Disponibles",
+            },
+            legal: {
+                title: "Asesoría Legal y Técnica",
+                shortDesc: "Soporte experto en permisos, normativas y viabilidad de proyectos.",
+                longDesc:
+                    "Nuestros especialistas en derecho energético y técnicos certificados guían a promotores y propietarios a través de todo el proceso administrativo, desde la obtención de permisos hasta la conexión a red. Garantizamos cumplimiento normativo y minimizamos riesgos.",
+                benefits: [
+                    "Cumplimiento garantizado con legislación actual",
+                    "Reducción de tiempos administrativos",
+                    "Soporte en negociaciones contractuales",
+                ],
+                process: [
+                    "Evaluación inicial de viabilidad",
+                    "Tramitación de permisos y autorizaciones",
+                    "Asesoramiento en contratos y acuerdos",
+                    "Seguimiento hasta conexión a red",
+                ],
+                cta: "Consultar con Expertos",
+            },
+            analytics: {
+                title: "Análisis de Datos Energéticos",
+                shortDesc: "Evaluaciones precisas del potencial solar y eólico de tus terrenos.",
+                longDesc:
+                    "Utilizamos datos satelitales, meteorológicos y topográficos para calcular el potencial energético real de cada terreno. Nuestros informes detallados incluyen proyecciones de producción, ROI estimado y análisis de riesgos.",
+                benefits: [
+                    "Precisión superior al 95% en estimaciones",
+                    "Datos actualizados y verificados",
+                    "Informes personalizados por terreno",
+                ],
+                process: [
+                    "Recopilación de datos geográficos",
+                    "Análisis de irradiación solar y viento",
+                    "Modelado de producción energética",
+                    "Generación de informes ejecutivos",
+                ],
+                cta: "Analizar Mi Terreno",
+            },
+            management: {
+                title: "Gestión de Proyectos",
+                shortDesc: "Acompañamiento completo desde el matching hasta la ejecución.",
+                longDesc:
+                    "Ofrecemos herramientas y soporte integral para gestionar proyectos renovables desde la fase inicial hasta la operación. Incluye seguimiento de hitos, gestión documental y coordinación entre partes.",
+                benefits: ["Seguimiento transparente del progreso", "Gestión documental centralizada", "Soporte técnico continuo"],
+                process: [
+                    "Planificación y cronograma detallado",
+                    "Coordinación entre propietarios y promotores",
+                    "Seguimiento de ejecución y hitos",
+                    "Soporte post-implementación",
+                ],
+                cta: "Iniciar Proyecto",
+            },
+        },
     },
     hero: {
         title: "Conectamos terrenos con proyectos de energía renovable",

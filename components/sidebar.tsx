@@ -4,8 +4,15 @@ import { LanguageSwitcher } from "@/components/language-switcher"
 import Logo from "@/components/logo"
 import { SidebarUserMenu } from "@/components/sidebar-user-menu"
 import { Button } from "@/components/ui/button"
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
 import { useAuth } from "@/contexts/AuthContext"
-import { Home, Info, Mail, Menu, X } from "lucide-react"
+import { Home, Info, Mail, Menu, Settings, X } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -58,6 +65,18 @@ export function Sidebar() {
                                 {t.nav?.home}
                             </Button>
                         </Link>
+
+                        {/* Menú de servicios profesional y consistente */}
+                        <Link href="/servicios">
+                            <Button
+                                variant={pathname === "/servicios" ? "sidebar-active" : "sidebar-hover"}
+                                className="w-full justify-start gap-3"
+                            >
+                                <Settings className="h-5 w-5" />
+                                {t.nav?.services || "Servicios"}
+                            </Button>
+                        </Link>
+
                         <Link href="/nosotros">
                             <Button
                                 variant={pathname === "/nosotros" ? "sidebar-active" : "sidebar-hover"}
