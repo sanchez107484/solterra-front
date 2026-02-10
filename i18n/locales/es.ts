@@ -13,82 +13,316 @@ export const es = {
         contact: "Contacto",
     },
     services: {
-        title: "Nuestros Servicios",
-        subtitle: "Soluciones integrales para el desarrollo de proyectos de energía renovable",
-        overview:
-            "En Solterra Advisory ofrecemos un ecosistema completo de servicios diseñados para conectar propietarios de terrenos con promotores de energía renovable, facilitando el desarrollo sostenible y maximizando el valor para todas las partes involucradas.",
-        cta: "Descubre Más",
-        list: {
-            matching: {
-                title: "Matching Inteligente",
-                shortDesc: "Conectamos terrenos ideales con proyectos renovables mediante algoritmos avanzados.",
-                longDesc:
-                    "Nuestro sistema de matching utiliza inteligencia artificial para analizar características de terrenos, requisitos de proyectos y normativas locales, encontrando las mejores combinaciones posibles. Esto acelera el proceso de desarrollo y aumenta las probabilidades de éxito.",
-                benefits: [
-                    "Reducción del tiempo de búsqueda en un 60%",
-                    "Mayor precisión en las conexiones",
-                    "Análisis de viabilidad preliminar incluido",
+        title: "Servicios",
+        subtitle: "Conectamos terrenos con energía renovable de forma estructurada y transparente",
+        tagline: "No vendemos terrenos. Los estructuramos para que lleguen solo a promotores serios.",
+        
+        // Hero principal
+        hero: {
+            title: "Estructuramos terrenos, no los vendemos",
+            subtitle: "Conectamos propietarios y promotores con procesos claros, validación técnica y transparencia total",
+        },
+
+        // Bloque 1: Servicios para Propietarios
+        owners: {
+            badge: "Para Propietarios",
+            title: "No vendemos tu suelo. Lo estructuramos para que llegue solo a promotores serios",
+            subtitle: "Sin brokers, sin intermediarios opacos, sin exclusivas confusas",
+            intro: "Sabemos que te llaman constantemente con promesas irreales. En Solterra validamos técnicamente tu terreno y solo te conectamos con promotores que de verdad pueden cerrar un acuerdo.",
+            trustSignal: "0€ hasta que se cierra el acuerdo con un promotor verificado",
+            painPoints: [
+                "¿Te llaman brokers constantemente?",
+                "¿No sabes si tu terreno vale realmente algo?",
+                "¿Te preocupa firmar algo que no entiendes?",
+                "¿Quieres seguridad jurídica y trato humano?",
+            ],
+            services: [
+                {
+                    id: "validation",
+                    icon: "Shield",
+                    title: "Validación Técnica del Terreno",
+                    shortDesc: "Saber si tu terreno vale realmente para renovables",
+                    description: "Análisis completo de viabilidad técnica, urbanística y estratégica. Sin promesas vacías, solo datos reales.",
+                    painPoint: "¿No sabes si tu terreno sirve para placas solares?",
+                    result: "Informe técnico que confirma si tu suelo tiene potencial real y estimación de valor",
+                    benefits: [
+                        "Validación técnica en 48-72h",
+                        "Análisis urbanístico y catastral",
+                        "Estimación de valor de arrendamiento",
+                        "Sin coste, sin compromiso",
+                    ],
+                    process: [
+                        "Envías información básica del terreno",
+                        "Analizamos viabilidad técnica y urbanística",
+                        "Recibes informe con potencial real",
+                        "Decidimos juntos los siguientes pasos",
+                    ],
+                    ctaPrimary: "Evaluar mi terreno",
+                    ctaPrimaryLink: "/contacto",
+                    ctaSecondary: "Ver ejemplo de informe",
+                    ctaSecondaryLink: "/servicios/propietarios#ejemplo-validacion",
+                },
+                {
+                    id: "structuring",
+                    icon: "Layers",
+                    title: "Estructuración y Posicionamiento",
+                    shortDesc: "Tu terreno ordenado y listo para promotores serios",
+                    description: "Organizamos tu terreno (individual o agrupado con otros compatibles) para maximizar su atractivo y valor en el mercado.",
+                    painPoint: "¿Tu terreno está ahí pero nadie lo ve?",
+                    result: "Tu terreno entra al mercado de forma ordenada, aumentando probabilidad de cierre y mejor precio",
+                    benefits: [
+                        "Posicionamiento estratégico",
+                        "Documentación preparada y verificada",
+                        "Agrupación con terrenos compatibles (si aplica)",
+                        "Visibilidad ante promotores cualificados",
+                    ],
+                    process: [
+                        "Preparamos documentación técnica completa",
+                        "Identificamos posibles agrupaciones estratégicas",
+                        "Posicionamos tu terreno ante promotores cualificados",
+                        "Gestionamos contactos y cierre de acuerdo",
+                    ],
+                    ctaPrimary: "Estructurar mi terreno",
+                    ctaPrimaryLink: "/contacto",
+                    ctaSecondary: "Más información",
+                    ctaSecondaryLink: "/servicios/propietarios#estructuracion",
+                },
+                {
+                    id: "negotiation",
+                    icon: "Handshake",
+                    title: "Acompañamiento en Negociación",
+                    shortDesc: "No negocies solo contra grandes promotoras",
+                    description: "Te acompañamos en todo el proceso de negociación para asegurar condiciones justas y transparentes.",
+                    painPoint: "¿Te sientes perdido negociando con promotoras?",
+                    result: "Acuerdos justos, transparentes y sin sorpresas",
+                    benefits: [
+                        "Asesoramiento durante toda la negociación",
+                        "Revisión de contratos y cláusulas críticas",
+                        "Benchmark de condiciones de mercado",
+                        "Sin coste hasta cierre",
+                    ],
+                    process: [
+                        "Evaluamos ofertas recibidas",
+                        "Revisamos contratos y condiciones",
+                        "Negociamos mejores términos",
+                        "Acompañamos hasta la firma",
+                    ],
+                    ctaPrimary: "Necesito asesoramiento",
+                    ctaPrimaryLink: "/contacto",
+                    ctaSecondary: "Ver guía de negociación",
+                    ctaSecondaryLink: "/servicios/propietarios#negociacion",
+                },
+            ],
+        },
+        developers: {
+            badge: "Para Promotores",
+            title: "No te mandamos suelo. Te mandamos oportunidades estructuradas",
+            subtitle: "Pipeline pre-filtrado, validación técnica y acceso directo a propietarios",
+            intro: "Sabemos que pierdes tiempo analizando terrenos inviables y negociando con propietarios desordenados. En Solterra curamos el suelo antes de presentártelo.",
+            trustSignal: "Solo pagas al cerrar. Sin coste por acceso al pipeline",
+            painPoints: [
+                "¿Pierdes tiempo con suelo inviable?",
+                "¿Necesitas pipeline estructurado y fiable?",
+                "¿Quieres acceso directo a propietarios válidos?",
+                "¿Buscas cierre rápido y ordenado?",
+            ],
+            pricing: {
+                title: "Modelo de success fee transparente",
+                subtitle: "Solo pagas cuando cierras un proyecto",
+                note: "Precios orientativos. Varían según complejidad y tamaño del proyecto.",
+                options: [
+                    {
+                        model: "Pipeline Estándar",
+                        price: "3% – 5%",
+                        description: "Success fee al cierre del proyecto",
+                        includes: [
+                            "Acceso a terrenos pre-validados",
+                            "Contacto directo con propietario",
+                            "Documentación técnica básica",
+                            "Acompañamiento en negociación",
+                        ],
+                    },
+                    {
+                        model: "Packs Estratégicos",
+                        price: "5% – 7%",
+                        description: "Success fee al cierre del proyecto",
+                        includes: [
+                            "Agrupación de terrenos compatibles",
+                            "Validación técnica completa",
+                            "Estructuración legal y financiera",
+                            "Gestión de múltiples propietarios",
+                        ],
+                    },
                 ],
-                process: [
-                    "Registro y verificación de terrenos",
-                    "Análisis de datos técnicos y legales",
-                    "Matching con proyectos compatibles",
-                    "Facilitación del contacto inicial",
-                ],
-                cta: "Ver Terrenos Disponibles",
             },
-            legal: {
-                title: "Asesoría Legal y Técnica",
-                shortDesc: "Soporte experto en permisos, normativas y viabilidad de proyectos.",
-                longDesc:
-                    "Nuestros especialistas en derecho energético y técnicos certificados guían a promotores y propietarios a través de todo el proceso administrativo, desde la obtención de permisos hasta la conexión a red. Garantizamos cumplimiento normativo y minimizamos riesgos.",
-                benefits: [
-                    "Cumplimiento garantizado con legislación actual",
-                    "Reducción de tiempos administrativos",
-                    "Soporte en negociaciones contractuales",
-                ],
-                process: [
-                    "Evaluación inicial de viabilidad",
-                    "Tramitación de permisos y autorizaciones",
-                    "Asesoramiento en contratos y acuerdos",
-                    "Seguimiento hasta conexión a red",
-                ],
-                cta: "Consultar con Expertos",
+            services: [
+                {
+                    id: "pipeline",
+                    icon: "Filter",
+                    title: "Pipeline Pre-Filtrado",
+                    shortDesc: "Solo suelo con viabilidad técnica confirmada",
+                    description: "Acceso a terrenos ya validados técnica y legalmente. No perdéis tiempo con suelo que no sirve.",
+                    painPoint: "¿Cansado de analizar terrenos inviables?",
+                    result: "Ahorra 60% del tiempo de análisis, reduce riesgos y acelera tu pipeline",
+                    benefits: [
+                        "Validación técnica previa completa",
+                        "Documentación urbanística verificada",
+                        "Propietarios contactados y cualificados",
+                        "Actualización constante del pipeline",
+                    ],
+                    process: [
+                        "Accedes al dashboard con terrenos activos",
+                        "Filtras por ubicación, potencia, tipo proyecto",
+                        "Ves información técnica completa",
+                        "Contactas directamente con el propietario",
+                    ],
+                    ctaPrimary: "Acceder al pipeline",
+                    ctaPrimaryLink: "/registro/promotor",
+                    ctaSecondary: "Ver demo del dashboard",
+                    ctaSecondaryLink: "/servicios/promotores#demo-pipeline",
+                },
+                {
+                    id: "matching",
+                    icon: "Zap",
+                    title: "Matching Asistido + Packs Estratégicos",
+                    shortDesc: "Terrenos agrupados que optimizan tu inversión",
+                    description: "Creamos packs de terrenos compatibles para maximizar potencia, reducir fricción administrativa y optimizar fees.",
+                    painPoint: "¿Un solo terreno no da la potencia que necesitas?",
+                    result: "Packs de 10-50 MW con gestión unificada y fees optimizados",
+                    benefits: [
+                        "Agrupación estratégica por zona",
+                        "Mayor potencia total disponible",
+                        "Reducción costes administrativos",
+                        "Un solo proceso de cierre",
+                    ],
+                    process: [
+                        "Defines requisitos de tu proyecto",
+                        "Identificamos terrenos compatibles",
+                        "Creamos pack estratégico a medida",
+                        "Facilit amos negociación unificada",
+                    ],
+                    ctaPrimary: "Solicitar pack a medida",
+                    ctaPrimaryLink: "/contacto",
+                    ctaSecondary: "Ver packs disponibles",
+                    ctaSecondaryLink: "/login/promotor",
+                },
+                {
+                    id: "closing",
+                    icon: "FileCheck",
+                    title: "Acompañamiento hasta el Cierre",
+                    shortDesc: "De la LOI al contrato firmado sin fricción",
+                    description: "Gestionamos LOI, exclusividades temporales, contratos de arrendamiento u opción de compra hasta el cierre definitivo.",
+                    painPoint: "¿Negociaciones que se alargan eternamente?",
+                    result: "Cierre medio en 30-45 días vs 4-6 meses del mercado",
+                    benefits: [
+                        "Gestión de exclusividades claras",
+                        "Negociación de términos optimizada",
+                        "Revisión contractual profesional",
+                        "Acompañamiento hasta firma definitiva",
+                    ],
+                    process: [
+                        "Firmamos LOI con términos claros",
+                        "Gestionamos due diligence ordenada",
+                        "Negociamos contrato final",
+                        "Acompañamos hasta cierre definitivo",
+                    ],
+                    ctaPrimary: "Hablar con equipo comercial",
+                    ctaPrimaryLink: "/contacto",
+                    ctaSecondary: null,
+                    ctaSecondaryLink: null,
+                },
+            ],
+        },
+
+        // Servicio Premium: Packs
+        packs: {
+            badge: "Servicio Premium",
+            title: "Packs Estratégicos de Terrenos",
+            description: "Agrupamos terrenos compatibles para crear oportunidades de mayor potencia y valor",
+            longDescription: "Identificamos, agrupamos y estructuramos terrenos cercanos con características compatibles para crear packs de 10-50 MW que optimizan tu inversión.",
+            result: "Mayor potencia, menor fricción administrativa y fees ajustados al valor real",
+            benefits: [
+                "Agrupación estratégica por zona",
+                "Mayor potencia total (10-50 MW)",
+                "Reducción costes administrativos (-40%)",
+                "Un solo proceso de negociación",
+                "Fees optimizados por volumen (5-7%)",
+            ],
+            process: [
+                "Identificamos terrenos compatibles en zona objetivo",
+                "Validamos viabilidad técnica del pack completo",
+                "Preparamos documentación unificada",
+                "Facilitamos negociación con propietarios",
+            ],
+            ctaPrimary: "Solicitar pack a medida",
+            ctaPrimaryLink: "/contacto",
+        },
+
+        // Servicio Secundario: Prospección
+        prospection: {
+            badge: "Servicio Mandatado",
+            title: "Prospección Mandatada de Suelo",
+            description: "Buscamos activamente terrenos específicos según tus requisitos exactos",
+            longDescription: "Si necesitas suelo en una zona específica o con características concretas, activamos prospección bajo mandato para encontrar las mejores oportunidades.",
+            result: "Terrenos a medida en tu zona objetivo con fees controlados",
+            benefits: [
+                "Búsqueda activa en zona específica",
+                "Requisitos técnicos personalizados",
+                "Validación previa de viabilidad",
+                "Fees por fase + success fee reducido (1-2%)",
+            ],
+            process: [
+                "Defines zona y requisitos técnicos exactos",
+                "Prospectamos activamente terrenos válidos",
+                "Validamos y negociamos preliminarmente",
+                "Presentamos solo oportunidades viables",
+            ],
+            pricing: "Retainer por fase + success fee 1-2% al cierre",
+            ctaPrimary: "Solicitar prospección",
+            ctaPrimaryLink: "/contacto",
+        },
+
+        // CTAs globales
+        cta: {
+            owners: {
+                primary: "Evaluar mi terreno",
+                primaryLink: "/contacto",
+                secondary: "Hablar con experto",
+                secondaryLink: "/contacto",
             },
-            analytics: {
-                title: "Análisis de Datos Energéticos",
-                shortDesc: "Evaluaciones precisas del potencial solar y eólico de tus terrenos.",
-                longDesc:
-                    "Utilizamos datos satelitales, meteorológicos y topográficos para calcular el potencial energético real de cada terreno. Nuestros informes detallados incluyen proyecciones de producción, ROI estimado y análisis de riesgos.",
-                benefits: [
-                    "Precisión superior al 95% en estimaciones",
-                    "Datos actualizados y verificados",
-                    "Informes personalizados por terreno",
-                ],
-                process: [
-                    "Recopilación de datos geográficos",
-                    "Análisis de irradiación solar y viento",
-                    "Modelado de producción energética",
-                    "Generación de informes ejecutivos",
-                ],
-                cta: "Analizar Mi Terreno",
+            developers: {
+                primary: "Ver el pipeline",
+                primaryLink: "/login/promotor",
+                secondary: "Solicitar acceso",
+                secondaryLink: "/registro/promotor",
             },
-            management: {
-                title: "Gestión de Proyectos",
-                shortDesc: "Acompañamiento completo desde el matching hasta la ejecución.",
-                longDesc:
-                    "Ofrecemos herramientas y soporte integral para gestionar proyectos renovables desde la fase inicial hasta la operación. Incluye seguimiento de hitos, gestión documental y coordinación entre partes.",
-                benefits: ["Seguimiento transparente del progreso", "Gestión documental centralizada", "Soporte técnico continuo"],
-                process: [
-                    "Planificación y cronograma detallado",
-                    "Coordinación entre propietarios y promotores",
-                    "Seguimiento de ejecución y hitos",
-                    "Soporte post-implementación",
-                ],
-                cta: "Iniciar Proyecto",
+        },
+
+        footer: {
+            title: "¿Listo para empezar?",
+            tagline: "Solterra Advisory — 100% orientado a cierre. Solo cobramos cuando se firma el acuerdo.",
+        },
+
+        // SEO Meta information
+        seo: {
+            main: {
+                title: "Servicios Solterra | Terrenos Renovables España",
+                description: "Validación técnica de terrenos, estructuración de oportunidades y pipeline pre-filtrado para proyectos solares, eólicos y BESS en España.",
+                keywords: "servicios terrenos renovables, validación suelo fotovoltaico, pipeline suelo solar, packs terrenos renovables, prospección suelo BESS",
+            },
+            owners: {
+                title: "Servicios para Propietarios | Valida tu Terreno para Renovables",
+                description: "Validación técnica gratuita de terrenos para proyectos solares y eólicos. Sin brokers, sin exclusivas opacas. Solo pagas si se cierra.",
+                keywords: "vender terreno renovables, valor suelo fotovoltaico, cuánto vale mi terreno solar, empresas serias terrenos placas solares",
+            },
+            developers: {
+                title: "Servicios para Promotores | Pipeline Suelo Pre-Filtrado España",
+                description: "Acceso a pipeline de terrenos validados técnicamente para proyectos fotovoltaicos, eólicos y BESS. Packs estratégicos y cierre asistido.",
+                keywords: "pipeline suelo fotovoltaico, terrenos renovables españa, packs terrenos solares, sourcing suelo renovables, plataforma terrenos BESS",
             },
         },
     },
+
     hero: {
         title: "Conectamos terrenos con proyectos de energía renovable",
         subtitle: "La plataforma que une propietarios de terrenos con desarrolladores de proyectos",
