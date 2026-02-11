@@ -2,6 +2,7 @@
 
 import StandardLayout from "@/components/layouts/StandardLayout"
 import { ServiceSchema } from "@/components/seo/ServiceSchema"
+import ServiceInterlinks from "@/components/services/ServiceInterlinks"
 import { FAQList } from "@/components/shared/faq-item"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Building2, CheckCircle2, Clock, Filter, Handshake, Search, Shield, Sparkles, TrendingUp, Zap } from "lucide-react"
@@ -565,6 +566,14 @@ export default function MarketplaceRenovablesPage() {
                     />
                 </div>
             </section>
+
+            {/* Otros Servicios - Interlinking */}
+            <ServiceInterlinks
+                currentService="marketplace"
+                title="Otros Servicios"
+                subtitle="Explora nuestras soluciones complementarias para desarrolladores de proyectos renovables"
+                background="white"
+            />
 
             {/* CTA Final */}
             <section className="from-secondary/10 via-background to-secondary/10 bg-gradient-to-r py-16 md:py-20">

@@ -2,6 +2,7 @@
 
 import StandardLayout from "@/components/layouts/StandardLayout"
 import { ServiceSchema } from "@/components/seo/ServiceSchema"
+import ServicesShowcase from "@/components/services/ServicesShowcase"
 import { FAQList } from "@/components/shared/faq-item"
 import { Button } from "@/components/ui/button"
 import {
@@ -186,10 +187,12 @@ export default function ServiciosPropietariosPage() {
                                 4
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-foreground mb-2 text-xl font-bold md:text-2xl">Acompañamiento legal hasta el cierre</h3>
+                                <h3 className="text-foreground mb-2 text-xl font-bold md:text-2xl">
+                                    Intermediación profesional hasta el cierre
+                                </h3>
                                 <p className="text-muted-foreground leading-relaxed">
-                                    Negociamos condiciones, revisamos contratos de arrendamiento o compraventa, y te acompañamos hasta la
-                                    firma. Solo cobramos comisión cuando tú cobres.
+                                    Coordinamos con todas las partes (promotor, notario, asesores), facilitamos la negociación de
+                                    condiciones y te acompañamos hasta la firma. Solo cobramos comisión cuando tú cobres.
                                 </p>
                             </div>
                             <Handshake className="text-primary h-10 w-10 flex-shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
@@ -296,14 +299,14 @@ export default function ServiciosPropietariosPage() {
                             <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
                                 <FileCheck className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Revisión legal de contratos</h3>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Análisis de propuestas contractuales</h3>
                             <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                Revisión exhaustiva de contratos de arrendamiento o compraventa para proteger tus intereses y evitar
-                                cláusulas abusivas o poco claras.
+                                Revisamos junto contigo las propuestas de los promotores, identificamos puntos críticos y te sugerimos
+                                aspectos a negociar. Recomendamos asesoramiento jurídico independiente para la firma final.
                             </p>
                             <div className="text-primary flex items-center gap-2 text-sm font-medium">
                                 <BadgeCheck className="h-4 w-4" />
-                                Seguridad jurídica
+                                Acompañamiento experto
                             </div>
                             <div
                                 className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
@@ -452,8 +455,21 @@ export default function ServiciosPropietariosPage() {
                                 </Button>
                             </Link>
                         </div>
+                    </div>
+                </div>
+            </section>
 
-                        {/* FAQ */}
+            {/* Interlinks a otros servicios */}
+            <ServicesShowcase
+                title="Nuestros Servicios para el Sector Renovable"
+                subtitle="Conectamos propietarios de terrenos rústicos con promotores de energía renovable"
+                background="white"
+            />
+
+            {/* FAQ */}
+            <section className="bg-background py-16 md:py-20">
+                <div className="container mx-auto px-4">
+                    <div className="mx-auto max-w-4xl">
                         <FAQList
                             faqs={[
                                 {

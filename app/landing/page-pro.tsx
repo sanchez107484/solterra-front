@@ -3,6 +3,7 @@
 import { HeroSection } from "@/components/landing/hero-section"
 import StandardLayout from "@/components/layouts/StandardLayout"
 import { FAQSchema } from "@/components/seo/faq-schema"
+import ServicesShowcase from "@/components/services/ServicesShowcase"
 import dynamic from "next/dynamic"
 
 // Lazy load below-the-fold components to improve FCP and LCP
@@ -29,6 +30,11 @@ export default function LandingPage() {
             <StandardLayout>
                 <HeroSection />
                 <StatsSection />
+                <ServicesShowcase
+                    title="Nuestros Servicios para el Sector Renovable"
+                    subtitle="Soluciones integrales desde la validación de terrenos hasta el marketplace y prospección personalizada"
+                    background="muted"
+                />
                 <SeccionBeneficios />
                 <SeccionComoFuncionaSplit showCTA={true} compactMode={false} />
                 {/* <SeccionComoFunciona showCTA={true} compactMode={false} /> */}

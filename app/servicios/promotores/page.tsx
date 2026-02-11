@@ -2,6 +2,7 @@
 
 import StandardLayout from "@/components/layouts/StandardLayout"
 import { ServiceSchema } from "@/components/seo/ServiceSchema"
+import ServicesShowcase from "@/components/services/ServicesShowcase"
 import { FAQList } from "@/components/shared/faq-item"
 import { Button } from "@/components/ui/button"
 import {
@@ -269,19 +270,19 @@ export default function ServiciosPromotoresPage() {
                             />
                         </div>
 
-                        {/* Servicio 4 - Nuevo: Packs estratégicos */}
+                        {/* Servicio 4 - Flexibilidad en superficie */}
                         <div className="group border-secondary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-8 shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03]">
                             <div className="bg-secondary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
                                 <Package className="text-secondary-foreground h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Packs estratégicos de terrenos</h3>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Opciones flexibles de superficie</h3>
                             <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                Agrupamos terrenos cercanos en packs para alcanzar la superficie objetivo. Si buscas 10 ha y tenemos 3
-                                terrenos de 5, 3 y 2 ha en la misma zona, te los ofrecemos juntos para maximizar tus opciones de cierre.
+                                Si tienes necesidades específicas de superficie o ubicación, podemos identificar terrenos complementarios en
+                                la misma zona. Facilitamos la coordinación de negociaciones cuando tiene sentido agrupar parcelas próximas.
                             </p>
                             <div className="text-secondary-foreground flex items-center gap-2 text-sm font-medium">
                                 <BadgeCheck className="h-4 w-4" />
-                                Estrategia optimizada
+                                Soluciones adaptadas
                             </div>
                             <div
                                 className="bg-secondary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
@@ -294,13 +295,14 @@ export default function ServiciosPromotoresPage() {
                             <div className="bg-secondary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
                                 <MapPin className="text-secondary-foreground h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Prospección personalizada</h3>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Actualizaciones regulares</h3>
                             <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                ¿Buscas terrenos en zona específica? Servicio de prospección a demanda en tu área estratégica con validación
-                                técnica incluida.
+                                El marketplace se actualiza continuamente con nuevos terrenos validados. Recibe notificaciones cuando
+                                aparezcan oportunidades en tus zonas de interés.
                             </p>
                             <div className="text-secondary-foreground flex items-center gap-2 text-sm font-medium">
-                                <BadgeCheck className="h-4 w-4" />A medida
+                                <BadgeCheck className="h-4 w-4" />
+                                Pipeline activo
                             </div>
                             <div
                                 className="bg-secondary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
@@ -487,41 +489,52 @@ export default function ServiciosPromotoresPage() {
                                 </Button>
                             </Link>
                         </div>
+                    </div>
+                </div>
+            </section>
 
-                        {/* FAQ con componente */}
-                        <div className="mt-12">
-                            <FAQList
-                                title="Preguntas frecuentes"
-                                categoryLabels={{ promotor: "Promotor" }}
-                                faqs={[
-                                    {
-                                        question: "¿Cuánto cuesta acceder al marketplace?",
-                                        answer: "El acceso al marketplace es gratuito. Solo pagas comisión cuando cierres un acuerdo con el propietario. El modelo de comisión se acuerda previamente y suele ser un % sobre el valor del contrato de arrendamiento o compraventa.",
-                                        category: "promotor",
-                                    },
-                                    {
-                                        question: "¿Los terrenos están en exclusiva?",
-                                        answer: "No. Los propietarios pueden estar en contacto con varios promotores. El primero que cierre condiciones con el propietario se queda con el terreno. Esto incentiva la agilidad y seriedad en las negociaciones.",
-                                        category: "promotor",
-                                    },
-                                    {
-                                        question: "¿Qué son los packs estratégicos de terrenos?",
-                                        answer: "Agrupamos terrenos cercanos para alcanzar las hectáreas que necesitas. Por ejemplo, si buscas 10 ha y tenemos 3 terrenos de 5+3+2 ha en la misma zona, te los ofrecemos como pack. Simplifica la negociación y reduce el riesgo de proyectos fragmentados.",
-                                        category: "promotor",
-                                    },
-                                    {
-                                        question: "¿Cómo funciona la intermediación de Solterra?",
-                                        answer: "Actuamos como intermediario profesional entre promotor y propietario. Gestionamos toda la comunicación, coordinamos visitas, facilitamos la negociación y acompañamos hasta el cierre. No hay negociación directa - nosotros gestionamos expectativas y facilitamos acuerdos justos para ambas partes.",
-                                        category: "promotor",
-                                    },
-                                    {
-                                        question: "¿Ofrecen prospección personalizada?",
-                                        answer: "Sí. Si buscas terrenos en zona específica que no está en el marketplace, ofrecemos servicio de prospección a demanda. Contacta con el equipo para más información sobre plazos y condiciones.",
-                                        category: "promotor",
-                                    },
-                                ]}
-                            />
-                        </div>
+            {/* Interlinks a otros servicios */}
+            <ServicesShowcase
+                title="Nuestros Servicios para el Sector Renovable"
+                subtitle="Soluciones integrales desde la validación de terrenos hasta el marketplace y prospección personalizada"
+                background="white"
+            />
+
+            {/* FAQ con componente */}
+            <section className="bg-background py-16 md:py-20">
+                <div className="container mx-auto px-4">
+                    <div className="mx-auto max-w-4xl">
+                        <FAQList
+                            title="Preguntas frecuentes"
+                            categoryLabels={{ promotor: "Promotor" }}
+                            faqs={[
+                                {
+                                    question: "¿Cuánto cuesta acceder al marketplace?",
+                                    answer: "El acceso al marketplace es gratuito. Solo pagas comisión cuando cierres un acuerdo con el propietario. El modelo de comisión se acuerda previamente y suele ser un % sobre el valor del contrato de arrendamiento o compraventa.",
+                                    category: "promotor",
+                                },
+                                {
+                                    question: "¿Los terrenos están en exclusiva?",
+                                    answer: "No. Los propietarios pueden estar en contacto con varios promotores. El primero que cierre condiciones con el propietario se queda con el terreno. Esto incentiva la agilidad y seriedad en las negociaciones.",
+                                    category: "promotor",
+                                },
+                                {
+                                    question: "¿Qué son los packs estratégicos de terrenos?",
+                                    answer: "Agrupamos terrenos cercanos para alcanzar las hectáreas que necesitas. Por ejemplo, si buscas 10 ha y tenemos 3 terrenos de 5+3+2 ha en la misma zona, te los ofrecemos como pack. Simplifica la negociación y reduce el riesgo de proyectos fragmentados.",
+                                    category: "promotor",
+                                },
+                                {
+                                    question: "¿Cómo funciona la intermediación de Solterra?",
+                                    answer: "Actuamos como intermediario profesional entre promotor y propietario. Gestionamos toda la comunicación, coordinamos visitas, facilitamos la negociación y acompañamos hasta el cierre. No hay negociación directa - nosotros gestionamos expectativas y facilitamos acuerdos justos para ambas partes.",
+                                    category: "promotor",
+                                },
+                                {
+                                    question: "¿Ofrecen prospección personalizada?",
+                                    answer: "Sí. Si buscas terrenos en zona específica que no está en el marketplace, ofrecemos servicio de prospección a demanda. Contacta con el equipo para más información sobre plazos y condiciones.",
+                                    category: "promotor",
+                                },
+                            ]}
+                        />
                     </div>
                 </div>
             </section>

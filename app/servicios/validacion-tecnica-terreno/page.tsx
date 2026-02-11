@@ -2,6 +2,7 @@
 
 import StandardLayout from "@/components/layouts/StandardLayout"
 import { ServiceSchema } from "@/components/seo/ServiceSchema"
+import ServiceInterlinks from "@/components/services/ServiceInterlinks"
 import { FAQList } from "@/components/shared/faq-item"
 import { Button } from "@/components/ui/button"
 import {
@@ -732,6 +733,14 @@ export default function ValidacionTecnicaTerrenoPage() {
                     />
                 </div>
             </section>
+
+            {/* Otros Servicios - Interlinking */}
+            <ServiceInterlinks
+                currentService="validacion"
+                title="Servicios para Promotores"
+                subtitle="¿Eres desarrollador de proyectos renovables? Descubre cómo podemos ayudarte a encontrar suelo validado"
+                background="white"
+            />
 
             {/* CTA Final */}
             <section className="from-primary/10 via-background to-primary/10 bg-gradient-to-r py-16 md:py-20">

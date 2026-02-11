@@ -62,7 +62,7 @@ export function Sidebar() {
                         {/* Menú de servicios profesional y consistente */}
                         <Link href="/servicios">
                             <Button
-                                variant={pathname === "/servicios" ? "sidebar-active" : "sidebar-hover"}
+                                variant={pathname?.startsWith("/servicios") ? "sidebar-active" : "sidebar-hover"}
                                 className="w-full justify-start gap-3"
                             >
                                 <Settings className="h-5 w-5" />

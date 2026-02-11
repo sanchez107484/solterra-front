@@ -2,6 +2,7 @@
 
 import StandardLayout from "@/components/layouts/StandardLayout"
 import { ServiceSchema } from "@/components/seo/ServiceSchema"
+import ServiceInterlinks from "@/components/services/ServiceInterlinks"
 import { FAQList } from "@/components/shared/faq-item"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle2, Clock, FileText, MapPin, Search, Shield, Sparkles, Target, TrendingUp, Users, Zap } from "lucide-react"
@@ -582,6 +583,9 @@ export default function ProspeccionDemandaPage() {
                     />
                 </div>
             </section>
+
+            {/* Otros Servicios - Interlinking */}
+            <ServiceInterlinks currentService="prospeccion" background="white" />
 
             {/* CTA Final */}
             <section className="via-background from-secondary/10 to-secondary/10 bg-gradient-to-r py-16 md:py-20">
