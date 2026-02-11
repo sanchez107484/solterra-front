@@ -2,6 +2,7 @@
 
 import StandardLayout from "@/components/layouts/StandardLayout"
 import { ServiceSchema } from "@/components/seo/ServiceSchema"
+import { FAQList } from "@/components/shared/faq-item"
 import { Button } from "@/components/ui/button"
 import {
     AlertCircle,
@@ -31,27 +32,27 @@ export default function ValidacionTecnicaTerrenoPage() {
     return (
         <StandardLayout>
             <Head>
-                <title>Validación Técnica de Terrenos Renovables | Evaluación Gratuita Solar y Eólica</title>
+                <title>¿Cuánto Vale tu Terreno para Placas Solares? | Evaluación 100% Gratuita</title>
                 <meta
                     name="description"
-                    content="Validación técnica gratuita de terrenos para proyectos de energía solar y eólica. Descubre si tu terreno es viable para renovables en 48-72h."
+                    content="Descubre GRATIS si tu terreno sirve para energía solar o eólica. Análisis técnico completo sin coste ni compromiso. Te decimos cuánto puedes ganar por arrendarlo o venderlo para proyectos renovables."
                 />
                 <meta
                     name="keywords"
-                    content="validacion tecnica terreno solar, evaluar terreno fotovoltaico, mi terreno sirve placas solares, valorar suelo renovables, terreno viable energia solar"
+                    content="cuanto pagan por arrendar terreno placas solares, como saber si mi terreno vale energia solar, evaluar terreno fotovoltaico gratis, cuanto vale mi terreno renovables, arrendar suelo placas solares precio"
                 />
                 <link rel="canonical" href="https://solterra.es/servicios/validacion-tecnica-terreno" />
             </Head>
 
             <ServiceSchema
                 name="Validación Técnica de Terrenos para Proyectos de Energías Renovables"
-                description="Servicio gratuito de validación técnica y curación de terrenos para proyectos solares, eólicos y BESS. Análisis urbanístico, catastral y de viabilidad técnica."
+                description="Servicio gratuito de validación técnica y curación de terrenos para proyectos solares, eólicos y BESS. Descubre si tu terreno es viable y cuánto puedes ganar por arrendarlo o venderlo. Análisis urbanístico, catastral y de viabilidad técnica sin coste ni compromiso."
                 serviceType="Technical Validation and Land Assessment"
                 areaServed="ES"
                 offers={{
                     price: "0",
                     priceCurrency: "EUR",
-                    description: "Validación técnica 100% gratuita hasta que se cierra un acuerdo con promotor",
+                    description: "Validación técnica 100% gratuita sin compromiso. Solo cobras si decides cerrar un acuerdo.",
                 }}
             />
 
@@ -64,33 +65,37 @@ export default function ValidacionTecnicaTerrenoPage() {
                     <div
                         className={`mx-auto max-w-5xl text-center transition-all duration-1000 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
                     >
-                        <div className="mb-6 flex justify-center">
+                        <div className="mb-6 flex flex-wrap justify-center gap-3">
                             <div className="bg-primary/10 border-primary/20 text-primary inline-flex items-center gap-2 rounded-full border-2 px-4 py-2">
                                 <Landmark className="h-4 w-4" />
                                 <span className="text-sm font-semibold">Para Propietarios</span>
                             </div>
+                            <div className="inline-flex items-center gap-2 rounded-full border-2 border-green-500/30 bg-green-500/10 px-5 py-2 text-green-700">
+                                <Sparkles className="h-5 w-5" />
+                                <span className="text-base font-bold">100% GRATIS</span>
+                            </div>
                         </div>
 
                         <h1 className="text-foreground mb-6 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-                            ¿Tu Terreno Sirve para <span className="text-primary">Energía Renovable</span>?
+                            Regístrate y Publica tu Terreno <span className="text-primary">GRATIS</span>
                         </h1>
 
                         <p className="text-muted-foreground mx-auto mb-8 max-w-3xl text-lg md:text-xl">
-                            Validación técnica gratuita en 48-72h. Descubre si tu terreno es viable para proyectos solares, eólicos o BESS
-                            sin coste ni compromiso.
+                            ¿Tienes un terreno para energía solar o eólica? Regístrate como propietario y publica tu terreno. Nosotros
+                            hacemos la validación técnica antes de que aparezca en el marketplace. 100% gratuito.
                         </p>
 
                         <div className="flex flex-wrap justify-center gap-4">
-                            <Link href="/contacto">
+                            <Link href="/registro/propietario">
                                 <Button size="lg" className="bg-primary hover:bg-primary/90 gap-2 text-base">
                                     <Sparkles className="h-5 w-5" />
-                                    Validar mi terreno gratis
+                                    Regístrate como propietario
                                     <ArrowRight className="h-5 w-5" />
                                 </Button>
                             </Link>
-                            <Link href="/registro/propietario">
+                            <Link href="/contacto">
                                 <Button size="lg" variant="outline" className="gap-2 text-base">
-                                    Crear cuenta propietario
+                                    Hablar con el equipo
                                 </Button>
                             </Link>
                         </div>
@@ -99,15 +104,15 @@ export default function ValidacionTecnicaTerrenoPage() {
                         <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm">
                             <div className="flex items-center gap-2">
                                 <CheckCircle2 className="text-primary h-5 w-5" />
-                                <span className="text-muted-foreground">100% gratuito</span>
+                                <span className="text-muted-foreground font-semibold">100% gratuito</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <CheckCircle2 className="text-primary h-5 w-5" />
-                                <span className="text-muted-foreground">Sin compromiso</span>
+                                <span className="text-muted-foreground font-semibold">Sin compromiso</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <CheckCircle2 className="text-primary h-5 w-5" />
-                                <span className="text-muted-foreground">Respuesta en 48-72h</span>
+                                <span className="text-muted-foreground font-semibold">Respuesta rápida</span>
                             </div>
                         </div>
                     </div>
@@ -115,7 +120,7 @@ export default function ValidacionTecnicaTerrenoPage() {
             </section>
 
             {/* Common Doubts Section */}
-            <section className="bg-muted/30 py-16 md:py-20">
+            <section className="from-background to-muted/30 bg-gradient-to-b py-16 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
@@ -125,7 +130,7 @@ export default function ValidacionTecnicaTerrenoPage() {
                     </div>
 
                     <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        <div className="bg-background rounded-xl border-2 border-amber-500/20 p-6">
+                        <div className="rounded-xl border-2 border-amber-500/20 bg-white p-6 shadow-sm">
                             <div className="mb-4 flex items-start gap-3">
                                 <AlertCircle className="mt-1 h-6 w-6 shrink-0 text-amber-600" />
                                 <div>
@@ -138,7 +143,7 @@ export default function ValidacionTecnicaTerrenoPage() {
                             </div>
                         </div>
 
-                        <div className="bg-background rounded-xl border-2 border-amber-500/20 p-6">
+                        <div className="rounded-xl border-2 border-amber-500/20 bg-white p-6 shadow-sm">
                             <div className="mb-4 flex items-start gap-3">
                                 <AlertCircle className="mt-1 h-6 w-6 shrink-0 text-amber-600" />
                                 <div>
@@ -150,7 +155,7 @@ export default function ValidacionTecnicaTerrenoPage() {
                             </div>
                         </div>
 
-                        <div className="bg-background rounded-xl border-2 border-amber-500/20 p-6">
+                        <div className="rounded-xl border-2 border-amber-500/20 bg-white p-6 shadow-sm">
                             <div className="mb-4 flex items-start gap-3">
                                 <AlertCircle className="mt-1 h-6 w-6 shrink-0 text-amber-600" />
                                 <div>
@@ -162,7 +167,7 @@ export default function ValidacionTecnicaTerrenoPage() {
                             </div>
                         </div>
 
-                        <div className="bg-background rounded-xl border-2 border-amber-500/20 p-6">
+                        <div className="rounded-xl border-2 border-amber-500/20 bg-white p-6 shadow-sm">
                             <div className="mb-4 flex items-start gap-3">
                                 <AlertCircle className="mt-1 h-6 w-6 shrink-0 text-amber-600" />
                                 <div>
@@ -174,7 +179,7 @@ export default function ValidacionTecnicaTerrenoPage() {
                             </div>
                         </div>
 
-                        <div className="bg-background rounded-xl border-2 border-amber-500/20 p-6">
+                        <div className="rounded-xl border-2 border-amber-500/20 bg-white p-6 shadow-sm">
                             <div className="mb-4 flex items-start gap-3">
                                 <AlertCircle className="mt-1 h-6 w-6 shrink-0 text-amber-600" />
                                 <div>
@@ -186,7 +191,7 @@ export default function ValidacionTecnicaTerrenoPage() {
                             </div>
                         </div>
 
-                        <div className="bg-background rounded-xl border-2 border-amber-500/20 p-6">
+                        <div className="rounded-xl border-2 border-amber-500/20 bg-white p-6 shadow-sm">
                             <div className="mb-4 flex items-start gap-3">
                                 <AlertCircle className="mt-1 h-6 w-6 shrink-0 text-amber-600" />
                                 <div>
@@ -202,7 +207,7 @@ export default function ValidacionTecnicaTerrenoPage() {
             </section>
 
             {/* What We Analyze Section */}
-            <section className="py-16 md:py-24">
+            <section className="from-muted/30 bg-gradient-to-b to-white py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">Qué Analizamos en la Validación</h2>
@@ -211,13 +216,14 @@ export default function ValidacionTecnicaTerrenoPage() {
 
                     <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {/* Analysis 1 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-6 shadow-sm transition-transform duration-200 ease-out hover:scale-[1.03] sm:p-8">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-2 sm:p-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/0">
-                                    <MapPin className="text-primary h-5 w-5 transition-transform group-hover:scale-110" />
-                                </div>
-                                <h3 className="text-foreground m-0 text-base leading-tight font-semibold">Ubicación y Accesos</h3>
+                        <div className="group border-primary/20 hover:border-primary/40 bg-background relative overflow-hidden rounded-xl border-2 p-8 shadow-lg transition-all duration-200 ease-out hover:-translate-y-2 hover:shadow-2xl">
+                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
+                                <MapPin className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Ubicación y Accesos</h3>
+                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                                Análisis de distancia a red eléctrica, accesibilidad del terreno y viabilidad de la ubicación.
+                            </p>
                             <ul className="space-y-2 text-sm">
                                 <li className="flex items-start gap-2">
                                     <CheckCircle2 className="text-primary mt-0.5 h-4 w-4 shrink-0" />
@@ -236,6 +242,10 @@ export default function ValidacionTecnicaTerrenoPage() {
                                     <span>Zonas restringidas cercanas</span>
                                 </li>
                             </ul>
+                            <div className="text-primary mt-4 flex items-center gap-2 text-sm font-medium">
+                                <MapPin className="h-4 w-4" />
+                                Localización estratégica
+                            </div>
                             <div
                                 className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
                                 aria-hidden
@@ -243,13 +253,14 @@ export default function ValidacionTecnicaTerrenoPage() {
                         </div>
 
                         {/* Analysis 2 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-6 shadow-sm transition-transform duration-200 ease-out hover:scale-[1.03] sm:p-8">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-2 sm:p-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/0">
-                                    <FileSearch className="text-primary h-5 w-5 transition-transform group-hover:scale-110" />
-                                </div>
-                                <h3 className="text-foreground m-0 text-base leading-tight font-semibold">Análisis Urbanístico</h3>
+                        <div className="group border-primary/20 hover:border-primary/40 bg-background relative overflow-hidden rounded-xl border-2 p-8 shadow-lg transition-all duration-200 ease-out hover:-translate-y-2 hover:shadow-2xl">
+                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
+                                <FileSearch className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Análisis Urbanístico</h3>
+                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                                Verificación de clasificación del suelo, compatibilidad de usos y restricciones aplicables.
+                            </p>
                             <ul className="space-y-2 text-sm">
                                 <li className="flex items-start gap-2">
                                     <CheckCircle2 className="text-primary mt-0.5 h-4 w-4 shrink-0" />
@@ -268,6 +279,10 @@ export default function ValidacionTecnicaTerrenoPage() {
                                     <span>Espacios protegidos</span>
                                 </li>
                             </ul>
+                            <div className="text-primary mt-4 flex items-center gap-2 text-sm font-medium">
+                                <Shield className="h-4 w-4" />
+                                Cumplimiento normativo
+                            </div>
                             <div
                                 className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
                                 aria-hidden
@@ -275,13 +290,14 @@ export default function ValidacionTecnicaTerrenoPage() {
                         </div>
 
                         {/* Analysis 3 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-6 shadow-sm transition-transform duration-200 ease-out hover:scale-[1.03] sm:p-8">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-2 sm:p-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/0">
-                                    <Landmark className="text-primary h-5 w-5 transition-transform group-hover:scale-110" />
-                                </div>
-                                <h3 className="text-foreground m-0 text-base leading-tight font-semibold">Datos Catastrales</h3>
+                        <div className="group border-primary/20 hover:border-primary/40 bg-background relative overflow-hidden rounded-xl border-2 p-8 shadow-lg transition-all duration-200 ease-out hover:-translate-y-2 hover:shadow-2xl">
+                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
+                                <Landmark className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Datos Catastrales</h3>
+                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                                Revisión de referencias catastrales, superficies y titularidad preliminar del terreno.
+                            </p>
                             <ul className="space-y-2 text-sm">
                                 <li className="flex items-start gap-2">
                                     <CheckCircle2 className="text-primary mt-0.5 h-4 w-4 shrink-0" />
@@ -300,6 +316,10 @@ export default function ValidacionTecnicaTerrenoPage() {
                                     <span>Cargas visibles</span>
                                 </li>
                             </ul>
+                            <div className="text-primary mt-4 flex items-center gap-2 text-sm font-medium">
+                                <Landmark className="h-4 w-4" />
+                                Datos verificados
+                            </div>
                             <div
                                 className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
                                 aria-hidden
@@ -307,13 +327,14 @@ export default function ValidacionTecnicaTerrenoPage() {
                         </div>
 
                         {/* Analysis 4 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-6 shadow-sm transition-transform duration-200 ease-out hover:scale-[1.03] sm:p-8">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-2 sm:p-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/0">
-                                    <Zap className="text-primary h-5 w-5 transition-transform group-hover:scale-110" />
-                                </div>
-                                <h3 className="text-foreground m-0 text-base leading-tight font-semibold">Potencial Energético</h3>
+                        <div className="group border-primary/20 hover:border-primary/40 bg-background relative overflow-hidden rounded-xl border-2 p-8 shadow-lg transition-all duration-200 ease-out hover:-translate-y-2 hover:shadow-2xl">
+                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
+                                <Zap className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Potencial Energético</h3>
+                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                                Estimación de recursos renovables, potencia instalable y tecnología más adecuada.
+                            </p>
                             <ul className="space-y-2 text-sm">
                                 <li className="flex items-start gap-2">
                                     <CheckCircle2 className="text-primary mt-0.5 h-4 w-4 shrink-0" />
@@ -332,6 +353,10 @@ export default function ValidacionTecnicaTerrenoPage() {
                                     <span>Tecnología óptima</span>
                                 </li>
                             </ul>
+                            <div className="text-primary mt-4 flex items-center gap-2 text-sm font-medium">
+                                <Zap className="h-4 w-4" />
+                                Máximo rendimiento
+                            </div>
                             <div
                                 className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
                                 aria-hidden
@@ -339,13 +364,14 @@ export default function ValidacionTecnicaTerrenoPage() {
                         </div>
 
                         {/* Analysis 5 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-6 shadow-sm transition-transform duration-200 ease-out hover:scale-[1.03] sm:p-8">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-2 sm:p-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/0">
-                                    <TrendingUp className="text-primary h-5 w-5 transition-transform group-hover:scale-110" />
-                                </div>
-                                <h3 className="text-foreground m-0 text-base leading-tight font-semibold">Viabilidad Económica</h3>
+                        <div className="group border-primary/20 hover:border-primary/40 bg-background relative overflow-hidden rounded-xl border-2 p-8 shadow-lg transition-all duration-200 ease-out hover:-translate-y-2 hover:shadow-2xl">
+                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
+                                <TrendingUp className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Viabilidad Económica</h3>
+                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                                Valoración orientativa, comparativa de mercado y modalidades de contratación disponibles.
+                            </p>
                             <ul className="space-y-2 text-sm">
                                 <li className="flex items-start gap-2">
                                     <CheckCircle2 className="text-primary mt-0.5 h-4 w-4 shrink-0" />
@@ -364,6 +390,10 @@ export default function ValidacionTecnicaTerrenoPage() {
                                     <span>Atractivo para promotores</span>
                                 </li>
                             </ul>
+                            <div className="text-primary mt-4 flex items-center gap-2 text-sm font-medium">
+                                <TrendingUp className="h-4 w-4" />
+                                Valor optimizado
+                            </div>
                             <div
                                 className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
                                 aria-hidden
@@ -371,13 +401,14 @@ export default function ValidacionTecnicaTerrenoPage() {
                         </div>
 
                         {/* Analysis 6 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-6 shadow-sm transition-transform duration-200 ease-out hover:scale-[1.03] sm:p-8">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-2 sm:p-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/0">
-                                    <Shield className="text-primary h-5 w-5 transition-transform group-hover:scale-110" />
-                                </div>
-                                <h3 className="text-foreground m-0 text-base leading-tight font-semibold">Factores de Descarte</h3>
+                        <div className="group border-primary/20 hover:border-primary/40 bg-background relative overflow-hidden rounded-xl border-2 p-8 shadow-lg transition-all duration-200 ease-out hover:-translate-y-2 hover:shadow-2xl">
+                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
+                                <Shield className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
                             </div>
+                            <h3 className="text-foreground mb-3 text-xl font-bold">Factores de Descarte</h3>
+                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                                Identificación de impedimentos técnicos, legales o económicos que descartan la viabilidad.
+                            </p>
                             <ul className="space-y-2 text-sm">
                                 <li className="flex items-start gap-2">
                                     <CheckCircle2 className="text-primary mt-0.5 h-4 w-4 shrink-0" />
@@ -396,6 +427,10 @@ export default function ValidacionTecnicaTerrenoPage() {
                                     <span>Inviabilidad económica clara</span>
                                 </li>
                             </ul>
+                            <div className="text-primary mt-4 flex items-center gap-2 text-sm font-medium">
+                                <Shield className="h-4 w-4" />
+                                Prevención de riesgos
+                            </div>
                             <div
                                 className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
                                 aria-hidden
@@ -415,16 +450,16 @@ export default function ValidacionTecnicaTerrenoPage() {
 
                     <div className="mx-auto max-w-4xl space-y-6">
                         {/* Step 1 */}
-                        <div className="bg-background group hover:border-primary rounded-xl border-2 border-transparent p-6 transition-all hover:shadow-xl">
+                        <div className="group hover:border-primary rounded-xl border-2 border-transparent bg-white p-6 shadow-sm transition-all hover:shadow-xl">
                             <div className="flex items-start gap-4">
                                 <div className="bg-primary/10 shrink-0 rounded-xl p-3">
                                     <span className="text-primary text-2xl font-bold">1</span>
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-foreground mb-2 text-xl font-bold">Solicita la validación</h3>
+                                    <h3 className="text-foreground mb-2 text-xl font-bold">Regístrate como propietario</h3>
                                     <p className="text-muted-foreground mb-3">
-                                        Rellena el formulario con datos básicos de tu terreno: ubicación (municipio o referencia catastral),
-                                        superficie aproximada, y tus datos de contacto.
+                                        Crea tu cuenta de propietario en la plataforma. Completa tu perfil con tus datos básicos y acepta
+                                        términos y condiciones.
                                     </p>
                                     <div className="bg-primary/5 flex items-center gap-2 rounded-lg p-3 text-sm">
                                         <Clock className="text-primary h-4 w-4" />
@@ -435,40 +470,40 @@ export default function ValidacionTecnicaTerrenoPage() {
                         </div>
 
                         {/* Step 2 */}
-                        <div className="bg-background group hover:border-primary rounded-xl border-2 border-transparent p-6 transition-all hover:shadow-xl">
+                        <div className="group hover:border-primary rounded-xl border-2 border-transparent bg-white p-6 shadow-sm transition-all hover:shadow-xl">
                             <div className="flex items-start gap-4">
                                 <div className="bg-primary/10 shrink-0 rounded-xl p-3">
                                     <span className="text-primary text-2xl font-bold">2</span>
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-foreground mb-2 text-xl font-bold">Analizamos tu terreno</h3>
+                                    <h3 className="text-foreground mb-2 text-xl font-bold">Publica tu terreno</h3>
                                     <p className="text-muted-foreground mb-3">
-                                        Nuestro equipo técnico realiza la curación: análisis urbanístico, catastral, distancia a red,
-                                        orografía, y potencial energético. Sin moverte de casa.
+                                        Sube los datos de tu terreno: ubicación (referencia catastral), superficie, tipo de suelo, y
+                                        documentación disponible. Puedes subir múltiples terrenos.
                                     </p>
                                     <div className="bg-primary/5 flex items-center gap-2 rounded-lg p-3 text-sm">
                                         <FileSearch className="text-primary h-4 w-4" />
-                                        <span>Análisis exhaustivo en 48-72h hábiles</span>
+                                        <span>Formulario sencillo y guiado</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Step 3 */}
-                        <div className="bg-background group hover:border-primary rounded-xl border-2 border-transparent p-6 transition-all hover:shadow-xl">
+                        <div className="group hover:border-primary rounded-xl border-2 border-transparent bg-white p-6 shadow-sm transition-all hover:shadow-xl">
                             <div className="flex items-start gap-4">
                                 <div className="bg-primary/10 shrink-0 rounded-xl p-3">
                                     <span className="text-primary text-2xl font-bold">3</span>
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-foreground mb-2 text-xl font-bold">Recibes el informe</h3>
+                                    <h3 className="text-foreground mb-2 text-xl font-bold">Validamos y publicamos</h3>
                                     <p className="text-muted-foreground mb-3">
-                                        Te enviamos el informe de validación: si es viable, te explicamos potencial y próximos pasos. Si no
-                                        es viable, te explicamos por qué de forma clara y honesta.
+                                        Nuestro equipo técnico valida tu terreno: análisis urbanístico, distancia a red, orografía,
+                                        viabilidad. Si es válido, lo publicamos en el marketplace. Te informamos del resultado.
                                     </p>
                                     <div className="bg-primary/5 flex items-center gap-2 rounded-lg p-3 text-sm">
                                         <CheckCircle2 className="text-primary h-4 w-4" />
-                                        <span>Informe claro sin tecnicismos complejos</span>
+                                        <span>Validación técnica gratuita antes de publicar</span>
                                     </div>
                                 </div>
                             </div>
@@ -476,10 +511,10 @@ export default function ValidacionTecnicaTerrenoPage() {
                     </div>
 
                     <div className="mt-12 text-center">
-                        <Link href="/contacto">
+                        <Link href="/registro/propietario">
                             <Button size="lg" className="bg-primary hover:bg-primary/90 gap-2">
                                 <Sparkles className="h-5 w-5" />
-                                Validar mi terreno ahora
+                                Regístrate y publica tu terreno
                                 <ArrowRight className="h-5 w-5" />
                             </Button>
                         </Link>
@@ -488,7 +523,7 @@ export default function ValidacionTecnicaTerrenoPage() {
             </section>
 
             {/* Results Section */}
-            <section className="py-16 md:py-24">
+            <section className="from-muted/30 bg-gradient-to-b to-white py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">Posibles Resultados de la Validación</h2>
@@ -656,27 +691,67 @@ export default function ValidacionTecnicaTerrenoPage() {
                 </div>
             </section>
 
+            {/* FAQ Section */}
+            <section className="bg-muted/30 py-16 md:py-24">
+                <div className="container mx-auto px-4">
+                    <FAQList
+                        title="Preguntas frecuentes"
+                        categoryLabels={{ propietario: "Propietario" }}
+                        faqs={[
+                            {
+                                question: "¿Cuánto pagan por arrendar un terreno para placas solares?",
+                                answer: "Depende de múltiples factores: ubicación, proximidad a red eléctrica, potencia instalable, y tecnología. Normalmente entre 800€-3.000€/ha/año en arrendamiento, o venta desde 5.000€-15.000€/ha según viabilidad. La validación gratuita te dará un rango orientativo para tu terreno específico.",
+                                category: "propietario",
+                            },
+                            {
+                                question: "¿Cómo sé si mi terreno sirve para energía solar o eólica?",
+                                answer: "Necesitas validación técnica que analice: distancia a puntos de conexión eléctrica (máximo 5-10 km viable), clasificación del suelo (rústico compatible), ausencia de zonas protegidas, orografía adecuada, y superficie mínima (5+ ha solar, 20+ ha eólico). Nuestra validación gratuita revisa todos estos criterios.",
+                                category: "propietario",
+                            },
+                            {
+                                question: "¿Registrarme y publicar mi terreno me obliga a algo?",
+                                answer: "No. Registrarte y publicar tu terreno es 100% gratuito y sin compromiso. No firmas exclusivas, no hay cláusulas ocultas. Validamos tu terreno y, si es viable, lo publicamos en nuestro marketplace. Si eventualmente cierras un acuerdo con un promotor a través de nuestra plataforma, cobramos una comisión. Tú decides siempre.",
+                                category: "propietario",
+                            },
+                            {
+                                question: "¿Qué documentación necesito para publicar mi terreno?",
+                                answer: "Para registrar tu terreno en la plataforma solo necesitamos: ubicación del terreno (municipio o referencia catastral) y superficie aproximada. Si el terreno pasa la validación técnica, después pediremos: nota simple registral, plano catastral actualizado, y escrituras de propiedad. Pero para empezar y que nuestro equipo haga la validación inicial, con los datos básicos es suficiente.",
+                                category: "propietario",
+                            },
+                            {
+                                question: "¿Cuánto tarda la validación técnica?",
+                                answer: "Una vez que publicas tu terreno en la plataforma, nuestro equipo técnico realiza el análisis preliminar en pocos días hábiles. Te notificamos por email el resultado: si tu terreno es viable, lo publicamos en el marketplace. Si no es viable o necesita mejoras, te explicamos los motivos de forma clara y honesta.",
+                                category: "propietario",
+                            },
+                            {
+                                question: "¿Qué pasa si mi terreno NO es viable?",
+                                answer: "Te lo decimos con total honestidad y explicamos los motivos: muy lejos de red, zona protegida, incompatibilidad urbanística, o inviabilidad económica. No tenemos incentivo para darte falsas esperanzas. Solo ganamos si tú cierras un acuerdo real, así que preferimos ser transparentes desde el principio.",
+                                category: "propietario",
+                            },
+                        ]}
+                    />
+                </div>
+            </section>
+
             {/* CTA Final */}
             <section className="from-primary/10 via-background to-primary/10 bg-gradient-to-r py-16 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto max-w-3xl text-center">
-                        <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
-                            ¿Listo para Descubrir el Potencial de tu Terreno?
-                        </h2>
+                        <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">Regístrate y Empieza a Ganar con tu Terreno</h2>
                         <p className="text-muted-foreground mb-8 text-lg">
-                            Validación técnica 100% gratuita, sin compromiso. Respuesta en 48-72h.
+                            Plataforma 100% GRATUITA, sin compromiso. Publica tu terreno, nosotros lo validamos y conectamos con promotores.
                         </p>
                         <div className="flex flex-wrap justify-center gap-4">
-                            <Link href="/contacto">
+                            <Link href="/registro/propietario">
                                 <Button size="lg" className="bg-primary hover:bg-primary/90 gap-2">
                                     <Sparkles className="h-5 w-5" />
-                                    Solicitar validación gratuita
+                                    Regístrate y publica tu terreno
                                     <ArrowRight className="h-5 w-5" />
                                 </Button>
                             </Link>
-                            <Link href="/registro/propietario">
+                            <Link href="/contacto">
                                 <Button size="lg" variant="outline">
-                                    Crear cuenta propietario
+                                    ¿Tienes dudas? Contáctanos
                                 </Button>
                             </Link>
                         </div>

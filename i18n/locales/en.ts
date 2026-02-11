@@ -7,6 +7,7 @@ export const en = {
     adminUser: "Administrator",
     nav: {
         home: "Home",
+        services: "Services",
         howItWorks: "How it works",
         about: "About",
         contact: "Contact",

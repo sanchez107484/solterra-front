@@ -4,13 +4,6 @@ import { LanguageSwitcher } from "@/components/language-switcher"
 import Logo from "@/components/logo"
 import { SidebarUserMenu } from "@/components/sidebar-user-menu"
 import { Button } from "@/components/ui/button"
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
 import { useAuth } from "@/contexts/AuthContext"
 import { Home, Info, Mail, Menu, Settings, X } from "lucide-react"
 import Link from "next/link"
