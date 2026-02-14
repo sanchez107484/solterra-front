@@ -31,7 +31,7 @@ export default function LandingPage() {
                 <HeroSection />
                 <StatsSection />
                 <ServicesShowcase
-                    title="Nuestros Servicios para el Sector Renovable"
+                    title="Nuestros servicios para el sector renovable"
                     subtitle="Soluciones integrales desde la validación de terrenos hasta el marketplace y prospección personalizada"
                     background="muted"
                 />

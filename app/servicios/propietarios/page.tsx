@@ -2,24 +2,13 @@
 
 import StandardLayout from "@/components/layouts/StandardLayout"
 import { ServiceSchema } from "@/components/seo/ServiceSchema"
+import ProcessStepCard from "@/components/services/ProcessStepCard"
+import ServiceBenefitCard from "@/components/services/ServiceBenefitCard"
 import ServicesShowcase from "@/components/services/ServicesShowcase"
+import ValueCard from "@/components/services/ValueCard"
 import { FAQList } from "@/components/shared/faq-item"
 import { Button } from "@/components/ui/button"
-import {
-    ArrowRight,
-    BadgeCheck,
-    CheckCircle2,
-    Clock,
-    Euro,
-    FileCheck,
-    Handshake,
-    Landmark,
-    Search,
-    Shield,
-    TrendingUp,
-    Users,
-    Zap,
-} from "lucide-react"
+import { ArrowRight, CheckCircle2, Clock, Euro, FileCheck, Handshake, Landmark, Search, Shield, TrendingUp, Users, Zap } from "lucide-react"
 import Head from "next/head"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -71,7 +60,7 @@ export default function ServiciosPropietariosPage() {
 
                         {/* Main Title - H1 SEO optimizado */}
                         <h1 className="text-foreground mb-6 text-4xl leading-tight font-bold md:text-5xl lg:text-6xl">
-                            ¿Cuánto Vale Tu Terreno para Energía Solar o Eólica?
+                            ¿Cuánto vale tu terreno para energía solar o eólica?
                         </h1>
 
                         {/* Subtitle */}
@@ -117,7 +106,7 @@ export default function ServiciosPropietariosPage() {
             </section>
 
             {/* Sección: Cómo Funciona (Paso a Paso) */}
-            <section className="bg-background py-16 md:py-24">
+            <section className="from-background to-primary/5 bg-gradient-to-b py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
@@ -131,78 +120,43 @@ export default function ServiciosPropietariosPage() {
 
                     {/* Proceso en 4 pasos - Cards horizontales */}
                     <div className="mx-auto max-w-5xl space-y-6">
-                        {/* Paso 1 */}
-                        <div className="group border-primary/20 hover:border-primary/40 to-primary/5 flex flex-col gap-6 rounded-xl border-2 bg-gradient-to-br from-transparent p-6 shadow-sm transition-all hover:shadow-lg md:flex-row md:items-center md:p-8">
-                            <div className="bg-primary/10 text-primary flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl text-2xl font-bold md:h-20 md:w-20 md:text-3xl">
-                                1
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="text-foreground mb-2 text-xl font-bold md:text-2xl">Regístrate y da de alta tu terreno</h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Crea tu cuenta como propietario en nuestro marketplace y publica tu terreno con datos básicos:
-                                    ubicación, superficie y referencia catastral. El proceso es rápido y sencillo.
-                                </p>
-                            </div>
-                            <Search className="text-primary h-10 w-10 flex-shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
-                        </div>
+                        <ProcessStepCard
+                            stepNumber={1}
+                            title="Regístrate y da de alta tu terreno"
+                            description="Crea tu cuenta como propietario en nuestro marketplace y publica tu terreno con datos básicos: ubicación, superficie y referencia catastral. El proceso es rápido y sencillo."
+                            icon={Search}
+                            userType="propietarios"
+                        />
 
-                        {/* Paso 2 */}
-                        <div className="group border-primary/20 hover:border-primary/40 to-primary/5 flex flex-col gap-6 rounded-xl border-2 bg-gradient-to-br from-transparent p-6 shadow-sm transition-all hover:shadow-lg md:flex-row md:items-center md:p-8">
-                            <div className="bg-primary/10 text-primary flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl text-2xl font-bold md:h-20 md:w-20 md:text-3xl">
-                                2
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="text-foreground mb-2 text-xl font-bold md:text-2xl">
-                                    Validación técnica exhaustiva gratuita
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Analizamos en profundidad la viabilidad solar/eólica, distancia a subestaciones, topografía, regulación
-                                    urbanística y limitaciones ambientales. Recibirás un informe detallado por correo electrónico con
-                                    valoración de mercado.
-                                </p>
-                            </div>
-                            <FileCheck className="text-primary h-10 w-10 flex-shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
-                        </div>
+                        <ProcessStepCard
+                            stepNumber={2}
+                            title="Validación técnica exhaustiva gratuita"
+                            description="Analizamos en profundidad la viabilidad solar/eólica, distancia a subestaciones, topografía, regulación urbanística y limitaciones ambientales. Recibirás un informe detallado por correo electrónico con valoración de mercado."
+                            icon={FileCheck}
+                            userType="propietarios"
+                        />
 
-                        {/* Paso 3 */}
-                        <div className="group border-primary/20 hover:border-primary/40 to-primary/5 flex flex-col gap-6 rounded-xl border-2 bg-gradient-to-br from-transparent p-6 shadow-sm transition-all hover:shadow-lg md:flex-row md:items-center md:p-8">
-                            <div className="bg-primary/10 text-primary flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl text-2xl font-bold md:h-20 md:w-20 md:text-3xl">
-                                3
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="text-foreground mb-2 text-xl font-bold md:text-2xl">
-                                    Te conectamos con promotores verificados
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Si tu terreno es viable, lo presentamos a promotores de energía solar y eólica interesados en tu zona.
-                                    Actuamos como intermediarios profesionales para facilitar el proceso y proteger tus intereses.
-                                </p>
-                            </div>
-                            <Users className="text-primary h-10 w-10 flex-shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
-                        </div>
+                        <ProcessStepCard
+                            stepNumber={3}
+                            title="Te conectamos con promotores verificados"
+                            description="Si tu terreno es viable, lo presentamos a promotores de energía solar y eólica interesados en tu zona. Actuamos como intermediarios profesionales para facilitar el proceso y proteger tus intereses."
+                            icon={Users}
+                            userType="propietarios"
+                        />
 
-                        {/* Paso 4 */}
-                        <div className="group border-primary/20 hover:border-primary/40 to-primary/5 flex flex-col gap-6 rounded-xl border-2 bg-gradient-to-br from-transparent p-6 shadow-sm transition-all hover:shadow-lg md:flex-row md:items-center md:p-8">
-                            <div className="bg-primary/10 text-primary flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl text-2xl font-bold md:h-20 md:w-20 md:text-3xl">
-                                4
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="text-foreground mb-2 text-xl font-bold md:text-2xl">
-                                    Intermediación profesional hasta el cierre
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Coordinamos con todas las partes (promotor, notario, asesores), facilitamos la negociación de
-                                    condiciones y te acompañamos hasta la firma. Solo cobramos comisión cuando tú cobres.
-                                </p>
-                            </div>
-                            <Handshake className="text-primary h-10 w-10 flex-shrink-0 opacity-60 transition-opacity group-hover:opacity-100" />
-                        </div>
+                        <ProcessStepCard
+                            stepNumber={4}
+                            title="Intermediación profesional hasta el cierre"
+                            description="Coordinamos con todas las partes (promotor, notario, asesores), facilitamos la negociación de condiciones y te acompañamos hasta la firma. Solo cobramos comisión cuando tú cobres."
+                            icon={Handshake}
+                            userType="propietarios"
+                        />
                     </div>
                 </div>
             </section>
 
             {/* Sección: Servicios Incluidos (Cards estilo beneficios) */}
-            <section className="bg-muted/30 py-16 md:py-24">
+            <section className="bg-primary/5 py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
@@ -214,131 +168,59 @@ export default function ServiciosPropietariosPage() {
                     </div>
 
                     <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        {/* Servicio 1 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-8 shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03]">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
-                                <Shield className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
-                            </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Validación técnica completa</h3>
-                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                Análisis de viabilidad solar/eólica, distancia a red eléctrica, topografía, normativa urbanística y
-                                limitaciones ambientales.
-                            </p>
-                            <div className="text-primary flex items-center gap-2 text-sm font-medium">
-                                <BadgeCheck className="h-4 w-4" />
-                                100% Gratuito
-                            </div>
-                            <div
-                                className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
-                                aria-hidden
-                            />
-                        </div>
+                        <ServiceBenefitCard
+                            icon={Shield}
+                            title="Validación técnica completa"
+                            description="Análisis de viabilidad solar/eólica, distancia a red eléctrica, topografía, normativa urbanística y limitaciones ambientales."
+                            badgeText="100% Gratuito"
+                            userType="propietarios"
+                        />
 
-                        {/* Servicio 2 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-8 shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03]">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
-                                <TrendingUp className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
-                            </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Valoración real de mercado</h3>
-                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                Estimación realista de ingresos por arrendamiento o precio de venta basada en proyectos comparables y
-                                condiciones actuales del mercado renovable.
-                            </p>
-                            <div className="text-primary flex items-center gap-2 text-sm font-medium">
-                                <BadgeCheck className="h-4 w-4" />
-                                Datos reales
-                            </div>
-                            <div
-                                className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
-                                aria-hidden
-                            />
-                        </div>
+                        <ServiceBenefitCard
+                            icon={TrendingUp}
+                            title="Valoración real de mercado"
+                            description="Estimación realista de ingresos por arrendamiento o precio de venta basada en proyectos comparables y condiciones actuales del mercado renovable."
+                            badgeText="Datos reales"
+                            userType="propietarios"
+                        />
 
-                        {/* Servicio 3 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-8 shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03]">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
-                                <Users className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
-                            </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Matching con promotores</h3>
-                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                Conexión con promotores verificados interesados en tu zona a través de nuestra intermediación profesional.
-                                Facilitamos el contacto y gestionamos el proceso para proteger tus intereses.
-                            </p>
-                            <div className="text-primary flex items-center gap-2 text-sm font-medium">
-                                <BadgeCheck className="h-4 w-4" />
-                                Transparente
-                            </div>
-                            <div
-                                className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
-                                aria-hidden
-                            />
-                        </div>
+                        <ServiceBenefitCard
+                            icon={Users}
+                            title="Matching con promotores"
+                            description="Conexión con promotores verificados interesados en tu zona a través de nuestra intermediación profesional. Facilitamos el contacto y gestionamos el proceso para proteger tus intereses."
+                            badgeText="Transparente"
+                            userType="propietarios"
+                        />
 
-                        {/* Servicio 4 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-8 shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03]">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
-                                <Handshake className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
-                            </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Negociación y asesoramiento</h3>
-                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                Te acompañamos en la negociación de condiciones: duración del contrato, precio, garantías, cláusulas de
-                                rescisión y obligaciones de ambas partes.
-                            </p>
-                            <div className="text-primary flex items-center gap-2 text-sm font-medium">
-                                <BadgeCheck className="h-4 w-4" />
-                                Expertos
-                            </div>
-                            <div
-                                className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
-                                aria-hidden
-                            />
-                        </div>
+                        <ServiceBenefitCard
+                            icon={Handshake}
+                            title="Negociación y asesoramiento"
+                            description="Te acompañamos en la negociación de condiciones: duración del contrato, precio, garantías, cláusulas de rescisión y obligaciones de ambas partes."
+                            badgeText="Expertos"
+                            userType="propietarios"
+                        />
 
-                        {/* Servicio 5 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-8 shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03]">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
-                                <FileCheck className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
-                            </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Análisis de propuestas contractuales</h3>
-                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                Revisamos junto contigo las propuestas de los promotores, identificamos puntos críticos y te sugerimos
-                                aspectos a negociar. Recomendamos asesoramiento jurídico independiente para la firma final.
-                            </p>
-                            <div className="text-primary flex items-center gap-2 text-sm font-medium">
-                                <BadgeCheck className="h-4 w-4" />
-                                Acompañamiento experto
-                            </div>
-                            <div
-                                className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
-                                aria-hidden
-                            />
-                        </div>
+                        <ServiceBenefitCard
+                            icon={FileCheck}
+                            title="Análisis de propuestas contractuales"
+                            description="Revisamos junto contigo las propuestas de los promotores, identificamos puntos críticos y te sugerimos aspectos a negociar. Recomendamos asesoramiento jurídico independiente para la firma final."
+                            badgeText="Acompañamiento experto"
+                            userType="propietarios"
+                        />
 
-                        {/* Servicio 6 */}
-                        <div className="group border-primary/20 relative overflow-hidden rounded-xl border-2 bg-gradient-to-br from-transparent to-transparent p-8 shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03]">
-                            <div className="bg-primary/20 mb-4 inline-flex items-center gap-3 rounded-2xl p-3">
-                                <Zap className="text-primary h-6 w-6 transition-transform group-hover:scale-110" />
-                            </div>
-                            <h3 className="text-foreground mb-3 text-xl font-bold">Seguimiento hasta el cierre</h3>
-                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                                Coordinación con todas las partes (promotor, notario, registro) hasta la firma definitiva. Solo cobramos
-                                cuando tú cobres.
-                            </p>
-                            <div className="text-primary flex items-center gap-2 text-sm font-medium">
-                                <BadgeCheck className="h-4 w-4" />
-                                Sin riesgo
-                            </div>
-                            <div
-                                className="bg-primary/10 absolute right-0 bottom-0 h-20 w-20 rounded-tl-full transition-all group-hover:h-28 group-hover:w-28"
-                                aria-hidden
-                            />
-                        </div>
+                        <ServiceBenefitCard
+                            icon={Zap}
+                            title="Seguimiento hasta el cierre"
+                            description="Coordinación con todas las partes (promotor, notario, registro) hasta la firma definitiva. Solo cobramos cuando tú cobres."
+                            badgeText="Sin riesgo"
+                            userType="propietarios"
+                        />
                     </div>
                 </div>
             </section>
 
             {/* Sección: Por Qué Elegirnos (Valores estilo nosotros) */}
-            <section className="bg-background py-16 md:py-24">
+            <section className="from-background to-primary/5 bg-gradient-to-b py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">Por qué confiar tu terreno a Solterra</h2>
@@ -348,82 +230,29 @@ export default function ServiciosPropietariosPage() {
                     </div>
 
                     <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
-                        {/* Valor 1 */}
-                        <div className="group bg-background relative overflow-hidden rounded-xl border-2 p-8 text-center shadow-lg transition-all hover:-translate-y-2 hover:shadow-2xl">
-                            <div className="from-primary/0 to-primary/5 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity group-hover:opacity-100" />
-                            <div className="relative">
-                                <div className="bg-primary/10 ring-primary/20 group-hover:ring-primary/40 mx-auto mb-6 w-fit rounded-full p-4 ring-4 transition-all group-hover:scale-110">
-                                    <Euro className="text-primary h-10 w-10" />
-                                </div>
-                                <h3 className="mb-4 text-2xl font-bold">Sin coste inicial</h3>
-                                <p className="text-muted-foreground mb-6 leading-relaxed">
-                                    0€ hasta que firmes el contrato. Solo cobramos comisión cuando tú cobres tu primer pago del promotor.
-                                    Intereses completamente alineados.
-                                </p>
-                                <div className="text-primary flex items-center justify-center gap-2 text-sm font-semibold">
-                                    <CheckCircle2 className="h-5 w-5" />
-                                    <span>Sin riesgo para ti</span>
-                                </div>
-                            </div>
-                        </div>
+                        <ValueCard
+                            icon={Euro}
+                            title="Sin coste inicial"
+                            description="0€ hasta que firmes el contrato. Solo cobramos comisión cuando tú cobres tu primer pago del promotor. Intereses completamente alineados."
+                            bottomText="Sin riesgo para ti"
+                            userType="propietarios"
+                        />
 
-                        {/* Valor 2 */}
-                        <div className="group bg-background relative overflow-hidden rounded-xl border-2 p-8 text-center shadow-lg transition-all hover:-translate-y-2 hover:shadow-2xl">
-                            <div className="from-primary/0 to-primary/5 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity group-hover:opacity-100" />
-                            <div className="relative">
-                                <div className="bg-primary/10 ring-primary/20 group-hover:ring-primary/40 mx-auto mb-6 w-fit rounded-full p-4 ring-4 transition-all group-hover:scale-110">
-                                    <Shield className="text-primary h-10 w-10" />
-                                </div>
-                                <h3 className="mb-4 text-2xl font-bold">Total transparencia</h3>
-                                <p className="text-muted-foreground mb-6 leading-relaxed">
-                                    Sin exclusivas opacas ni cláusulas leoninas. Sabes en todo momento qué promotores están interesados y
-                                    las condiciones que ofrecen.
-                                </p>
-                                <div className="text-primary flex items-center justify-center gap-2 text-sm font-semibold">
-                                    <CheckCircle2 className="h-5 w-5" />
-                                    <span>Control total</span>
-                                </div>
-                            </div>
-                        </div>
+                        <ValueCard
+                            icon={Shield}
+                            title="Total transparencia"
+                            description="Sin exclusivas opacas ni cláusulas leoninas. Sabes en todo momento qué promotores están interesados y las condiciones que ofrecen."
+                            bottomText="Control total"
+                            userType="propietarios"
+                        />
 
-                        {/* Valor 3 */}
-                        <div className="group bg-background relative overflow-hidden rounded-xl border-2 p-8 text-center shadow-lg transition-all hover:-translate-y-2 hover:shadow-2xl">
-                            <div className="from-primary/0 to-primary/5 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity group-hover:opacity-100" />
-                            <div className="relative">
-                                <div className="bg-primary/10 ring-primary/20 group-hover:ring-primary/40 mx-auto mb-6 w-fit rounded-full p-4 ring-4 transition-all group-hover:scale-110">
-                                    <Clock className="text-primary h-10 w-10" />
-                                </div>
-                                <h3 className="mb-4 text-2xl font-bold">Rapidez y eficiencia</h3>
-                                <p className="text-muted-foreground mb-6 leading-relaxed">
-                                    Validación técnica exhaustiva y profesional. Conexión inmediata con promotores que buscan activamente en
-                                    tu zona.
-                                </p>
-                                <div className="text-primary flex items-center justify-center gap-2 text-sm font-semibold">
-                                    <CheckCircle2 className="h-5 w-5" />
-                                    <span>Ahorra tiempo</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Sección: Stats / Trust Signals */}
-            <section className="from-primary/5 to-background bg-gradient-to-br py-16">
-                <div className="container mx-auto px-4">
-                    <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
-                        <div className="border-primary/20 rounded-xl border-2 bg-white p-8 text-center shadow-sm">
-                            <div className="text-primary mb-3 text-4xl font-bold">Exhaustiva</div>
-                            <p className="text-muted-foreground text-sm font-medium">Validación técnica completa y detallada</p>
-                        </div>
-                        <div className="border-primary/20 rounded-xl border-2 bg-white p-8 text-center shadow-sm">
-                            <div className="text-primary mb-3 text-4xl font-bold">0€</div>
-                            <p className="text-muted-foreground text-sm font-medium">Hasta que firmes tu contrato</p>
-                        </div>
-                        <div className="border-primary/20 rounded-xl border-2 bg-white p-8 text-center shadow-sm">
-                            <div className="text-primary mb-3 text-4xl font-bold">100%</div>
-                            <p className="text-muted-foreground text-sm font-medium">Transparencia, sin exclusivas abusivas</p>
-                        </div>
+                        <ValueCard
+                            icon={Clock}
+                            title="Rapidez y eficiencia"
+                            description="Validación técnica exhaustiva y profesional. Conexión inmediata con promotores que buscan activamente en tu zona."
+                            bottomText="Ahorra tiempo"
+                            userType="propietarios"
+                        />
                     </div>
                 </div>
             </section>
@@ -461,13 +290,13 @@ export default function ServiciosPropietariosPage() {
 
             {/* Interlinks a otros servicios */}
             <ServicesShowcase
-                title="Nuestros Servicios para el Sector Renovable"
+                title="Nuestros servicios para el sector renovable"
                 subtitle="Conectamos propietarios de terrenos rústicos con promotores de energía renovable"
                 background="white"
             />
 
             {/* FAQ */}
-            <section className="bg-background py-16 md:py-20">
+            <section className="bg-primary/5 py-16 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto max-w-4xl">
                         <FAQList

@@ -9,7 +9,7 @@ interface ServicesShowcaseProps {
     /** Subtítulo descriptivo */
     subtitle?: string
     /** Fondo de la sección */
-    background?: "white" | "muted"
+    background?: string
 }
 
 export default function ServicesShowcase({
@@ -17,8 +17,14 @@ export default function ServicesShowcase({
     subtitle = "Conectamos propietarios de terrenos rústicos con promotores de energía renovable. Validación técnica gratuita, pipeline pre-filtrado y acompañamiento hasta el cierre del acuerdo.",
     background = "muted",
 }: ServicesShowcaseProps) {
-    const bgClass = background === "white" ? "bg-white" : "bg-muted/30"
-
+    const bgClass =
+        background === "white"
+            ? "bg-white"
+            : background === "muted/30"
+              ? "bg-muted/30"
+              : background === "primary/5"
+                ? "bg-primary/5"
+                : background
     return (
         <section className={`${bgClass} py-16 md:py-24`}>
             <div className="container mx-auto px-4">
