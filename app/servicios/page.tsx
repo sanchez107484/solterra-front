@@ -233,7 +233,7 @@ export default function ServiciosPage() {
             />
 
             {/* Benefits Section - Por Qué Solterra */}
-            <section className="bg-muted/30 py-16 md:py-24">
+            <section className="py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mt-16 mb-12 max-w-3xl text-center">
                         <h3 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">

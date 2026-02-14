@@ -55,7 +55,7 @@ export default function ServiciosPropietariosPage() {
                         {/* Badge */}
                         <div className="bg-primary/10 text-primary mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold">
                             <Landmark className="h-4 w-4" />
-                            Para Propietarios de Terrenos Rústicos
+                            Para propietarios de terrenos
                         </div>
 
                         {/* Main Title - H1 SEO optimizado */}
@@ -156,7 +156,7 @@ export default function ServiciosPropietariosPage() {
             </section>
 
             {/* Sección: Servicios Incluidos (Cards estilo beneficios) */}
-            <section className="bg-primary/5 py-16 md:py-24">
+            <section className="from-primary/5 to-background bg-gradient-to-b py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
@@ -296,7 +296,7 @@ export default function ServiciosPropietariosPage() {
             />
 
             {/* FAQ */}
-            <section className="bg-primary/5 py-16 md:py-20">
+            <section className="py-16 md:py-20">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto max-w-4xl">
                         <FAQList

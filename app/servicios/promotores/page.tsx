@@ -120,7 +120,7 @@ export default function ServiciosPromotoresPage() {
             </section>
 
             {/* Sección: Cómo Funciona */}
-            <section className="bg-background py-16 md:py-24">
+            <section className="from-background to-muted/30 bg-gradient-to-b py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
@@ -169,7 +169,7 @@ export default function ServiciosPromotoresPage() {
             </section>
 
             {/* Sección: Servicios Incluidos */}
-            <section className="from-background to-muted/30 bg-gradient-to-b py-16 md:py-24">
+            <section className="from-muted/30 to-background bg-gradient-to-b py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
@@ -249,7 +249,7 @@ export default function ServiciosPromotoresPage() {
             </section>
 
             {/* Sección: Por Qué Elegirnos */}
-            <section className="bg-muted/30 py-16 md:py-24">
+            <section className="from-background to-muted/30 bg-gradient-to-b py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto mb-12 max-w-3xl text-center">
                         <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">Por qué usar Solterra para tu pipeline</h2>
